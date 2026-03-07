@@ -1,0 +1,378 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #1e293b;
+  --accent-foreground: #f8fafc;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #f8fafc;
+  --border: #334155;
+  --input: #334155;
+  --ring: #3b82f6;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-black/70 backdrop-blur-md border border-white/10 shadow-xl;
+  }
+
+  .a4-page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Active tool button - "çivili" / pressed inset appearance */
+.btn-active {
+  background-color: #dce8f7 !important;
+  outline: 1.5px dashed #2b579a;
+  outline-offset: -1px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.18), inset 0 1px 2px rgba(43, 87, 154, 0.15) !important;
+  border-radius: 3px;
+}
+
+.dark .btn-active {
+  background-color: #2a3a5c !important;
+  outline: 1.5px dashed #60a5fa;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(96, 165, 250, 0.2) !important;
+}
+
+/* ── Dark mode: Ribbon tab section dividers ── */
+.dark [class*="border-[#dadada]"] {
+  border-color: #2a2a40 !important;
+}
+
+.dark [class*="border-zinc-200"] {
+  border-color: #334155 !important;
+}
+
+/* ── Dark mode: Ribbon tab text colors ── */
+.dark .text-zinc-800,
+.dark .text-zinc-700 {
+  color: #e2e8f0 !important;
+}
+
+.dark .text-zinc-500 {
+  color: #94a3b8 !important;
+}
+
+/* ── Dark mode: Dropdown menus ── */
+.dark .ribbon-dropdown,
+.dark [class*="bg-white"][class*="border"][class*="rounded-lg"][class*="shadow"] {
+  background-color: #1e1e30 !important;
+  border-color: #334155 !important;
+}
+
+.dark .ribbon-dropdown button:hover,
+.dark [class*="hover:bg-blue-50"]:hover {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+}
+
+/* ── Dark mode: Hover states on ribbon buttons ── */
+.dark [class*="hover:bg-white/60"]:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ── Dark mode: Color picker & input elements in tabs ── */
+.dark select,
+.dark input[type="color"] {
+  background-color: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+/* ── Dark mode: Ribbon tab checkbox styling ── */
+.dark [class*="border-zinc-400"][class*="rounded-sm"] {
+  border-color: #64748b;
+}
+
+/* Dropdown animation for Apple HIG compliance */
+.ribbon-dropdown {
+  animation: dropdown-appear 0.15s ease-out;
+  transform-origin: top center;
+  backdrop-filter: blur(8px);
+}
+
+@keyframes dropdown-appear {
+  from {
+    opacity: 0;
+    transform: scaleY(0.96) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* Focus ring for keyboard navigation - only on interactive UI elements, NOT on the page/editor */
+*:focus-visible:not(.ProseMirror):not(.a4-page):not([contenteditable]) {
+  outline: 2px solid #2b579a;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Ensure the editor/paper area NEVER shows a focus outline */
+.ProseMirror:focus,
+.ProseMirror:focus-visible,
+[contenteditable]:focus,
+[contenteditable]:focus-visible {
+  outline: none !important;
+}
+
+/* Prevent text and content from overflowing outside the page boundary */
+.ProseMirror {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+.ProseMirror img,
+.ProseMirror video,
+.ProseMirror table {
+  max-width: 100%;
+}
+
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Tiptap Table Styles */
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  min-width: 1em;
+  border: 1px solid #ced4da;
+  padding: 3px 5px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.ProseMirror table th {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f1f3f5;
+}
+
+.dark .ProseMirror table td,
+.dark .ProseMirror table th {
+  border-color: #475569;
+}
+
+.dark .ProseMirror table th {
+  background-color: #334155;
+}
+
+.ProseMirror table .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(200, 200, 255, 0.4);
+  pointer-events: none;
+}
+
+.ProseMirror table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 20;
+  background-color: #adf;
+  pointer-events: none;
+}
+
+/* Task List Styles */
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror ul[data-type="taskList"] label {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.ProseMirror ul[data-type="taskList"] div {
+  flex: 1 1 auto;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body,
+  html {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .flex-1.overflow-auto {
+    overflow: visible !important;
+    background: white !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  .a4-page {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    transform: none !important;
+    width: 210mm !important;
+    min-height: 100% !important;
+    padding: 20mm !important;
+  }
+
+  .a4-page * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force the motion.div (paper) to be standard A4 */
+  .motion-paper {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 2.54cm !important;
+    /* Standard Word Margins */
+    width: 210mm !important;
+    min-height: 297mm !important;
+    transform: none !important;
+    zoom: 1 !important;
+    background: white !important;
+  }
+
+  /* Manual page break divider - hide it in print */
+  .page-divider {
+    display: none !important;
+  }
+
+  /* Ensure natural page breaks between height-calculated blocks if any */
+  h1,
+  h2,
+  h3,
+  p {
+    break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+}
