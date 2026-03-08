@@ -6,22 +6,26 @@ export async function POST(req: NextRequest) {
     try {
         const { html, title } = await req.json();
 
-        const htmlContent = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <title>${title || 'Document'}</title>
-            </head>
-            <body>
-                ${html}
-            </body>
-            </html>
-        `;
+        let safeHtml = html || '';
+        // Eğer HTML içeriği neredeyse boşsa (sadece boş etiketler vs), Word'ün hata vermemesi için geçerli bir boş paragraf ekle
+        if (!safeHtml.replace(/<[^>]*>?/gm, '').replace(/\s+/g, '').length) {
+            // Word'ün "bozuk" hatası vermemesi için en az bir geçerli karakter (gizli) ekleyelim:
+            safeHtml = '<p><span style="color: white; font-size: 1px;">.</span></p>';
+        }
+
+        const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>${title || 'Document'}</title>
+</head>
+<body>
+    ${safeHtml}
+</body>
+</html>`;
 
         const docxBlob = await generateDocx(htmlContent, undefined, {
-            orientation: 'portrait',
-            margins: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+            orientation: 'portrait'
         });
 
         return new NextResponse(docxBlob, {

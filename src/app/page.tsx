@@ -7,6 +7,7 @@ import { saveRecentDocument, type RecentDocument } from "./utils/recentDocuments
 
 const Editor = dynamic<{ initialContent: string; onBack: (content?: string) => void }>(() => import("./components/Editor"), { ssr: false });
 const PdfEditor = dynamic<{ onBack: () => void; initialFile?: File }>(() => import("./components/PdfEditor"), { ssr: false });
+const PptxEditor = dynamic<{ onBack: () => void; initialFile?: File }>(() => import("./components/PptxEditor"), { ssr: false });
 
 
 // ─── Image helper utilities ───────────────────────────────────────────────────
@@ -31,9 +32,10 @@ function loadImageDimensions(file: File): Promise<{ width: number; height: numbe
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [view, setView] = useState<"landing" | "editor" | "pdf">("landing");
+  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx">("landing");
   const [initialContent, setInitialContent] = useState<string>("");
   const [initialPdfFile, setInitialPdfFile] = useState<File | null>(null);
+  const [initialPptxFile, setInitialPptxFile] = useState<File | null>(null);
   const currentDocIdRef = useRef<string | undefined>(undefined);
 
   const handleEditorBack = useCallback((content?: string) => {
@@ -52,7 +54,94 @@ export default function Home() {
   }, []);
 
   const handleSelectTemplate = (id: string, content: string) => {
-    if (id === "pdf") {
+    if (id === "pptx-editor") {
+      setInitialPptxFile(null);
+      setView("pptx");
+    } else if (id === "pptx-open") {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".pptx";
+      input.onchange = async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (file) {
+          setInitialPptxFile(file);
+          setView("pptx");
+        }
+      };
+      input.click();
+    } else if (id === "pptx-to-png") {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".pptx";
+      input.onchange = async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        try {
+          const JSZip = (await import("jszip")).default;
+          const { saveAs } = await import("file-saver");
+          const zip = new JSZip();
+          const content2 = await zip.loadAsync(file);
+          const mediaFiles = Object.keys(content2.files).filter(p =>
+            p.startsWith("ppt/media/") && (p.endsWith(".png") || p.endsWith(".jpg") || p.endsWith(".jpeg"))
+          );
+          if (mediaFiles.length === 0) { alert("Görsel içerik bulunamadı."); return; }
+          if (mediaFiles.length === 1) {
+            const imgData = await content2.files[mediaFiles[0]].async("blob");
+            saveAs(imgData, file.name.replace(/\.[^/.]+$/, "") + ".png");
+          } else {
+            const outZip = new JSZip();
+            for (let i = 0; i < mediaFiles.length; i++) {
+              const blob = await content2.files[mediaFiles[i]].async("blob");
+              const ext = mediaFiles[i].split(".").pop();
+              outZip.file(`slayt_${i + 1}.${ext}`, blob);
+            }
+            const zipBlob = await outZip.generateAsync({ type: "blob" });
+            saveAs(zipBlob, file.name.replace(/\.[^/.]+$/, "") + "_gorseller.zip");
+          }
+          alert("Başarıyla dönüştürüldü!");
+        } catch (err) {
+          console.error("PPTX to PNG error:", err);
+          alert("Dönüştürme hatası.");
+        }
+      };
+      input.click();
+    } else if (id === "docx-to-pptx") {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".docx";
+      input.onchange = async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        try {
+          const mammoth = await import("mammoth");
+          const PptxGenJS = (await import("pptxgenjs")).default;
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.convertToHtml({ arrayBuffer });
+          const html = result.value;
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = html;
+          const paragraphs = Array.from(tempDiv.querySelectorAll("h1,h2,h3,p,li")).map(el => el.textContent || "").filter(t => t.trim());
+          const pptx = new PptxGenJS();
+          pptx.defineLayout({ name: "CUSTOM", width: 10, height: 5.625 });
+          pptx.layout = "CUSTOM";
+          // Title slide
+          const titleSlide = pptx.addSlide();
+          titleSlide.addText(paragraphs[0] || file.name, { x: 1, y: 1.5, w: 8, h: 2, fontSize: 36, bold: true, color: "1e293b", align: "center" });
+          // Content slides (5 paragraphs per slide)
+          for (let i = 1; i < paragraphs.length; i += 5) {
+            const slide = pptx.addSlide();
+            const chunk = paragraphs.slice(i, i + 5).join("\n\n");
+            slide.addText(chunk, { x: 0.5, y: 0.5, w: 9, h: 4.5, fontSize: 16, color: "334155", valign: "top" });
+          }
+          await pptx.writeFile({ fileName: file.name.replace(/\.[^/.]+$/, "") + ".pptx" });
+          alert("Başarıyla dönüştürüldü!");
+        } catch (err) {
+          console.error("DOCX to PPTX error:", err);
+          alert("Dönüştürme hatası.");
+        }
+      };
+      input.click();
+    } else if (id === "pdf") {
       const input = document.createElement("input");
       input.type = "file";
       input.accept = ".pdf";
@@ -456,6 +545,8 @@ export default function Home() {
         <LandingPage onSelectTemplate={handleSelectTemplate} onOpenRecentDocument={handleOpenRecentDocument} />
       ) : view === "editor" ? (
         <Editor initialContent={initialContent} onBack={handleEditorBack} />
+      ) : view === "pptx" ? (
+        <PptxEditor onBack={() => setView("landing")} initialFile={initialPptxFile || undefined} />
       ) : (
         <PdfEditor onBack={() => setView("landing")} initialFile={initialPdfFile || undefined} />
       )}

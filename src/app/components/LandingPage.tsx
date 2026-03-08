@@ -154,8 +154,12 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {[
+                            { id: "pptx-editor", title: "PowerPoint Editörü", icon: PieChart, color: "from-red-500 to-orange-500", desc: "Sunum Oluştur & Düzenle" },
+                            { id: "pptx-open", title: "PPTX Dosyası Aç", icon: Library, color: "from-amber-500 to-orange-500", desc: "Mevcut Sunumu Düzenle" },
                             { id: "pdf-to-pptx", title: "PDF'den PPTX'e", icon: PieChart, color: "from-orange-500 to-orange-600", desc: "PDF'i Sunuma Çevir" },
                             { id: "pptx-to-pdf", title: "PPTX'ten PDF'e", icon: Library, color: "from-blue-500 to-blue-600", desc: "Sunumu PDF Yap" },
+                            { id: "pptx-to-png", title: "PPTX'ten PNG'ye", icon: Image, color: "from-teal-500 to-emerald-500", desc: "Slaytları Görsele Çevir" },
+                            { id: "docx-to-pptx", title: "Word'den PPTX'e", icon: FileText, color: "from-sky-500 to-blue-600", desc: "Belgeden Sunum Oluştur" },
                             { id: "pdf-to-word", title: "PDF'den Word'e", icon: FileText, color: "from-indigo-500 to-indigo-600", desc: "PDF'i Metne Çevir" },
                             { id: "word-to-pdf", title: "Word'den PDF'e", icon: FileSearch, color: "from-red-500 to-red-600", desc: "Word'ü PDF Yap" },
                             { id: "png-to-pdf", title: "PNG'den PDF'e", icon: Image, color: "from-emerald-500 to-emerald-600", desc: "Görseli PDF Yap" },
