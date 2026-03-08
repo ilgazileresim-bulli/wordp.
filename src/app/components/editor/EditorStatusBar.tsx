@@ -38,8 +38,8 @@ const EditorStatusBar = ({
     setZoom
 }: EditorStatusBarProps) => {
     return (
-        <div className="h-6 bg-[#2b579a] dark:bg-[#0d0d1a] text-white flex items-center justify-between px-3 text-[10px] z-[60] shrink-0 no-print shadow-[0_-1px_3px_rgba(0,0,0,0.1)]">
-            <div className="flex items-center gap-4 h-full">
+        <div className="h-6 bg-[#2b579a] dark:bg-[#0d0d1a] text-white flex items-center justify-between px-3 text-[10px] z-[60] shrink-0 no-print shadow-[0_-1px_3px_rgba(0,0,0,0.1)] overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-4 h-full shrink-0">
                 <div className="flex items-center gap-1.5 px-2 hover:bg-white/10 h-full cursor-pointer transition-colors">
                     <FileText size={12} strokeWidth={2.5} />
                     <span className="font-bold uppercase tracking-tighter">SAYFA {currentPage} / {pageCount}</span>
@@ -52,7 +52,7 @@ const EditorStatusBar = ({
                     <span className="font-bold uppercase tracking-tighter">Erişilebilirlik: İyi</span>
                 </div>
             </div>
-            <div className="flex items-center gap-0 h-full">
+            <div className="flex items-center gap-0 h-full shrink-0">
                 <div className="flex items-center h-full mr-4 gap-0.5">
                     <button onClick={() => setViewMode('read')} className={cn("p-1 px-2 h-full transition-colors hover:bg-white/10", viewMode === 'read' && "bg-white/20 shadow-inner")} title="Okuma Modu"><BookOpen size={13} strokeWidth={2.5} /></button>
                     <button onClick={() => setViewMode('print')} className={cn("p-1 px-2 h-full transition-colors hover:bg-white/10", viewMode === 'print' && "bg-white/20 shadow-inner")} title="Yazdırma Düzeni"><Layout size={13} strokeWidth={2.5} /></button>

@@ -61,10 +61,10 @@ const FileMenu = ({
                     animate={{ x: 0 }}
                     exit={{ x: "-100%" }}
                     transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-                    className="fixed inset-0 bg-[#2b579a] dark:bg-[#0a0a18] z-[10000] flex overflow-hidden no-print"
+                    className="fixed inset-0 bg-[#2b579a] dark:bg-[#0a0a18] z-[10000] flex flex-col md:flex-row overflow-hidden no-print"
                 >
                     {/* Left Sidebar */}
-                    <div className="w-[200px] bg-[#1a478a] dark:bg-[#06060f] flex flex-col pt-8 shrink-0">
+                    <div className="w-full md:w-[200px] bg-[#1a478a] dark:bg-[#06060f] flex flex-row md:flex-col pt-2 md:pt-8 shrink-0 overflow-x-auto scrollbar-hide">
                         <button
                             onClick={onClose}
                             className="flex items-center gap-3 px-6 py-4 hover:bg-[#3b67aa] text-white/80 hover:text-white transition-colors group mb-4"
@@ -75,7 +75,7 @@ const FileMenu = ({
                             <span className="text-xs font-black uppercase tracking-widest">Geri</span>
                         </button>
 
-                        <div className="flex flex-col">
+                        <div className="flex flex-row md:flex-col items-center md:items-stretch">
                             <MenuButton icon={Info} label="Bilgi" active={activeTab === 'info'} onClick={() => setActiveTab('info')} />
                             <MenuButton icon={Save} label="Kaydet" onClick={handleQuickSave} />
                             <MenuButton icon={Download} label="Kaydet (Farklı)" active={activeTab === 'save-as'} onClick={() => setActiveTab('save-as')} />
@@ -85,7 +85,7 @@ const FileMenu = ({
                             <MenuButton icon={X} label="Kapat" onClick={onClose} />
                         </div>
 
-                        <div className="mt-auto pb-8">
+                        <div className="md:mt-auto md:pb-8 flex items-center pr-4 md:pr-0">
                             <MenuButton icon={Settings} label="Seçenekler" />
                         </div>
                     </div>
@@ -99,7 +99,7 @@ const FileMenu = ({
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.2 }}
-                                className="p-12 max-w-5xl w-full mx-auto overflow-y-auto"
+                                className="p-4 md:p-12 max-w-5xl w-full mx-auto overflow-y-auto"
                             >
                                 {activeTab === 'info' && (
                                     <div className="animate-in fade-in duration-500">
@@ -244,13 +244,13 @@ const MenuButton = ({ icon: Icon, label, active, onClick }: { icon: any, label: 
     <button
         onClick={onClick}
         className={cn(
-            "flex items-center gap-4 px-6 py-4 w-full transition-all text-left",
-            active ? "bg-white dark:bg-[#16162a] text-[#2b579a] dark:text-blue-400" : "text-white/70 hover:bg-[#3b67aa] dark:hover:bg-white/10 hover:text-white"
+            "flex justify-center md:justify-start items-center gap-2 md:gap-4 px-4 md:px-6 py-3 md:py-4 w-auto md:w-full shrink-0 transition-all text-left",
+            active ? "bg-white dark:bg-[#16162a] text-[#2b579a] dark:text-blue-400 rounded-lg md:rounded-none" : "text-white/70 hover:bg-[#3b67aa] dark:hover:bg-white/10 hover:text-white"
         )}
     >
         <Icon size={20} strokeWidth={active ? 2.5 : 2} />
-        <span className={cn("text-sm transition-all", active ? "font-black" : "font-medium")}>{label}</span>
-        {active && <div className="ml-auto w-1 h-4 bg-[#2b579a] rounded-full" />}
+        <span className={cn("text-xs md:text-sm transition-all whitespace-nowrap", active ? "font-black" : "font-medium")}>{label}</span>
+        {active && <div className="hidden md:block ml-auto w-1 h-4 bg-[#2b579a] rounded-full" />}
     </button>
 );
 

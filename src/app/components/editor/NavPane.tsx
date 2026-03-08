@@ -17,7 +17,7 @@ const NavPane = ({ isOpen, onClose }: NavPaneProps) => {
                     initial={{ width: 0, opacity: 0 }}
                     animate={{ width: 260, opacity: 1 }}
                     exit={{ width: 0, opacity: 0 }}
-                    className="h-full bg-white dark:bg-[#16162a] border-r border-zinc-300 dark:border-slate-700 overflow-hidden flex flex-col shrink-0 no-print"
+                    className="absolute md:relative z-50 md:z-auto h-full bg-white dark:bg-[#16162a] border-r border-zinc-300 dark:border-slate-700 overflow-hidden flex flex-col shrink-0 no-print shadow-2xl md:shadow-none"
                 >
                     <div className="p-3 border-b border-zinc-200 dark:border-slate-700 flex items-center justify-between">
                         <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Gezinti</span>

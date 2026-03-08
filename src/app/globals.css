@@ -85,6 +85,17 @@
 }
 
 @layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   .glass {
     @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
   }
@@ -214,6 +225,47 @@
   max-width: 100%;
 }
 
+/* Mobile Responsiveness Improvements */
+@media (max-width: 640px) {
+
+  /* Turn ribbon dropdowns into Bottom Sheets */
+  .ribbon-dropdown {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    top: auto !important;
+    width: 100vw !important;
+    max-height: 60vh !important;
+    border-radius: 16px 16px 0 0 !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2) !important;
+    z-index: 99999 !important;
+    padding-bottom: 2rem !important;
+    /* Extra padding for bottom-sheet feel */
+    transform: none !important;
+    animation: bottom-sheet-slide-up 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Make the document page responsive to phone width (text wrapping) */
+  .motion-paper {
+    padding: 16px !important;
+    max-width: calc(100vw - 16px) !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    /* Remove any previous hardcoded A4 width */
+  }
+}
+
+@keyframes bottom-sheet-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* Smooth scroll behavior */
 html {

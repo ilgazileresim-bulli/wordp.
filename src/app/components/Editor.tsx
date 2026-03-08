@@ -521,7 +521,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
 
             <div className="flex-1 flex overflow-hidden relative">
                 <NavPane isOpen={showNavPane} onClose={() => setShowNavPane(false)} />
-                <SearchPanel isOpen={showSearch} onClose={() => setShowSearch(false)} />
+                <SearchPanel isOpen={showSearch} onClose={() => setShowSearch(false)} editor={editor} />
 
                 <DocumentWorkplace
                     editor={editor}

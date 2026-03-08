@@ -31,8 +31,8 @@ const EditorTopBar = ({
     onExportDocx
 }: EditorTopBarProps) => {
     return (
-        <div className="h-10 bg-[#2b579a] dark:bg-[#0d0d1a] flex items-center px-4 z-[60] shrink-0 no-print border-b border-[#1a478a] dark:border-[#1e1e30]">
-            <div className="flex items-center gap-3 min-w-[300px]">
+        <div className="h-10 bg-[#2b579a] dark:bg-[#0d0d1a] flex items-center px-4 z-[60] shrink-0 no-print border-b border-[#1a478a] dark:border-[#1e1e30] overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-3 min-w-max">
                 <div className="flex items-center gap-2">
                     <span className="text-[10px] font-bold text-white/90 uppercase tracking-tighter">Otomatik Kaydet</span>
                     <div className="w-8 h-4 bg-white/20 rounded-full relative cursor-pointer ring-1 ring-white/10">
@@ -63,7 +63,7 @@ const EditorTopBar = ({
                     <ChevronDown size={14} className="text-white/60 ml-auto" />
                 </div>
             </div>
-            <div className="flex items-center gap-1 min-w-[200px] justify-end">
+            <div className="flex items-center gap-1 min-w-max justify-end ml-4">
                 <button onClick={onPrint} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Yazdır"><Printer size={18} strokeWidth={2.5} /></button>
                 <button onClick={onBack} className="p-1.5 hover:bg-red-500 rounded transition-colors text-white" title="Kapat"><X size={18} strokeWidth={2.5} /></button>
             </div>
