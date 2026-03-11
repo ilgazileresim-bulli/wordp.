@@ -124,6 +124,8 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
     const [showShapeDropdown, setShowShapeDropdown] = useState(false);
     const [showBgDropdown, setShowBgDropdown] = useState(false);
     const [showDosya, setShowDosya] = useState(false);
+    const [clipboardElement, setClipboardElement] = useState<SlideElement | null>(null);
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
     const canvasRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -161,8 +163,8 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
 
     // ─── Element Ops ─────────────────────────────────────────────────
     const addTextElement = () => {
-        const el: SlideElement = { id: uid(), type: "text", x: 100, y: 200, width: 400, height: 60, content: "Metin yazın...", fontSize: 24, fontFamily: "Calibri", color: "#333333", backgroundColor: "transparent", textAlign: "left", fontWeight: "normal", fontStyle: "normal" };
-        updateSlide(currentSlideIdx, { elements: [...currentSlide.elements, el] }); setSelectedElId(el.id); setActiveTool("select");
+        const el: SlideElement = { id: uid(), type: "text", x: 100, y: 200, width: 400, height: 60, content: "", fontSize: 24, fontFamily: "Calibri", color: "#333333", backgroundColor: "transparent", textAlign: "left", fontWeight: "normal", fontStyle: "normal" };
+        updateSlide(currentSlideIdx, { elements: [...currentSlide.elements, el] }); setSelectedElId(el.id); setEditingTextId(el.id); setActiveTool("select");
     };
     const addShape = (shapeType: SlideElement["shapeType"] = "rect") => {
         const el: SlideElement = { id: uid(), type: "shape", x: 200, y: 150, width: 200, height: 150, content: "", shapeType, backgroundColor: "#4472c4", borderColor: "#2f5496", borderWidth: 2, color: "#ffffff" };
@@ -177,6 +179,56 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
     };
     const deleteElement = () => { if (!selectedElId) return; updateSlide(currentSlideIdx, { elements: currentSlide.elements.filter(e => e.id !== selectedElId) }); setSelectedElId(null); };
 
+    // ─── Clipboard & Layering Ops ────────────────────────────────────
+    const handleCopy = useCallback(() => { if (selectedEl) setClipboardElement(selectedEl); }, [selectedEl]);
+    const handleCut = useCallback(() => { if (selectedEl) { setClipboardElement(selectedEl); deleteElement(); } }, [selectedEl, deleteElement]);
+    const handlePaste = useCallback(() => {
+        if (clipboardElement) {
+            const el: SlideElement = { ...clipboardElement, id: uid(), x: clipboardElement.x + 20, y: clipboardElement.y + 20 };
+            updateSlide(currentSlideIdx, { elements: [...currentSlide.elements, el] });
+            setSelectedElId(el.id);
+            setActiveTool("select");
+        }
+    }, [clipboardElement, currentSlideIdx, updateSlide, currentSlide]);
+
+    const bringForward = () => {
+        if (!selectedElId) return;
+        const els = [...currentSlide.elements];
+        const idx = els.findIndex(e => e.id === selectedElId);
+        if (idx < els.length - 1) {
+            const temp = els[idx]; els[idx] = els[idx + 1]; els[idx + 1] = temp;
+            updateSlide(currentSlideIdx, { elements: els });
+        }
+    };
+    const sendBackward = () => {
+        if (!selectedElId) return;
+        const els = [...currentSlide.elements];
+        const idx = els.findIndex(e => e.id === selectedElId);
+        if (idx > 0) {
+            const temp = els[idx]; els[idx] = els[idx - 1]; els[idx - 1] = temp;
+            updateSlide(currentSlideIdx, { elements: els });
+        }
+    };
+    
+    const toggleFullscreen = () => {
+        if (!isFullscreen) {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => console.error(err));
+            }
+        } else {
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.error(err));
+            }
+        }
+        setIsFullscreen(!isFullscreen);
+    };
+
+    useEffect(() => {
+        const handleFullscreenChange = () => { if (!document.fullscreenElement) setIsFullscreen(false); };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }, []);
+
     // ─── Mouse ───────────────────────────────────────────────────────
     const getCanvasPos = (e: React.MouseEvent) => { if (!canvasRef.current) return { x: 0, y: 0 }; const r = canvasRef.current.getBoundingClientRect(); const s = zoom / 100; return { x: (e.clientX - r.left) / s, y: (e.clientY - r.top) / s }; };
 
@@ -184,11 +236,31 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
         const pos = getCanvasPos(e);
         const clicked = [...currentSlide.elements].reverse().find(el => pos.x >= el.x && pos.x <= el.x + el.width && pos.y >= el.y && pos.y <= el.y + el.height);
         if (clicked) {
+            let isEditingNow = editingTextId === clicked.id;
+
             // Clear placeholder on first click
             if (clicked.isPlaceholder) {
-                updateElement(clicked.id, { isPlaceholder: false, borderColor: "transparent", borderWidth: 0 });
+                updateElement(clicked.id, { isPlaceholder: false, content: "", borderColor: "transparent", borderWidth: 0 });
+                setEditingTextId(clicked.id);
+                setSelectedElId(clicked.id);
+                isEditingNow = true;
+            } else if (!isEditingNow && clicked.type === "text") {
+                // If we click a text element, we shouldn't necessarily enter edit mode immediately on mousedown if double click is expected,
+                // BUT to make it easier to write, let's just use double click as implemented in the div below.
+                // We just need to make sure we don't clear the editingTextId incorrectly.
+                // Wait, if we click ANOTHER element, we should clear edit mode.
+                setEditingTextId(null);
             }
-            setSelectedElId(clicked.id); setIsDragging(true); setDragStart({ x: pos.x - clicked.x, y: pos.y - clicked.y });
+
+            // If already editing THIS element, don't restart dragging
+            if (isEditingNow) {
+                return; // Let the textarea handle its own mousedown (selection, etc.)
+            }
+
+            setSelectedElId(clicked.id);
+            // If they click on a shape or text box, they can double-click to edit, or single click to select.
+            setIsDragging(true); setDragStart({ x: pos.x - clicked.x, y: pos.y - clicked.y });
+
             if (pos.x >= clicked.x + clicked.width - 12 && pos.y >= clicked.y + clicked.height - 12) { setIsResizing(true); setIsDragging(false); }
         } else { setSelectedElId(null); setEditingTextId(null); }
     };
@@ -240,9 +312,39 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
 
     // ─── Keyboard ────────────────────────────────────────────────────
     useEffect(() => {
-        const h = (e: KeyboardEvent) => { if (editingTextId) return; if (e.key === "Delete" || e.key === "Backspace") { if (selectedElId) deleteElement(); } if (e.ctrlKey && e.key === "z") { e.preventDefault(); undo(); } if (e.ctrlKey && e.key === "y") { e.preventDefault(); redo(); } };
+        const h = (e: KeyboardEvent) => { 
+            if (isFullscreen) {
+                if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") {
+                    if (currentSlideIdx < slides.length - 1) setCurrentSlideIdx(currentSlideIdx + 1);
+                    else { if (document.fullscreenElement) document.exitFullscreen(); setIsFullscreen(false); }
+                } else if (e.key === "ArrowLeft" || e.key === "Backspace") {
+                    if (currentSlideIdx > 0) setCurrentSlideIdx(currentSlideIdx - 1);
+                } else if (e.key === "Escape") {
+                    if (document.fullscreenElement) document.exitFullscreen(); setIsFullscreen(false);
+                }
+                return;
+            }
+            if (editingTextId) return; 
+            if (selectedElId && e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                const el = currentSlide.elements.find(e2 => e2.id === selectedElId);
+                if (el && (el.type === "text" || el.type === "shape")) {
+                    setEditingTextId(selectedElId);
+                    // The very first character they type initiates editing. 
+                    const v = el.content === "" ? e.key : el.content + e.key;
+                    setSlides(p => p.map((s, i) => i !== currentSlideIdx ? s : { ...s, elements: s.elements.map(e3 => e3.id === selectedElId ? { ...e3, content: v } : e3) }));
+                    e.preventDefault();
+                    return;
+                }
+            }
+            if (e.key === "Delete" || e.key === "Backspace") { if (selectedElId) deleteElement(); } 
+            if (e.ctrlKey && e.key === "z") { e.preventDefault(); undo(); } 
+            if (e.ctrlKey && e.key === "y") { e.preventDefault(); redo(); } 
+            if (e.ctrlKey && e.key === "c") { e.preventDefault(); handleCopy(); }
+            if (e.ctrlKey && e.key === "x") { e.preventDefault(); handleCut(); }
+            if (e.ctrlKey && e.key === "v") { e.preventDefault(); handlePaste(); }
+        };
         window.addEventListener("keydown", h); return () => window.removeEventListener("keydown", h);
-    }, [selectedElId, editingTextId, history, redoStack, slides]);
+    }, [selectedElId, editingTextId, history, redoStack, slides, isFullscreen, currentSlideIdx, handleCopy, handleCut, handlePaste]);
 
     // ─── Render Shape ────────────────────────────────────────────────
     const renderShape = (el: SlideElement) => {
@@ -282,30 +384,30 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
             <div className="flex items-end px-2 py-1 gap-0">
                 {/* ── Pano ── */}
                 <RibbonGroup label="Pano">
-                    <BigBtn icon={Clipboard} label="Yapıştır" sub />
+                    <BigBtn icon={Clipboard} label="Yapıştır" sub onClick={handlePaste} />
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Scissors size={12} /> Kes</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Copy size={12} /> Kopyala</button>
+                        <button onClick={handleCut} className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Scissors size={12} /> Kes</button>
+                        <button onClick={handleCopy} className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Copy size={12} /> Kopyala</button>
                         <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Paintbrush size={12} /> Biçim Boyacısı</button>
                     </div>
                 </RibbonGroup>
                 {/* ── Slaytlar ── */}
                 <RibbonGroup label="Slaytlar">
                     <div className="flex flex-col gap-px">
-                        <div className="relative">
+                        <div className="relative z-50">
                             <button onClick={() => setShowLayoutDropdown(!showLayoutDropdown)} className="flex items-center gap-1 px-2 py-1 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444] border border-[#bbb] bg-white">
                                 <Plus size={11} /> Düzen <ChevronDown size={9} />
                             </button>
                             {showLayoutDropdown && (
-                                <div className="absolute top-full left-0 mt-1 bg-white border border-[#ccc] shadow-xl z-50 rounded-sm w-44">
+                                <div className="absolute top-full left-0 mt-1 bg-white border border-[#ccc] shadow-xl rounded-sm w-44">
                                     {LAYOUTS.map(l => (
                                         <button key={l.id} onClick={() => addSlide(l.id)} className="w-full text-left px-3 py-1.5 text-[11px] hover:bg-[#d6e4f0] text-[#333]">{l.label}</button>
                                     ))}
                                 </div>
                             )}
                         </div>
-                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><LayoutTemplate size={11} /> Sıfırla <ChevronDown size={9} /></button>
-                        <button onClick={deleteSlide} className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Trash2 size={11} /> Bölüm <ChevronDown size={9} /></button>
+                        <button onClick={duplicateSlide} className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Copy size={11} /> Çoğalt</button>
+                        <button onClick={deleteSlide} className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Trash2 size={11} /> Sil</button>
                     </div>
                 </RibbonGroup>
                 {/* ── Yazı Tipi ── */}
@@ -332,22 +434,25 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                                 className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] italic text-[#444]", selectedEl?.fontStyle === "italic" && "bg-[#b8cce4]")} title="Eğik">T</button>
                             <button onClick={() => selectedEl && updateElement(selectedEl.id, { textDecoration: selectedEl.textDecoration === "underline" ? "none" : "underline" })}
                                 className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] underline text-[#444]", selectedEl?.textDecoration === "underline" && "bg-[#b8cce4]")} title="Altı Çizili">A</button>
-                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] line-through text-[#444]" title="Üstü Çizili">S</button>
+                            <button onClick={() => selectedEl && updateElement(selectedEl.id, { textDecoration: selectedEl.textDecoration === "line-through" ? "none" : "line-through" })}
+                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] line-through text-[#444]", selectedEl?.textDecoration === "line-through" && "bg-[#b8cce4]")} title="Üstü Çizili">S</button>
                             <div className="w-px h-4 bg-[#ccc] mx-0.5" />
                             <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[10px] text-[#444]" title="Büyük/Küçük Harf">Aa<ChevronDown size={7} className="ml-px" /></button>
                             <div className="w-px h-4 bg-[#ccc] mx-0.5" />
                             {/* Font Color */}
                             <div className="relative group/fc">
-                                <button className="w-[22px] h-[20px] flex flex-col items-center justify-center rounded-sm hover:bg-[#c8dcf0]" title="Yazı Tipi Rengi">
+                                <label className="w-[22px] h-[20px] flex flex-col items-center justify-center rounded-sm hover:bg-[#c8dcf0] cursor-pointer" title="Yazı Tipi Rengi">
                                     <span className="text-[12px] font-bold text-[#444] leading-none">A</span>
                                     <div className="w-4 h-[3px] rounded-sm" style={{ backgroundColor: selectedEl?.color || "#c00000" }} />
-                                </button>
+                                    <input type="color" value={selectedEl?.color || "#000000"} onChange={e => selectedEl && updateElement(selectedEl.id, { color: e.target.value })} className="absolute opacity-0 w-0 h-0" />
+                                </label>
                             </div>
                             {/* Highlight */}
-                            <button className="w-[22px] h-[20px] flex flex-col items-center justify-center rounded-sm hover:bg-[#c8dcf0]" title="Vurgulama Rengi">
+                            <label className="w-[22px] h-[20px] flex flex-col items-center justify-center rounded-sm hover:bg-[#c8dcf0] cursor-pointer" title="Vurgulama Rengi">
                                 <span className="text-[10px] text-[#444] leading-none">ab</span>
-                                <div className="w-4 h-[3px] rounded-sm bg-yellow-400" />
-                            </button>
+                                <div className="w-4 h-[3px] rounded-sm" style={{ backgroundColor: selectedEl?.backgroundColor === "transparent" ? "#ffff00" : (selectedEl?.backgroundColor || "#ffff00") }} />
+                                <input type="color" value={selectedEl?.backgroundColor === "transparent" ? "#ffffff" : (selectedEl?.backgroundColor || "#ffffff")} onChange={e => selectedEl && updateElement(selectedEl.id, { backgroundColor: e.target.value })} className="absolute opacity-0 w-0 h-0" />
+                            </label>
                         </div>
                     </div>
                 </RibbonGroup>
@@ -395,7 +500,13 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                             </div>
                         </div>
                         <div className="flex items-center gap-0.5">
-                            <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Shapes size={11} /> Yerleştir <ChevronDown size={8} /></button>
+                            <div className="relative group z-50">
+                                <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Shapes size={11} /> Yerleştir <ChevronDown size={8} /></button>
+                                <div className="absolute top-full left-0 hidden group-hover:block mt-1 bg-white border border-[#ccc] shadow-xl rounded-sm w-32 py-1">
+                                    <button onClick={bringForward} className="w-full text-left px-3 py-1.5 text-[11px] hover:bg-[#d6e4f0] text-[#333]">Bir Öne Getir</button>
+                                    <button onClick={sendBackward} className="w-full text-left px-3 py-1.5 text-[11px] hover:bg-[#d6e4f0] text-[#333]">Bir Arkaya Gönder</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="flex flex-col gap-px ml-1">
@@ -743,8 +854,8 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
             <div className="flex items-end px-2 py-1 gap-0">
                 {/* Slayt Gösterisini Başlat */}
                 <RibbonGroup label="Slayt Gösterisini Başlat">
-                    <BigBtn icon={Play} label="Baştan" />
-                    <BigBtn icon={Monitor} label={"Geçerli\nSlayttan"} />
+                    <BigBtn icon={Play} label="Baştan" onClick={() => { setCurrentSlideIdx(0); toggleFullscreen(); }} />
+                    <BigBtn icon={Monitor} label={"Geçerli\nSlayttan"} onClick={toggleFullscreen} />
                     <BigBtn icon={Presentation} label={"Özel Slayt\nGösterisi"} sub />
                 </RibbonGroup>
                 {/* Ayarla */}
@@ -1140,26 +1251,34 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                                     className={cn("absolute", selectedElId === el.id && "outline outline-2 outline-[#4472c4]")}
                                     style={{ left: el.x, top: el.y, width: el.width, height: el.height, zIndex: selectedElId === el.id ? 50 : 1, border: el.isPlaceholder ? `1px dashed ${el.borderColor || "#a0a0a0"}` : "none" }}>
 
-                                    {el.type === "text" && (
+                                    {el.type === "image" && el.imageData && <img src={el.imageData} className="w-full h-full object-contain pointer-events-none" alt="" draggable={false} />}
+                                    {el.type === "shape" && renderShape(el)}
+
+                                    {(el.type === "text" || el.type === "shape") && (
                                         editingTextId === el.id ? (
                                             <textarea value={el.content}
                                                 onChange={e2 => { const v = e2.target.value; setSlides(p => p.map((s, i) => i !== currentSlideIdx ? s : { ...s, elements: s.elements.map(e3 => e3.id === el.id ? { ...e3, content: v } : e3) })); }}
-                                                onBlur={() => setEditingTextId(null)} autoFocus
-                                                className="w-full h-full bg-transparent outline-none resize-none p-2"
-                                                style={{ fontSize: el.fontSize, fontWeight: el.fontWeight, fontStyle: el.fontStyle, textDecoration: el.textDecoration, textAlign: el.textAlign as any, color: el.color, fontFamily: el.fontFamily || "Calibri, sans-serif" }}
+                                                onBlur={() => { setEditingTextId(null); setHistory(p => [...p.slice(-29), [...p.slice(-1)[0].slice(0, currentSlideIdx), slides[currentSlideIdx], ...p.slice(-1)[0].slice(currentSlideIdx + 1)]]); }} 
+                                                autoFocus
+                                                onMouseDown={e => e.stopPropagation()}
+                                                className="absolute inset-0 w-full h-full bg-transparent outline-none resize-none p-2 select-text"
+                                                style={{ fontSize: el.fontSize || 24, fontWeight: el.fontWeight, fontStyle: el.fontStyle, textDecoration: el.textDecoration, textAlign: el.textAlign as any || (el.type === "shape" ? "center" : "left"), color: el.color || (el.type === "shape" ? "#ffffff" : "#333333"), fontFamily: el.fontFamily || "Calibri, sans-serif" }}
                                             />
                                         ) : (
-                                            <div className="w-full h-full overflow-hidden whitespace-pre-wrap p-2 cursor-text flex items-center"
-                                                style={{ fontSize: el.fontSize, fontWeight: el.fontWeight, fontStyle: el.fontStyle, textDecoration: el.textDecoration, textAlign: el.textAlign as any, color: el.isPlaceholder ? "#888" : el.color, fontFamily: el.fontFamily || "Calibri, sans-serif", justifyContent: el.textAlign === "center" ? "center" : el.textAlign === "right" ? "flex-end" : "flex-start" }}
-                                                onDoubleClick={() => { setEditingTextId(el.id); setSelectedElId(el.id); }}>
+                                            <div className="absolute inset-0 w-full h-full overflow-hidden whitespace-pre-wrap p-2 cursor-text flex items-center"
+                                                style={{ fontSize: el.fontSize || 24, fontWeight: el.fontWeight, fontStyle: el.fontStyle, textDecoration: el.textDecoration, textAlign: el.textAlign as any || (el.type === "shape" ? "center" : "left"), color: el.isPlaceholder ? "#888" : (el.color || (el.type === "shape" ? "#ffffff" : "#333333")), fontFamily: el.fontFamily || "Calibri, sans-serif", justifyContent: (el.textAlign || (el.type === "shape" ? "center" : "left")) === "center" ? "center" : el.textAlign === "right" ? "flex-end" : "flex-start" }}
+                                                onDoubleClick={() => { setEditingTextId(el.id); setSelectedElId(el.id); setIsDragging(false); }}
+                                                onMouseDown={(e) => {
+                                                    if (el.isPlaceholder) {
+                                                        // Handled by canvas mousedown
+                                                    } else if (editingTextId === el.id) {
+                                                        e.stopPropagation();
+                                                    }
+                                                }}>
                                                 {el.content}
                                             </div>
                                         )
                                     )}
-
-                                    {el.type === "image" && el.imageData && <img src={el.imageData} className="w-full h-full object-contain pointer-events-none" alt="" draggable={false} />}
-                                    {el.type === "shape" && renderShape(el)}
-
                                     {selectedElId === el.id && (
                                         <>
                                             {/* Corner handles */}
@@ -1209,6 +1328,45 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
             {/* Hidden inputs */}
             <input ref={fileInputRef} type="file" accept=".pptx" className="hidden" onChange={handleFileOpen} />
             <input ref={imgInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageFile} />
+            
+            {/* Fullscreen Presentation Mode */}
+            {isFullscreen && (
+                <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center cursor-pointer select-none"
+                    onClick={() => {
+                        if (currentSlideIdx < slides.length - 1) setCurrentSlideIdx(currentSlideIdx + 1);
+                        else {
+                            if (document.fullscreenElement) document.exitFullscreen().catch(err => console.error(err));
+                            setIsFullscreen(false);
+                        }
+                    }}
+                >
+                    <div className="relative bg-white" style={{ 
+                        width: CANVAS_W, height: CANVAS_H, background: currentSlide.background,
+                        transform: `scale(min(100vw / ${CANVAS_W}, 100vh / ${CANVAS_H}))`,
+                        transformOrigin: "center center"
+                    }}>
+                        {currentSlide.elements.map(el => (
+                            <div key={el.id} className="absolute overflow-hidden" style={{
+                                left: el.x, top: el.y, width: el.width, height: el.height,
+                            }}>
+                                {el.type === "text" && <div className="leading-tight p-2 flex items-center w-full h-full" style={{ 
+                                    color: el.isPlaceholder ? "transparent" : el.color, 
+                                    fontSize: el.fontSize || 24, 
+                                    fontWeight: el.fontWeight, fontStyle: el.fontStyle, 
+                                    textDecoration: el.textDecoration, textAlign: el.textAlign as any,
+                                    fontFamily: el.fontFamily || "Calibri, sans-serif",
+                                    justifyContent: el.textAlign === "center" ? "center" : el.textAlign === "right" ? "flex-end" : "flex-start",
+                                    whiteSpace: "pre-wrap"
+                                }}>
+                                    {el.isPlaceholder ? "" : el.content}
+                                </div>}
+                                {el.type === "image" && el.imageData && <img src={el.imageData} className="w-full h-full object-contain pointer-events-none" alt="" draggable={false} />}
+                                {el.type === "shape" && renderShape(el)}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
