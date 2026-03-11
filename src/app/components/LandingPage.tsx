@@ -154,7 +154,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {[
-                            { id: "pptx-editor", title: "PowerPoint Editörü", icon: PieChart, color: "from-red-500 to-orange-500", desc: "Sunum Oluştur & Düzenle" },
+                            { id: "pptx-editor", title: "PowerPoint Editörü", icon: PieChart, color: "from-red-500 to-orange-500", desc: "Sunum Oluştur & Düzenle", badge: "YENİ" },
                             { id: "pptx-open", title: "PPTX Dosyası Aç", icon: Library, color: "from-amber-500 to-orange-500", desc: "Mevcut Sunumu Düzenle" },
                             { id: "pdf-to-pptx", title: "PDF'den PPTX'e", icon: PieChart, color: "from-orange-500 to-orange-600", desc: "PDF'i Sunuma Çevir" },
                             { id: "pptx-to-pdf", title: "PPTX'ten PDF'e", icon: Library, color: "from-blue-500 to-blue-600", desc: "Sunumu PDF Yap" },
@@ -184,7 +184,13 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                 <h3 className="font-bold text-zinc-800 dark:text-zinc-100 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400">{tool.title}</h3>
                                 <p className="text-[11px] text-zinc-400 font-medium">{tool.desc}</p>
 
-                                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                {tool.badge && (
+                                    <div className="absolute top-3 right-3">
+                                        <span className="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">{tool.badge}</span>
+                                    </div>
+                                )}
+
+                                <div className={cn("absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity", tool.badge && "top-10")}>
                                     <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
                                         <MousePointer2 size={14} />
                                     </div>
