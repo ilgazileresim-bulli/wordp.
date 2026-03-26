@@ -18,6 +18,9 @@ export async function POST(req: NextRequest) {
             imgHtml += `<p><img src="${dataUrl}" width="${w}" height="${h}" /></p>`;
         }
 
+        // Word'ün "bozuk" hatası vermemesi için en az bir geçerli karakter (gizli) ekleyelim:
+        imgHtml += '<p><span style="color: white; font-size: 1px;">.</span></p>';
+
         const html = `<!DOCTYPE html><html><body>${imgHtml}</body></html>`;
 
         const docxBlob = await generateDocx(html, undefined, {

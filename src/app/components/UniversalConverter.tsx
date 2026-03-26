@@ -305,47 +305,70 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
 
     // IMAGE -> DOCX
     const imgToDocx = async (file: File) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const dataUrl = reader.result as string;
-            const img = new Image();
-            img.src = dataUrl;
-            img.onload = async () => {
-                const images = [{ dataUrl, width: img.width, height: img.height }];
-                const outName = file.name.replace(/\.[^/.]+$/, "") + ".docx";
-                const response = await fetch("/api/png-to-docx", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ images, filename: outName }),
-                });
-                if (!response.ok) throw new Error("API error");
-                const { saveAs } = await import("file-saver");
-                const blob = await response.blob();
-                saveAs(blob, outName);
-            };
-        };
+        const { Document, Packer, Paragraph, ImageRun } = await import("docx");
+        const { saveAs } = await import("file-saver");
+        const arrayBuffer = await file.arrayBuffer();
+
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        await new Promise((resolve) => { img.onload = resolve; });
+
+        const maxWidth = 600;
+        const scale = img.width > maxWidth ? maxWidth / img.width : 1;
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+
+        const doc = new Document({
+            sections: [
+                {
+                    properties: {},
+                    children: [
+                        new Paragraph({
+                            children: [
+                                new ImageRun({
+                                    data: arrayBuffer,
+                                    transformation: { width: w, height: h },
+                                    type: file.type === "image/png" ? "png" : "jpg",
+                                }),
+                            ],
+                        }),
+                    ],
+                },
+            ],
+        });
+
+        const blob = await Packer.toBlob(doc);
+        saveAs(blob, file.name.replace(/\.[^/.]+$/, "") + ".docx");
     };
 
     // IMAGE -> PDF
     const imgToPdf = async (file: File) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const dataUrl = reader.result as string;
-            const img = new Image();
-            img.src = dataUrl;
-            img.onload = async () => {
-                const jsPDF = (await import("jspdf")).default;
-                const pdf = new jsPDF({
-                    orientation: img.width > img.height ? "landscape" : "portrait",
-                    unit: "px",
-                    format: [img.width, img.height],
-                });
-                pdf.addImage(dataUrl, file.type === "image/jpeg" ? "JPEG" : "PNG", 0, 0, img.width, img.height);
-                pdf.save(file.name.replace(/\.[^/.]+$/, "") + ".pdf");
+        return new Promise<void>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const dataUrl = reader.result as string;
+                const img = new Image();
+                img.src = dataUrl;
+                img.onload = async () => {
+                    try {
+                        const jsPDF = (await import("jspdf")).default;
+                        const pdf = new jsPDF({
+                            orientation: img.width > img.height ? "landscape" : "portrait",
+                            unit: "px",
+                            format: [img.width, img.height],
+                        });
+                        pdf.addImage(dataUrl, file.type === "image/jpeg" ? "JPEG" : "PNG", 0, 0, img.width, img.height);
+                        pdf.save(file.name.replace(/\.[^/.]+$/, "") + ".pdf");
+                        resolve();
+                    } catch (e) {
+                        reject(e);
+                    }
+                };
+                img.onerror = reject;
             };
-        };
+            reader.onerror = reject;
+        });
     };
 
     return (

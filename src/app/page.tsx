@@ -413,22 +413,36 @@ export default function Home() {
         const files = Array.from((e.target as HTMLInputElement).files || []);
         if (files.length === 0) return;
         try {
+          const { Document, Packer, Paragraph, ImageRun } = await import("docx");
           const { saveAs } = await import("file-saver");
-
-          // Load all images as data URLs
-          const images = await Promise.all(files.map(loadImageDataUrl));
-
-          // Call server-side API (html-to-docx requires Node.js fs/path modules)
-          const outName = files[0].name.replace(/\.[^/.]+$/, "") + ".docx";
-          const response = await fetch("/api/png-to-docx", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ images, filename: outName }),
-          });
-
-          if (!response.ok) throw new Error("API error");
-
-          const blob = await response.blob();
+          
+          const paragraphs = [];
+          for (const file of files) {
+            const arrayBuffer = await file.arrayBuffer();
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            await new Promise((resolve) => { img.onload = resolve; });
+            const maxWidth = 600;
+            const scale = img.width > maxWidth ? maxWidth / img.width : 1;
+            const w = Math.round(img.width * scale);
+            const h = Math.round(img.height * scale);
+            
+            paragraphs.push(
+               new Paragraph({
+                 children: [
+                   new ImageRun({
+                     data: arrayBuffer,
+                     transformation: { width: w, height: h },
+                     type: file.type === "image/png" ? "png" : "jpg"
+                   })
+                 ]
+               })
+            );
+          }
+          
+          const doc = new Document({ sections: [{ properties: {}, children: paragraphs }] });
+          const blob = await Packer.toBlob(doc);
+          const outName = files[0].name.replace(/\.[^/.]+$/, "") + (files.length > 1 ? "_combined" : "") + ".docx";
           saveAs(blob, outName);
         } catch (err) {
           console.error("PNG to DOCX error:", err);
