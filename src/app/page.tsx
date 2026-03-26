@@ -8,6 +8,10 @@ import { saveRecentDocument, type RecentDocument } from "./utils/recentDocuments
 const Editor = dynamic<{ initialContent: string; onBack: (content?: string) => void }>(() => import("./components/Editor"), { ssr: false });
 const PdfEditor = dynamic<{ onBack: () => void; initialFile?: File }>(() => import("./components/PdfEditor"), { ssr: false });
 const PptxEditor = dynamic<{ onBack: () => void; initialFile?: File }>(() => import("./components/PptxEditor"), { ssr: false });
+const BackgroundRemover = dynamic<{ onBack: () => void }>(() => import("./components/BackgroundRemover"), { ssr: false });
+const ImageCropper = dynamic<{ onBack: () => void }>(() => import("./components/ImageCropper"), { ssr: false });
+const ImageEnhancer = dynamic<{ onBack: () => void }>(() => import("./components/ImageEnhancer"), { ssr: false });
+const UniversalConverter = dynamic<{ onBack: () => void; onOpenPdfInEditor: (f: File) => void }>(() => import("./components/UniversalConverter"), { ssr: false });
 
 
 // ─── Image helper utilities ───────────────────────────────────────────────────
@@ -32,7 +36,7 @@ function loadImageDimensions(file: File): Promise<{ width: number; height: numbe
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx">("landing");
+  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter">("landing");
   const [initialContent, setInitialContent] = useState<string>("");
   const [initialPdfFile, setInitialPdfFile] = useState<File | null>(null);
   const [initialPptxFile, setInitialPptxFile] = useState<File | null>(null);
@@ -215,7 +219,7 @@ export default function Home() {
         if (file) {
           try {
             const JSZip = (await import("jszip")).default;
-            const { jsPDF } = await import("jspdf");
+            const jsPDF = (await import("jspdf")).default;
             const zip = new JSZip();
             const content = await zip.loadAsync(file);
             const mediaFiles = Object.keys(content.files).filter(path =>
@@ -378,7 +382,7 @@ export default function Home() {
         const files = Array.from((e.target as HTMLInputElement).files || []);
         if (files.length === 0) return;
         try {
-          const { jsPDF } = await import("jspdf");
+          const jsPDF = (await import("jspdf")).default;
           const firstImg = await loadImageDimensions(files[0]);
           const pdf = new jsPDF({
             orientation: firstImg.width > firstImg.height ? "landscape" : "portrait",
@@ -532,6 +536,14 @@ export default function Home() {
         }
       };
       input.click();
+    } else if (id === "bg-remover") {
+      setView("bg-remover");
+    } else if (id === "image-cropper") {
+      setView("image-cropper");
+    } else if (id === "image-enhancer") {
+      setView("image-enhancer");
+    } else if (id === "universal-converter") {
+      setView("universal-converter");
     } else {
 
       setInitialContent(content);
@@ -547,6 +559,21 @@ export default function Home() {
         <Editor initialContent={initialContent} onBack={handleEditorBack} />
       ) : view === "pptx" ? (
         <PptxEditor onBack={() => setView("landing")} initialFile={initialPptxFile || undefined} />
+      ) : view === "bg-remover" ? (
+        <BackgroundRemover onBack={() => setView("landing")} />
+      ) : view === "image-cropper" ? (
+        <ImageCropper onBack={() => setView("landing")} />
+      ) : view === "image-enhancer" ? (
+        <ImageEnhancer onBack={() => setView("landing")} />
+      ) : view === "universal-converter" ? (
+        <UniversalConverter 
+          onBack={() => setView("landing")} 
+          onOpenPdfInEditor={(file) => {
+            setView("editor");
+            setInitialContent(`PDF_IMPORT:${file.name}`);
+            (window as any).__pdfImportFile = file;
+          }} 
+        />
       ) : (
         <PdfEditor onBack={() => setView("landing")} initialFile={initialPdfFile || undefined} />
       )}
