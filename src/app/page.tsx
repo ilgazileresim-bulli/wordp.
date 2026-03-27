@@ -12,6 +12,7 @@ const BackgroundRemover = dynamic<{ onBack: () => void }>(() => import("./compon
 const ImageCropper = dynamic<{ onBack: () => void }>(() => import("./components/ImageCropper"), { ssr: false });
 const ImageEnhancer = dynamic<{ onBack: () => void }>(() => import("./components/ImageEnhancer"), { ssr: false });
 const UniversalConverter = dynamic<{ onBack: () => void; onOpenPdfInEditor: (f: File) => void }>(() => import("./components/UniversalConverter"), { ssr: false });
+const WordModifier = dynamic<{ onBack: () => void }>(() => import("./components/WordModifier"), { ssr: false });
 
 
 // ─── Image helper utilities ───────────────────────────────────────────────────
@@ -36,7 +37,7 @@ function loadImageDimensions(file: File): Promise<{ width: number; height: numbe
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter">("landing");
+  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier">("landing");
   const [initialContent, setInitialContent] = useState<string>("");
   const [initialPdfFile, setInitialPdfFile] = useState<File | null>(null);
   const [initialPptxFile, setInitialPptxFile] = useState<File | null>(null);
@@ -558,6 +559,8 @@ export default function Home() {
       setView("image-enhancer");
     } else if (id === "universal-converter") {
       setView("universal-converter");
+    } else if (id === "word-modifier") {
+      setView("word-modifier");
     } else {
 
       setInitialContent(content);
@@ -588,6 +591,8 @@ export default function Home() {
             (window as any).__pdfImportFile = file;
           }} 
         />
+      ) : view === "word-modifier" ? (
+        <WordModifier onBack={() => setView("landing")} />
       ) : (
         <PdfEditor onBack={() => setView("landing")} initialFile={initialPdfFile || undefined} />
       )}

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw } from "lucide-react";
+import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import ThemeToggle from "./ThemeToggle";
@@ -168,6 +168,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                             { id: "pdf-to-png", title: "PDF'den PNG'ye", icon: Image, color: "from-cyan-500 to-cyan-600", desc: "PDF'i Görsel Yap" },
                             { id: "universal-converter", title: "Tüm Format Dönüştürücü", icon: RefreshCw, color: "from-blue-600 to-indigo-600", desc: "Her Dosyayı Dönüştür", badge: "YENİ" },
                             { id: "bg-remover", title: "Arka Plan Kaldırıcı", icon: Image, color: "from-fuchsia-500 to-purple-600", desc: "Arka Planı Sil", badge: "YENİ" },
+                            { id: "word-modifier", title: "Word Seç (Stil Uygula)", icon: Type, color: "from-indigo-600 to-purple-600", desc: "Kelime Stilini Değiştir", badge: "YENİ" },
                             { id: "image-cropper", title: "Fotoğraf Kesme", icon: Image, color: "from-indigo-500 to-cyan-600", desc: "Fotoğraf Boyutlandır", badge: "YENİ" },
                             { id: "image-enhancer", title: "Bulanıklık Giderici", icon: Image, color: "from-emerald-500 to-teal-600", desc: "Fotoğrafı Netleştir", badge: "YENİ" },
                         ].map((tool, i) => (
