@@ -68,7 +68,8 @@ const DocumentWorkplace = ({
                         padding: viewMode === 'web' ? '20mm 15%' : `${margins}px`,
                         backgroundColor: viewMode === 'read' ? '#fff9f0' : pageColor,
                         width: viewMode === 'web' ? "100%" : (orientation === "portrait" ? "210mm" : "297mm"),
-                        minHeight: viewMode === 'web' ? "100%" : `${pageCount * PAGE_HEIGHT_MM}mm`,
+                        minHeight: viewMode === 'web' ? "100%" : undefined,
+                        height: viewMode === 'web' ? undefined : `${pageCount * PAGE_HEIGHT_MM}mm`,
                         zoom: zoom / 100,
                         position: 'relative',
                         display: 'flex',
@@ -94,11 +95,9 @@ const DocumentWorkplace = ({
                     {viewMode === 'print' && Array.from({ length: pageCount - 1 }).map((_, i) => (
                         <div
                             key={`divider-${i}`}
-                            className="absolute left-0 right-0 h-8 bg-[#f3f4f6] dark:bg-[#0c0c18] z-10 flex items-center justify-center no-print page-divider"
-                            style={{ top: `${(i + 1) * PAGE_HEIGHT_MM}mm`, transform: 'translateY(-50%)', width: '3000px', left: '-1000px' }}
-                        >
-                            <div className="w-full border-t border-b border-zinc-300 dark:border-slate-700 h-2 bg-zinc-200/30 dark:bg-slate-800/30 shadow-inner" />
-                        </div>
+                            className="absolute left-0 right-0 h-[1px] border-t border-dashed border-zinc-400 dark:border-slate-500 z-10 flex items-center justify-center no-print pointer-events-none page-divider"
+                            style={{ top: `${(i + 1) * PAGE_HEIGHT_MM}mm`, width: '3000px', left: '-1000px' }}
+                        />
                     ))}
 
                     <div ref={editorContainerRef} className="relative z-20 w-full" style={{ overflow: 'visible', wordBreak: 'break-word', overflowWrap: 'break-word', minHeight: `${PAGE_HEIGHT_MM * PX_PER_MM - (margins * 2)}px` }}>

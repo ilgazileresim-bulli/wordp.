@@ -259,9 +259,11 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
             }
 
             editor?.commands.setContent(fullText || "<p>PDF'den metin ayıklanamadı.</p>");
+            setTimeout(checkHeight, 100);
         } catch (error) {
             console.error("PDF extraction error:", error);
             editor?.commands.setContent("<p>PDF ayıklanırken bir hata oluştu.</p>");
+            setTimeout(checkHeight, 100);
         }
     }, [editor]);
 
@@ -278,8 +280,9 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
     useEffect(() => {
         if (initialContent && editor && !initialContent.startsWith("PDF_IMPORT:")) {
             editor.commands.setContent(initialContent);
+            setTimeout(checkHeight, 100);
         }
-    }, [initialContent, editor]);
+    }, [initialContent, editor, checkHeight]);
 
     useEffect(() => {
         if (initialContent && editor && (window as any).__autoExportPdf) {
@@ -310,6 +313,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
                 try {
                     const json = JSON.parse(e.target?.result as string);
                     editor.commands.setContent(json);
+                    setTimeout(checkHeight, 100);
                 } catch (err) {
                     alert('Invalid file format');
                 }
