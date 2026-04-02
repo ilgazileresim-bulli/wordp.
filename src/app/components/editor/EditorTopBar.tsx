@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo } from "react";
-import { Save, Undo, Redo, Search, ChevronDown, Printer, X, RefreshCw, FileText, Download } from "lucide-react";
+import { Save, Undo, Redo, Search, ChevronDown, Printer, X, RefreshCw, FileText, Download, Mic } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -18,6 +18,8 @@ interface EditorTopBarProps {
     onBack: () => void;
     onExportPdf: () => void;
     onExportDocx: () => void;
+    isDictating?: boolean;
+    onDictate?: () => void;
 }
 
 const EditorTopBar = ({
@@ -28,7 +30,9 @@ const EditorTopBar = ({
     onPrint,
     onBack,
     onExportPdf,
-    onExportDocx
+    onExportDocx,
+    isDictating,
+    onDictate
 }: EditorTopBarProps) => {
     return (
         <div className="h-10 bg-[#2b579a] dark:bg-[#0d0d1a] flex items-center px-4 z-[60] shrink-0 no-print border-b border-[#1a478a] dark:border-[#1e1e30] overflow-x-auto scrollbar-hide">
@@ -54,6 +58,12 @@ const EditorTopBar = ({
                     <div className="w-px h-4 bg-white/20 mx-1" />
                     <button onClick={onUndo} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Geri Al"><Undo size={16} strokeWidth={2.5} /></button>
                     <button onClick={onRedo} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Yinele"><Redo size={16} strokeWidth={2.5} /></button>
+                    {onDictate && (
+                      <button onClick={onDictate} className={cn("p-1.5 ml-1 rounded transition-colors text-white relative flex items-center gap-1", isDictating ? "bg-red-500 hover:bg-red-600 animate-pulse" : "hover:bg-white/10")} title="Sesle Dikte (Mikrofon)">
+                          <Mic size={16} strokeWidth={2.5} />
+                          {isDictating && <span className="text-[9px] font-black uppercase tracking-tighter">Dinliyor...</span>}
+                      </button>
+                    )}
                 </div>
             </div>
             <div className="flex-1 flex justify-center items-center">

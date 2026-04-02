@@ -13,7 +13,11 @@ const ImageCropper = dynamic<{ onBack: () => void }>(() => import("./components/
 const ImageEnhancer = dynamic<{ onBack: () => void }>(() => import("./components/ImageEnhancer"), { ssr: false });
 const UniversalConverter = dynamic<{ onBack: () => void; onOpenPdfInEditor: (f: File) => void }>(() => import("./components/UniversalConverter"), { ssr: false });
 const WordModifier = dynamic<{ onBack: () => void }>(() => import("./components/WordModifier"), { ssr: false });
-
+const OcrTool = dynamic<{ onBack: () => void }>(() => import("./components/OcrTool"), { ssr: false });
+const ExcelEditor = dynamic<{ onBack: () => void; initialFile?: File }>(() => import("./components/ExcelEditor"), { ssr: false });
+const PdfMergeSplit = dynamic<{ onBack: () => void }>(() => import("./components/PdfMergeSplit"), { ssr: false });
+const CvWizard = dynamic<{ onBack: () => void }>(() => import("./components/CvWizard"), { ssr: false });
+const InvoiceWizard = dynamic<{ onBack: () => void }>(() => import("./components/InvoiceWizard"), { ssr: false });
 
 // ─── Image helper utilities ───────────────────────────────────────────────────
 function loadImageDataUrl(file: File): Promise<{ dataUrl: string; width: number; height: number }> {
@@ -37,10 +41,11 @@ function loadImageDimensions(file: File): Promise<{ width: number; height: numbe
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier">("landing");
+  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard">("landing");
   const [initialContent, setInitialContent] = useState<string>("");
   const [initialPdfFile, setInitialPdfFile] = useState<File | null>(null);
   const [initialPptxFile, setInitialPptxFile] = useState<File | null>(null);
+  const [initialExcelFile, setInitialExcelFile] = useState<File | null>(null);
   const currentDocIdRef = useRef<string | undefined>(undefined);
 
   const handleEditorBack = useCallback((content?: string) => {
@@ -561,6 +566,29 @@ export default function Home() {
       setView("universal-converter");
     } else if (id === "word-modifier") {
       setView("word-modifier");
+    } else if (id === "ocr-tool") {
+      setView("ocr");
+    } else if (id === "excel-editor") {
+      setInitialExcelFile(null);
+      setView("excel");
+    } else if (id === "excel-open") {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".xlsx,.xls,.csv";
+      input.onchange = async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (file) {
+          setInitialExcelFile(file);
+          setView("excel");
+        }
+      };
+      input.click();
+    } else if (id === "pdf-merge-split") {
+      setView("pdf-merge-split");
+    } else if (id === "cv-wizard") {
+      setView("cv-wizard");
+    } else if (id === "invoice-wizard") {
+      setView("invoice-wizard");
     } else {
 
       setInitialContent(content);
@@ -593,6 +621,16 @@ export default function Home() {
         />
       ) : view === "word-modifier" ? (
         <WordModifier onBack={() => setView("landing")} />
+      ) : view === "ocr" ? (
+        <OcrTool onBack={() => setView("landing")} />
+      ) : view === "excel" ? (
+        <ExcelEditor onBack={() => setView("landing")} initialFile={initialExcelFile || undefined} />
+      ) : view === "pdf-merge-split" ? (
+        <PdfMergeSplit onBack={() => setView("landing")} />
+      ) : view === "cv-wizard" ? (
+        <CvWizard onBack={() => setView("landing")} />
+      ) : view === "invoice-wizard" ? (
+        <InvoiceWizard onBack={() => setView("landing")} />
       ) : (
         <PdfEditor onBack={() => setView("landing")} initialFile={initialPdfFile || undefined} />
       )}

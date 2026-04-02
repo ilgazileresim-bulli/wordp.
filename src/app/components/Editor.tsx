@@ -143,6 +143,8 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
     const [showSearch, setShowSearch] = useState(false);
     const [showFileMenu, setShowFileMenu] = useState(false);
     const [watermark, setWatermark] = useState<string | null>(null);
+    const [isDictating, setIsDictating] = useState(false);
+    const recognitionRef = useRef<any>(null);
 
 
 
@@ -467,6 +469,52 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
         event.target.value = '';
     }, [editor]);
 
+    const toggleDictation = useCallback(() => {
+        if (!editor) return;
+        
+        if (isDictating) {
+            if (recognitionRef.current) {
+                recognitionRef.current.stop();
+            }
+            setIsDictating(false);
+            return;
+        }
+
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Tarayıcınız sesli dikte özelliğini desteklemiyor. Lütfen Chrome kullanın.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'tr-TR';
+        recognition.continuous = true;
+        recognition.interimResults = false;
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[event.results.length - 1][0].transcript;
+            editor.commands.insertContent(transcript + " ");
+        };
+
+        recognition.onerror = (event: any) => {
+            console.error("Dictation error:", event.error);
+            setIsDictating(false);
+        };
+
+        recognition.onend = () => {
+            setIsDictating(false);
+        };
+
+        try {
+            recognition.start();
+            recognitionRef.current = recognition;
+            setIsDictating(true);
+        } catch (e) {
+            console.error(e);
+            setIsDictating(false);
+        }
+    }, [editor, isDictating]);
+
 
     if (!editor) return null;
 
@@ -483,6 +531,8 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
                 onBack={() => onBack(editor?.getHTML())}
                 onExportPdf={exportToPdf}
                 onExportDocx={downloadDocx}
+                isDictating={isDictating}
+                onDictate={toggleDictation}
             />
 
             <EditorRibbon

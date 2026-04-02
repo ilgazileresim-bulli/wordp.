@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type } from "lucide-react";
+import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import ThemeToggle from "./ThemeToggle";
@@ -167,10 +167,17 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                             { id: "docx-to-png", title: "Word'den PNG'ye", icon: FileSearch, color: "from-pink-500 to-pink-600", desc: "DOCX'i Görsel Yap" },
                             { id: "pdf-to-png", title: "PDF'den PNG'ye", icon: Image, color: "from-cyan-500 to-cyan-600", desc: "PDF'i Görsel Yap" },
                             { id: "universal-converter", title: "Tüm Format Dönüştürücü", icon: RefreshCw, color: "from-blue-600 to-indigo-600", desc: "Her Dosyayı Dönüştür", badge: "YENİ" },
+                            { id: "ocr-tool", title: "Resimden Yazıya (OCR)", icon: FileSearch, color: "from-amber-500 to-orange-600", desc: "Metni Çıkar", badge: "YENİ" },
+                            { id: "excel-editor", title: "Excel (Tablo) Editörü", icon: PieChart, color: "from-emerald-500 to-teal-600", desc: "Tablo Oluştur", badge: "YENİ" },
+                            { id: "excel-open", title: "Excel Dosyası Aç", icon: Library, color: "from-teal-500 to-cyan-600", desc: "Mevcut Tabloyu Düzenle" },
+                            { id: "pdf-merge-split", title: "PDF Birleştir & Ayır", icon: Combine, color: "from-blue-500 to-cyan-500", desc: "PDF'leri Yönet", badge: "YENİ" },
+                            { id: "cv-wizard", title: "CV Özgeçmiş Oluşturucu", icon: FileText, color: "from-purple-500 to-pink-500", desc: "Hızlıca CV Hazırla", badge: "YENİ" },
+                            { id: "invoice-wizard", title: "Fatura Kesici", icon: FileText, color: "from-indigo-400 to-purple-600", desc: "PDF Fatura Çıkar", badge: "YENİ" },
                             { id: "bg-remover", title: "Arka Plan Kaldırıcı", icon: Image, color: "from-fuchsia-500 to-purple-600", desc: "Arka Planı Sil", badge: "YENİ" },
                             { id: "word-modifier", title: "Word Seç (Stil Uygula)", icon: Type, color: "from-indigo-600 to-purple-600", desc: "Kelime Stilini Değiştir", badge: "YENİ" },
                             { id: "image-cropper", title: "Fotoğraf Kesme", icon: Image, color: "from-indigo-500 to-cyan-600", desc: "Fotoğraf Boyutlandır", badge: "YENİ" },
                             { id: "image-enhancer", title: "Bulanıklık Giderici", icon: Image, color: "from-emerald-500 to-teal-600", desc: "Fotoğrafı Netleştir", badge: "YENİ" },
+                            { id: "birthday-message", title: "Doğum Günü Mesajı", icon: Heart, color: "from-pink-500 to-rose-500", desc: "Uzun Mesaj Oluştur", badge: "YENİ", content: "<h1>İyi ki Doğdun!</h1><p>İyi ki doğdun! Hayatının yeni yaşının sana sağlık, mutluluk, başarı ve huzur getirmesini diliyorum. Umarım tüm hayallerin gerçek olur ve yüzün hep böyle güler. Seninle geçirdiğim her an o kadar kıymetli ki, iyi ki varsın ve iyi ki hayatımızdasın. Birlikte daha nice güzel anılar biriktireceğimiz harika bir yıl olsun. Yeni yaşın kutlu olsun! Dünyanın en şanslı insanıyım çünkü senin gibi harika bir dosta/insana sahibim. Hayat bazen zorlayıcı olabilir ama seninle her şeyin üstesinden gelmek o kadar kolay ve eğlenceli ki... Gülümsemen yüzünden eksik olmasın, kalbin her zamankinden daha umut dolu atsın. Hep mutlu ol, hiçbir şey için canını sıkma, her şey dilediğin gibi güzel geçsin yaşantında. Uzun lafın kısası, her şey gönlünce olsun. Nice mutlu yıllara!</p>" },
                         ].map((tool, i) => (
 
                             <motion.button
@@ -180,7 +187,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.1 }}
-                                onClick={() => onSelectTemplate(tool.id, "")}
+                                onClick={() => onSelectTemplate(tool.id, (tool as any).content || "")}
                                 className="group relative overflow-hidden bg-white dark:bg-slate-800 p-5 rounded-2xl border border-zinc-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-blue-400 transition-all text-left"
                             >
                                 <div className={cn("w-12 h-12 rounded-xl mb-4 flex items-center justify-center text-white shadow-lg bg-gradient-to-br", tool.color)}>
