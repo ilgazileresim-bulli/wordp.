@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { ArrowLeft, User, Briefcase, GraduationCap, Download, FileText, CheckCircle2 } from "lucide-react";
-import html2canvas from "html2canvas";
+import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 
 interface CvWizardProps {
@@ -59,7 +59,7 @@ export default function CvWizard({ onBack }: CvWizardProps) {
     setIsGenerating(true);
     try {
       // Create PDF
-      const canvas = await html2canvas(cvPreviewRef.current, { scale: 2 });
+      const canvas = await htmlToImage.toCanvas(cvPreviewRef.current, { pixelRatio: 2, style: { transform: "none", transformOrigin: "top left" } });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();

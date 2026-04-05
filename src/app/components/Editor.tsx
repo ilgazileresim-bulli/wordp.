@@ -36,7 +36,7 @@ import NavPane from "./editor/NavPane";
 import SearchPanel from "./editor/SearchPanel";
 import DocumentWorkplace from "./editor/DocumentWorkplace";
 import FileMenu from "./editor/FileMenu";
-import html2canvas from 'html2canvas';
+import * as htmlToImage from 'html-to-image';
 import jsPDF from 'jspdf';
 
 // Custom Indent Extension
@@ -339,19 +339,10 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
 
-            const canvas = await html2canvas(element, {
-                scale: 2,
-                useCORS: true,
+            const canvas = await htmlToImage.toCanvas(element, {
+                pixelRatio: 2,
                 backgroundColor: pageColor,
-                onclone: (clonedDoc) => {
-                    const allElements = clonedDoc.querySelectorAll('*');
-                    allElements.forEach((el) => {
-                        const htmlEl = el as HTMLElement;
-                        if (!htmlEl.style.color) {
-                            htmlEl.style.color = '#000000';
-                        }
-                    });
-                }
+                style: { transform: "none", transformOrigin: "top left" }
             });
 
             const imgData = canvas.toDataURL('image/png');

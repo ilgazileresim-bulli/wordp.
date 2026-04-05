@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { ArrowLeft, FileText, Download, Plus, Trash2, CheckCircle2 } from "lucide-react";
-import html2canvas from "html2canvas";
+import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 
 interface InvoiceWizardProps {
@@ -58,7 +58,7 @@ export default function InvoiceWizard({ onBack }: InvoiceWizardProps) {
     if (!previewRef.current) return;
     setIsGenerating(true);
     try {
-      const canvas = await html2canvas(previewRef.current, { scale: 2 });
+      const canvas = await htmlToImage.toCanvas(previewRef.current, { pixelRatio: 2, style: { transform: "none", transformOrigin: "top left" } });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();

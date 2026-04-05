@@ -121,7 +121,7 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
     // DOCX -> PNG
     const docxToPng = async (file: File) => {
         const mammoth = await import("mammoth");
-        const html2canvas = (await import("html2canvas")).default;
+        const htmlToImage = await import("html-to-image");
         const { saveAs } = await import("file-saver");
         const arrayBuffer = await file.arrayBuffer();
         const result = await mammoth.convertToHtml({ arrayBuffer });
@@ -140,15 +140,22 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
         const baseName = file.name.replace(/\.[^/.]+$/, "");
 
         if (totalPages === 1) {
-            const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: "#ffffff", width: 794, height: A4_HEIGHT });
+            const canvas = await htmlToImage.toCanvas(container, { pixelRatio: 2, backgroundColor: "#ffffff", width: 794, height: A4_HEIGHT });
             canvas.toBlob(blob => { if (blob) saveAs(blob, baseName + ".png"); }, "image/png");
         } else {
             const JSZip = (await import("jszip")).default;
             const zip = new JSZip();
+            const fullCanvas = await htmlToImage.toCanvas(container, { pixelRatio: 2, backgroundColor: "#ffffff", width: 794 });
             for (let i = 0; i < totalPages; i++) {
-                const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: "#ffffff", width: 794, height: A4_HEIGHT, y: i * A4_HEIGHT });
-                const blob: Blob = await new Promise(resolve => canvas.toBlob(b => resolve(b!), "image/png"));
-                zip.file(`${baseName}_sayfa_${i + 1}.png`, blob);
+                const pageCanvas = document.createElement("canvas");
+                pageCanvas.width = 794 * 2;
+                pageCanvas.height = A4_HEIGHT * 2;
+                const ctx = pageCanvas.getContext("2d");
+                if (ctx) {
+                    ctx.drawImage(fullCanvas, 0, i * A4_HEIGHT * 2, 794 * 2, A4_HEIGHT * 2, 0, 0, 794 * 2, A4_HEIGHT * 2);
+                    const blob: Blob = await new Promise(resolve => pageCanvas.toBlob(b => resolve(b!), "image/png"));
+                    zip.file(`${baseName}_sayfa_${i + 1}.png`, blob);
+                }
             }
             const zipBlob = await zip.generateAsync({ type: "blob" });
             saveAs(zipBlob, baseName + "_sayfalar.zip");
@@ -173,17 +180,22 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
 
         const jsPDFModule = await import("jspdf");
         const jsPDF = jsPDFModule.default;
-        const html2canvas = (await import("html2canvas")).default;
+        const htmlToImage = await import("html-to-image");
 
         const A4_HEIGHT_PX = 1123; 
         const totalPages = Math.ceil(container.offsetHeight / A4_HEIGHT_PX) || 1;
         const pdf = new jsPDF('p', 'mm', 'a4');
 
+        const canvas = await htmlToImage.toCanvas(container, { pixelRatio: 2, backgroundColor: "#ffffff", width: 794 });
+        const imgData = canvas.toDataURL('image/png', 1.0);
+        
+        const pdfWidth = 210;
+        const pdfHeight = 297;
+        const imgHeightMm = (canvas.height * pdfWidth) / canvas.width;
+
         for (let i = 0; i < totalPages; i++) {
             if (i > 0) pdf.addPage();
-            const canvas = await html2canvas(container, { scale: 2, useCORS: true, width: 794, height: A4_HEIGHT_PX, y: i * A4_HEIGHT_PX, windowWidth: 794, backgroundColor: "#ffffff" });
-            const imgData = canvas.toDataURL('image/png', 1.0);
-            pdf.addImage(imgData, 'PNG', 0, 0, 210, 297, undefined, 'FAST');
+            pdf.addImage(imgData, 'PNG', 0, -(i * pdfHeight), pdfWidth, imgHeightMm, undefined, 'FAST');
         }
         pdf.save(file.name.replace(".docx", ".pdf"));
         document.body.removeChild(container);
