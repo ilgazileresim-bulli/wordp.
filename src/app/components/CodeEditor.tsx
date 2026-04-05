@@ -7,7 +7,7 @@ import {
   ChevronDown, Code, Search, GitBranch, Package, Settings, X, Plus,
   FolderOpen, File, Circle, AlertCircle, CheckCircle2, Bell, Layout,
   SplitSquareHorizontal, Star, BookOpen, ArrowRight, Folder, ArrowLeft,
-  Coffee, Layers, Cpu, Clock
+  Coffee, Layers, Cpu, Clock, Palette
 } from "lucide-react";
 import { getCompletions, kindColor, kindLabel, parseEmmet, type Completion, type EditorLang } from "./intellisense";
 
@@ -125,6 +125,7 @@ export default function CodeEditor({ onBack, initialLang = "html" }: CodeEditorP
   const [snippetHint, setSnippetHint] = useState<{key:string;preview:string}|null>(null);
   const [explorerOpen, setExplorerOpen] = useState(true);
   const [autoRun, setAutoRun] = useState(false);
+  const colorInputRef = useRef<HTMLInputElement>(null);
   // IntelliSense
   const [acList, setAcList] = useState<Completion[]>([]);
   const [acIndex, setAcIndex] = useState(0);
@@ -147,6 +148,20 @@ export default function CodeEditor({ onBack, initialLang = "html" }: CodeEditorP
 
   const handleCodeChange = (val: string) => {
     setFiles(prev => ({ ...prev, [activeFile]: val }));
+  };
+
+  const insertColor = (color: string) => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const code = ta.value;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const newCode = code.substring(0, start) + color + code.substring(end);
+    handleCodeChange(newCode);
+    setTimeout(() => {
+      ta.selectionStart = ta.selectionEnd = start + color.length;
+      ta.focus();
+    }, 0);
   };
 
   const openFile = (name: string) => {
@@ -426,6 +441,15 @@ export default function CodeEditor({ onBack, initialLang = "html" }: CodeEditorP
 
         {/* Right icons */}
         <div className="flex items-center gap-2">
+          <button onClick={() => colorInputRef.current?.click()} className="p-1 hover:bg-white/10 rounded transition-all text-violet-400" title="Renk Ekle">
+            <Palette size={14} />
+          </button>
+          <input
+            type="color"
+            ref={colorInputRef}
+            className="hidden"
+            onChange={(e) => insertColor(e.target.value)}
+          />
           <button onClick={() => setIsPreviewOpen(v => !v)} className="p-1 hover:bg-white/10 rounded transition-all" title="Önizleme">
             <SplitSquareHorizontal size={14} />
           </button>

@@ -88,7 +88,7 @@ const HTML_TAGS: Completion[] = [
   { label:"template",  insert:`<template>\n  \n</template>`,       kind:"tag", detail:"Şablon" },
   { label:"textarea",  insert:`<textarea rows="4" cols="50"></textarea>`, kind:"tag", detail:"Metin alanı" },
   { label:"th",        insert:`<th></th>`,                         kind:"tag", detail:"Tablo başlığı" },
-  { label:"thead",     insert:`<thead>\n  \n</thead>`,             kind:"Tablo başı" },
+  { label:"thead",     insert:`<thead>\n  \n</thead>`,             kind:"tag", detail:"Tablo başı" },
   { label:"time",      insert:`<time datetime=""></time>`,         kind:"tag", detail:"Zaman" },
   { label:"title",     insert:`<title></title>`,                   kind:"tag", detail:"Başlık" },
   { label:"tr",        insert:`<tr>\n  <td></td>\n</tr>`,          kind:"tag", detail:"Tablo satırı" },
