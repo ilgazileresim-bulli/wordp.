@@ -6,7 +6,7 @@ import {
   Save, RefreshCw, Play, Monitor, Maximize2, Minimize2, ChevronDown,
   ChevronRight, GitBranch, Search, Package, Settings, Layers, Folder,
   AlertCircle, CheckCircle2, Terminal, Zap, Code, Upload, Trash2,
-  Check, Copy, FileText, SplitSquareHorizontal, Clock
+  Check, Copy, FileText, SplitSquareHorizontal, Clock, Palette
 } from "lucide-react";
 import { getCompletions, kindColor, kindLabel, parseEmmet, type Completion, type EditorLang } from "./intellisense";
 
@@ -181,6 +181,7 @@ export default function FolderCodeEditor({ onBack }: { onBack: () => void }) {
   const [acWord, setAcWord] = useState("");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const colorInputRef = useRef<HTMLInputElement>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout>|null>(null);
 
   // Active file
@@ -228,6 +229,20 @@ export default function FolderCodeEditor({ onBack }: { onBack: () => void }) {
     setSaveStatus("unsaved");
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => autoSave(activeTab, val), 1500);
+  };
+
+  const insertColor = (color: string) => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const code = ta.value;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const newCode = code.substring(0, start) + color + code.substring(end);
+    handleCodeChange(newCode);
+    setTimeout(() => {
+      ta.selectionStart = ta.selectionEnd = start + color.length;
+      ta.focus();
+    }, 0);
   };
 
   // ─── Save ────────────────────────────────────────────────────────────────
@@ -574,6 +589,15 @@ export default function FolderCodeEditor({ onBack }: { onBack: () => void }) {
           {saveStatus === "saving"  && <span className="text-yellow-400 text-[10px]">● Kaydediliyor…</span>}
           {saveStatus === "unsaved" && <span className="text-orange-400 text-[10px]">● Kaydedilmemiş</span>}
           {saveStatus === "saved"   && <span className="text-emerald-400 text-[10px]">✓ Kaydedildi</span>}
+          <button onClick={() => colorInputRef.current?.click()} className="p-1 hover:bg-white/10 rounded transition-all text-violet-400" title="Renk Ekle">
+            <Palette size={14} />
+          </button>
+          <input
+            type="color"
+            ref={colorInputRef}
+            className="hidden"
+            onChange={(e) => insertColor(e.target.value)}
+          />
           <button onClick={()=>setIsPreviewOpen(v=>!v)} className="p-1 hover:bg-white/10 rounded transition-all" title="Önizleme"><SplitSquareHorizontal size={14}/></button>
           <button onClick={runPreview} className="p-1 hover:bg-white/10 rounded transition-all" title="Çalıştır"><Play size={14} className="text-emerald-400"/></button>
         </div>
