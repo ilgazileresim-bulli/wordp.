@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart, LayoutTemplate, ArrowLeft, Code, FileCode, Braces, FileCode2 } from "lucide-react";
+import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart, LayoutTemplate, ArrowLeft, Code, FileCode, Braces, FileCode2, Zap } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import ThemeToggle from "./ThemeToggle";
@@ -40,6 +40,7 @@ const ALL_TOOLS = [
     { id: "code-editor-css", title: "CSS Editörü", icon: Braces, color: "from-blue-500 to-cyan-500", desc: "CSS Stillerini Düzenle", badge: "YENİ", group: "code" },
     { id: "code-editor-js", title: "JavaScript Editörü", icon: FileCode2, color: "from-yellow-400 to-orange-500", desc: "JS Kodu Yaz ve Çalıştır", badge: "YENİ", group: "code" },
     { id: "folder-code-editor", title: "Normal Kod Editörü", icon: FolderOpen, color: "from-violet-500 to-indigo-600", desc: "Klasörden Gerçek Proje Aç", badge: "YENİ", group: "code" },
+    { id: "cps-test", title: "Tıklama Hızı (CPS)", icon: MousePointer2, color: "from-yellow-400 to-orange-600", desc: "Saniye Başına Tıklama Testi", badge: "YENİ", group: "performance" },
 ];
 
 function cn(...inputs: ClassValue[]) {
@@ -202,6 +203,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                         { id: "photo", title: "Fotoğraf Stüdyosu", subtitle: "Canva stili tasarım posterleri, arka plan kaldırma araçları.", icon: Image, bg: "from-fuchsia-400 to-purple-600", borderHover: "hover:border-fuchsia-500/50", glow: "group-hover:shadow-fuchsia-500/20" },
                                         { id: "word", title: "Şablonlar & Sahneler", subtitle: "50'den fazla hazır sektörel şablon tasarımıyla hemen başla.", icon: LayoutTemplate, bg: "from-blue-400 to-indigo-600", borderHover: "hover:border-blue-500/50", glow: "group-hover:shadow-blue-500/20" },
                                         { id: "office", title: "Ofis Araçları", subtitle: "Gelişmiş Excel tablo düzenleyici ve akıllı asistanlar.", icon: Type, bg: "from-indigo-400 to-violet-600", borderHover: "hover:border-indigo-500/50", glow: "group-hover:shadow-indigo-500/20" },
+                                        { id: "performance", title: "Hız & Performans", subtitle: "CPS testi ve tıklama hızı ölçme araçları.", icon: Zap, bg: "from-yellow-400 to-orange-600", borderHover: "hover:border-yellow-500/50", glow: "group-hover:shadow-yellow-500/20" },
                                         { id: "powerpoint", title: "Sunum (PPTX)", subtitle: "Profesyonel slayt sunumları oluşturun ve sahne tasarımları yapın.", icon: PieChart, bg: "from-amber-400 to-orange-600", borderHover: "hover:border-amber-500/50", glow: "group-hover:shadow-amber-500/20" }
                                     ].map((folder, i) => (
                                         <motion.button
@@ -311,7 +313,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                         <ArrowLeft size={16} /> Geri Dön
                                     </button>
                                     <h3 className="text-lg font-black text-zinc-800 dark:text-zinc-200">
-                                        {activeToolGroup === "converters" ? "Çeviriciler" : activeToolGroup === "pdf" ? "PDF Stüdyosu" : activeToolGroup === "photo" ? "Fotoğraf Stüdyosu" : activeToolGroup === "office" ? "Ofis Araçları" : activeToolGroup === "code" ? "Kod Editörü" : "PowerPoint Stüdyosu"}
+                                        {activeToolGroup === "converters" ? "Çeviriciler" : activeToolGroup === "pdf" ? "PDF Stüdyosu" : activeToolGroup === "photo" ? "Fotoğraf Stüdyosu" : activeToolGroup === "office" ? "Ofis Araçları" : activeToolGroup === "code" ? "Kod Editörü" : activeToolGroup === "performance" ? "Hız & Performans" : "PowerPoint Stüdyosu"}
                                     </h3>
                                 </div>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">

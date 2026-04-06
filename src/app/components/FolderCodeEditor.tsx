@@ -8,7 +8,7 @@ import {
   AlertCircle, CheckCircle2, Terminal, Zap, Code, Upload, Trash2,
   Check, Copy, FileText, SplitSquareHorizontal, Clock, Palette
 } from "lucide-react";
-import { getCompletions, kindColor, kindLabel, parseEmmet, type Completion, type EditorLang } from "./intellisense";
+import { getCompletions, kindColor, kindLabel, parseEmmet, getLanguageContext, type Completion, type EditorLang } from "./intellisense";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Lang = "html" | "css" | "js" | "ts" | "json" | "txt" | "md" | "other";
@@ -357,9 +357,7 @@ export default function FolderCodeEditor({ onBack }: { onBack: () => void }) {
         setAcWord(word); setAcIndex(0); return;
       }
     }
-    const lang: EditorLang = currentLang === "html" ? "html" : currentLang === "css" ? "css" :
-                             (currentLang === "js" || currentLang === "ts") ? "js" : "other";
-    if (lang === "other") { setAcList([]); return; }
+    const lang = getLanguageContext(val, cursor, currentLang as EditorLang);
     const completions = getCompletions(lang, word);
     setAcList(completions);
     setAcWord(word);

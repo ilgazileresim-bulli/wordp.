@@ -21,6 +21,7 @@ const InvoiceWizard = dynamic<{ onBack: () => void }>(() => import("./components
 const CanvaClone = dynamic<{ onBack: () => void }>(() => import("./components/CanvaClone"), { ssr: false });
 const CodeEditor = dynamic<{ onBack: () => void; initialLang?: "html" | "css" | "js" }>(() => import("./components/CodeEditor"), { ssr: false });
 const FolderCodeEditor = dynamic<{ onBack: () => void }>(() => import("./components/FolderCodeEditor"), { ssr: false });
+const CpsTest = dynamic<{ onBack: () => void }>(() => import("./components/CpsTest"), { ssr: false });
 
 // ─── Image helper utilities ───────────────────────────────────────────────────
 function loadImageDataUrl(file: File): Promise<{ dataUrl: string; width: number; height: number }> {
@@ -44,7 +45,7 @@ function loadImageDimensions(file: File): Promise<{ width: number; height: numbe
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard" | "canva-clone" | "code-editor" | "folder-code-editor">("landing");
+  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard" | "canva-clone" | "code-editor" | "folder-code-editor" | "cps-test">("landing");
   const [codeEditorLang, setCodeEditorLang] = useState<"html" | "css" | "js">("html");
   const [initialContent, setInitialContent] = useState<string>("");
   const [initialPdfFile, setInitialPdfFile] = useState<File | null>(null);
@@ -612,6 +613,8 @@ export default function Home() {
       setView("code-editor");
     } else if (id === "folder-code-editor") {
       setView("folder-code-editor");
+    } else if (id === "cps-test") {
+      setView("cps-test");
     } else {
 
       setInitialContent(content);
@@ -660,6 +663,8 @@ export default function Home() {
         <CodeEditor onBack={() => setView("landing")} initialLang={codeEditorLang} />
       ) : view === "folder-code-editor" ? (
         <FolderCodeEditor onBack={() => setView("landing")} />
+      ) : view === "cps-test" ? (
+        <CpsTest onBack={() => setView("landing")} />
       ) : (
         <PdfEditor onBack={() => setView("landing")} initialFile={initialPdfFile || undefined} />
       )}
