@@ -11,36 +11,36 @@ export interface Template {
 }
 
 export const TEMPLATE_CATEGORIES = [
-    { id: "blank", label: "Boş Belgeler" },
-    { id: "professional", label: "Profesyonel" },
-    { id: "business", label: "İş Dünyası" },
-    { id: "creative", label: "Yaratıcı Yazarlık" },
-    { id: "education", label: "Eğitim" },
-    { id: "personal", label: "Kişisel" },
-    { id: "tools", label: "Araçlar" },
-    { id: "converters", label: "Dönüştürücüler" },
+    { id: "blank", label: "Blank Documents" },
+    { id: "professional", label: "Professional" },
+    { id: "business", label: "Business" },
+    { id: "creative", label: "Creative Writing" },
+    { id: "education", label: "Education" },
+    { id: "personal", label: "Personal" },
+    { id: "tools", label: "Tools" },
+    { id: "converters", label: "Converters" },
 ];
 
 export const TEMPLATES: Template[] = [
     // ─── Boş Belgeler ────────────────────────────────
     {
         id: "blank",
-        title: "Boş Belge",
-        description: "Sıfırdan başlayın",
+        title: "Blank Document",
+        description: "Start from scratch",
         icon: Plus,
-        content: "<h1>Adsız Belge</h1><p>Yazmaya başlayın...</p>",
+        content: "<h1>Untitled Document</h1><p>Start typing...</p>",
         color: "bg-blue-500",
         category: "blank"
     },
     {
         id: "diary",
-        title: "Günlük",
-        description: "Bugün neler oldu?",
+        title: "Diary",
+        description: "What happened today?",
         icon: Feather,
-        content: `<h1>Sevgili Günlük,</h1>
-<p><i>${new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</i></p>
+        content: `<h1>Dear Diary,</h1>
+<p><i>${new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</i></p>
 <br/>
-<p>Bugün...</p>`,
+<p>Today...</p>`,
         color: "bg-indigo-500",
         category: "personal"
     },
@@ -48,8 +48,8 @@ export const TEMPLATES: Template[] = [
     // ─── Profesyonel ─────────────────────────────────
     {
         id: "resume-modern",
-        title: "Modern Özgeçmiş",
-        description: "Şık ve modern tasarım",
+        title: "Modern Resume",
+        description: "Sleek and modern design",
         icon: Briefcase,
         content: `<h1 style="color: #2563eb; border-bottom: 3px solid #2563eb; padding-bottom: 8px;">AHMET YILMAZ</h1>
 <p style="color: #64748b; font-size: 14px;">Kıdemli Yazılım Mühendisi | İstanbul, Türkiye | ahmet.yilmaz@email.com | +90 555 123 4567</p>
@@ -95,8 +95,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "resume-classic",
-        title: "Klasik Özgeçmiş",
-        description: "Geleneksel ve resmi format",
+        title: "Classic Resume",
+        description: "Traditional and formal format",
         icon: Briefcase,
         content: `<h1 style="text-align: center; letter-spacing: 4px;">AYŞE DEMİR</h1>
 <p style="text-align: center; color: #666; font-size: 13px;">Pazarlama Müdürü<br/>İstanbul, Türkiye | ayse.demir@email.com | +90 532 987 6543</p>
@@ -138,8 +138,8 @@ export const TEMPLATES: Template[] = [
     // ─── Dönüştürücüler ──────────────────────────────
     {
         id: "pdf-to-pptx",
-        title: "PDF'den PPTX'e",
-        description: "PDF dosyasını PowerPoint sunumuna dönüştür",
+        title: "PDF to PPTX",
+        description: "Convert PDF file to PowerPoint presentation",
         icon: PieChart,
         content: "",
         color: "bg-orange-600",
@@ -147,8 +147,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "pptx-to-pdf",
-        title: "PPTX'ten PDF'e",
-        description: "PowerPoint dosyasını PDF belgesine dönüştür",
+        title: "PPTX to PDF",
+        description: "Convert PowerPoint file to PDF document",
         icon: Library,
         content: "",
         color: "bg-blue-600",
@@ -156,8 +156,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "pdf-to-word",
-        title: "PDF'den Word'e",
-        description: "PDF dosyasını düzenlenebilir Word belgesine çevir",
+        title: "PDF to Word",
+        description: "Convert PDF file to editable Word document",
         icon: FileText,
         content: "",
         color: "bg-blue-500",
@@ -165,8 +165,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "word-to-pdf",
-        title: "Word'den PDF'e",
-        description: "Word belgesini PDF formatına dönüştür",
+        title: "Word to PDF",
+        description: "Convert Word document to PDF format",
         icon: FileSearch,
         content: "",
         color: "bg-red-500",
@@ -174,8 +174,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "resume-creative",
-        title: "Yaratıcı Özgeçmiş",
-        description: "Göz alıcı ve farklı tasarım",
+        title: "Creative Resume",
+        description: "Eye-catching and unique design",
         icon: Crown,
         content: `<h1 style="color: #e11d48; font-size: 32px;">✦ EMRE KAYA</h1>
 <p style="font-size: 18px; color: #e11d48; font-weight: 600;">UI/UX Tasarımcı & Yaratıcı Yönetmen</p>
@@ -216,8 +216,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "cover-letter",
-        title: "Kapak Mektubu",
-        description: "İş başvurusu kapak mektubu",
+        title: "Cover Letter",
+        description: "Job application cover letter",
         icon: Mail,
         content: `<p style="text-align: right;">19 Şubat 2026</p>
 
@@ -243,8 +243,8 @@ export const TEMPLATES: Template[] = [
     // ─── İş Dünyası ──────────────────────────────────
     {
         id: "business-letter",
-        title: "Resmi İş Mektubu",
-        description: "Kurumsal yazışma şablonu",
+        title: "Official Business Letter",
+        description: "Corporate correspondence template",
         icon: Mail,
         content: `<p style="text-align: right;"><strong>ABC Danışmanlık A.Ş.</strong><br/>Levent Mahallesi, İş Kuleleri No:42<br/>34330 Beşiktaş, İstanbul<br/>Tel: +90 212 555 0000</p>
 
@@ -268,8 +268,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "meeting-minutes",
-        title: "Toplantı Tutanağı",
-        description: "Profesyonel toplantı notları",
+        title: "Meeting Minutes",
+        description: "Professional meeting notes",
         icon: Users,
         content: `<h1 style="color: #1e3a5f;">Toplantı Tutanağı</h1>
 <hr/>
@@ -317,8 +317,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "proposal",
-        title: "Teklif Mektubu",
-        description: "Profesyonel iş teklifi",
+        title: "Proposal Letter",
+        description: "Professional business proposal",
         icon: FileText,
         content: `<h1 style="color: #1e40af; text-align: center;">İŞ TEKLİFİ</h1>
 <p style="text-align: center; color: #64748b;">ABC Teknoloji — Web Geliştirme Hizmetleri</p>
@@ -364,8 +364,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "invoice",
-        title: "Fatura Şablonu",
-        description: "Profesyonel fatura",
+        title: "Invoice Template",
+        description: "Professional invoice",
         icon: Receipt,
         content: `<h1 style="color: #059669; border-bottom: 3px solid #059669; padding-bottom: 8px;">FATURA</h1>
 
@@ -400,8 +400,8 @@ export const TEMPLATES: Template[] = [
     // ─── Yaratıcı Yazarlık ──────────────────────────
     {
         id: "novel-chapter",
-        title: "Roman Bölümü",
-        description: "Başyapıtınızı yazın",
+        title: "Novel Chapter",
+        description: "Write your masterpiece",
         icon: BookOpen,
         content: `<h1 style="text-align: center; margin-top: 60px; letter-spacing: 6px; color: #1a1a1a;">BİRİNCİ BÖLÜM</h1>
 <h2 style="text-align: center; color: #666; font-style: italic; font-weight: 400;">Karanlık Sular</h2>
@@ -426,8 +426,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "screenplay",
-        title: "Senaryo Taslağı",
-        description: "Film veya dizi senaryosu",
+        title: "Screenplay Draft",
+        description: "Movie or TV series script",
         icon: Clapperboard,
         content: `<h1 style="text-align: center; letter-spacing: 8px;">KAYIP ŞEHIR</h1>
 <p style="text-align: center; color: #666;">Yazan: [Adınız]</p>
@@ -460,8 +460,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "short-story",
-        title: "Kısa Hikaye",
-        description: "Hikayenizi anlatın",
+        title: "Short Story",
+        description: "Tell your story",
         icon: PenTool,
         content: `<h1 style="text-align: center; font-style: italic;">Son Tren</h1>
 <p style="text-align: center; color: #94a3b8;">Bir kısa hikaye</p>
@@ -490,8 +490,8 @@ export const TEMPLATES: Template[] = [
     // ─── Eğitim ──────────────────────────────────────
     {
         id: "academic-paper",
-        title: "Makale / Tez",
-        description: "Akademik yazı formatı",
+        title: "Academic Paper",
+        description: "Academic writing format",
         icon: GraduationCap,
         content: `<h1 style="text-align: center;">Yapay Zekânın Eğitim Sistemleri Üzerindeki<br/>Dönüştürücü Etkisi: Bir İnceleme</h1>
 <p style="text-align: center; color: #666;">Prof. Dr. [Adınız Soyadınız]<br/>[Üniversite Adı], [Fakülte]<br/>email@university.edu.tr</p>
@@ -526,8 +526,8 @@ export const TEMPLATES: Template[] = [
     },
     {
         id: "lecture-notes",
-        title: "Ders Notları",
-        description: "Düzenli ders notu şablonu",
+        title: "Lecture Notes",
+        description: "Organized lecture notes template",
         icon: StickyNote,
         content: `<h1 style="color: #7c3aed;">📚 Veri Yapıları ve Algoritmalar</h1>
 <p style="color: #64748b;"><strong>Ders:</strong> BLM 201 | <strong>Hafta:</strong> 5 | <strong>Tarih:</strong> 19 Şubat 2026</p>
@@ -577,9 +577,9 @@ export const TEMPLATES: Template[] = [
 
     // ─── İş Dünyası (Ek) ────────────────────────────
     {
-        id: "dilekce",
-        title: "Dilekçe",
-        description: "Resmi dilekçe şablonu",
+        id: "petition",
+        title: "Petition",
+        description: "Official petition template",
         icon: ScrollText,
         content: `<h1 style="text-align: center; color: #1e3a5f;">DİLEKÇE</h1>
 
@@ -606,9 +606,9 @@ export const TEMPLATES: Template[] = [
         category: "business"
     },
     {
-        id: "sozlesme",
-        title: "Sözleşme",
-        description: "İş sözleşmesi taslağı",
+        id: "contract",
+        title: "Contract",
+        description: "Work contract draft",
         icon: ClipboardList,
         content: `<h1 style="text-align: center; color: #1e3a5f; border-bottom: 2px solid #1e3a5f; padding-bottom: 8px;">HİZMET SÖZLEŞMESİ</h1>
 
@@ -645,9 +645,9 @@ export const TEMPLATES: Template[] = [
         category: "business"
     },
     {
-        id: "is-raporu",
-        title: "İş Raporu",
-        description: "Haftalık/aylık iş raporu",
+        id: "work-report",
+        title: "Work Report",
+        description: "Weekly/monthly work report",
         icon: BarChart,
         content: `<h1 style="color: #1e40af;">📊 Haftalık Faaliyet Raporu</h1>
 <p style="color: #64748b;"><strong>Hazırlayan:</strong> [Ad Soyad] | <strong>Departman:</strong> Yazılım Geliştirme | <strong>Tarih:</strong> 19 Şubat 2026</p>
@@ -694,9 +694,9 @@ export const TEMPLATES: Template[] = [
 
     // ─── Kişisel ─────────────────────────────────────
     {
-        id: "blog-yazisi",
-        title: "Blog Yazısı",
-        description: "Kişisel blog yazısı şablonu",
+        id: "blog-post",
+        title: "Blog Post",
+        description: "Personal blog post template",
         icon: Newspaper,
         content: `<h1 style="font-size: 28px; color: #0f172a;">Yapay Zekâ Çağında İnsan Olmak: Düşünceler ve Gözlemler</h1>
 <p style="color: #94a3b8; font-size: 13px;">📅 19 Şubat 2026 | ✍️ [Yazar Adı] | 🏷️ Teknoloji, Felsefe | ⏱️ 5 dk okuma</p>
@@ -723,9 +723,9 @@ export const TEMPLATES: Template[] = [
         category: "personal"
     },
     {
-        id: "yapilacaklar",
-        title: "Yapılacaklar Listesi",
-        description: "Günlük/haftalık görev listesi",
+        id: "todo-list",
+        title: "To-Do List",
+        description: "Daily/weekly task list",
         icon: ListChecks,
         content: `<h1 style="color: #059669;">✅ Haftalık Yapılacaklar Listesi</h1>
 <p style="color: #64748b;">Hafta: 19–25 Şubat 2026 | Öncelik: 🔴 Yüksek 🟡 Orta 🟢 Düşük</p>
@@ -768,9 +768,9 @@ export const TEMPLATES: Template[] = [
         category: "personal"
     },
     {
-        id: "sunum-notlari",
-        title: "Sunum Notları",
-        description: "Profesyonel sunum taslağı",
+        id: "presentation-notes",
+        title: "Presentation Notes",
+        description: "Professional presentation draft",
         icon: Presentation,
         content: `<h1 style="color: #7c3aed; text-align: center;">🎯 Dijital Dönüşüm Stratejisi 2026</h1>
 <p style="text-align: center; color: #64748b;">Yönetim Kurulu Sunumu | 19 Şubat 2026</p>

@@ -65,7 +65,7 @@ const EditorRibbon = (props: EditorRibbonProps) => {
                     onClick={onFileClick}
                     className="h-full px-5 text-white text-[11px] font-bold uppercase transition-colors hover:bg-[#1a478a] dark:hover:bg-white/10 border-r border-[#1a478a] dark:border-[#1e1e30] shrink-0"
                 >
-                    Dosya
+                    File
                 </button>
                 {["home", "insert", "draw", "design", "layout", "references", "review", "view", "help", "convert"].map(tab => (
                     <button
@@ -76,22 +76,22 @@ const EditorRibbon = (props: EditorRibbonProps) => {
                             activeTab === tab ? "bg-[#f3f2f1] dark:bg-[#16162a] text-[#2b579a] dark:text-blue-400 rounded-t-sm" : "text-white"
                         )}
                     >
-                        {tab === "home" ? "Giriş" :
-                            tab === "insert" ? "Ekle" :
-                                tab === "draw" ? "Çizim" :
-                                    tab === "design" ? "Tasarım" :
-                                        tab === "layout" ? "Düzen" :
-                                            tab === "references" ? "Başvurular" :
-                                                tab === "review" ? "Gözden Geçir" :
-                                                    tab === "view" ? "Görünüm" :
-                                                        tab === "help" ? "Yardım" :
-                                                            tab === "convert" ? "Dönüştür" : tab}
+                        {tab === "home" ? "Home" :
+                            tab === "insert" ? "Insert" :
+                                tab === "draw" ? "Draw" :
+                                    tab === "design" ? "Design" :
+                                        tab === "layout" ? "Layout" :
+                                            tab === "references" ? "References" :
+                                                tab === "review" ? "Review" :
+                                                    tab === "view" ? "View" :
+                                                        tab === "help" ? "Help" :
+                                                            tab === "convert" ? "Convert" : tab}
                     </button>
                 ))}
             </div>
 
             <div className="h-24 bg-[#f3f2f1] dark:bg-[#16162a] flex items-center px-4 gap-0 overflow-x-auto scrollbar-hide" style={{ position: 'relative', zIndex: 40 }}>
-                <Suspense fallback={<div className="flex items-center justify-center p-4 text-[10px] text-zinc-400 font-bold uppercase tracking-wider animate-pulse">Menü Yükleniyor...</div>}>
+                <Suspense fallback={<div className="flex items-center justify-center p-4 text-[10px] text-zinc-400 font-bold uppercase tracking-wider animate-pulse">Loading Menu...</div>}>
                     {activeTab === "home" && <HomeTab {...props} />}
                     {activeTab === "insert" && <InsertTab {...props} />}
                     {activeTab === "design" && <DesignTab {...props} />}
@@ -106,7 +106,7 @@ const EditorRibbon = (props: EditorRibbonProps) => {
 
                 {!["home", "insert", "draw", "design", "layout", "references", "review", "view", "help", "convert"].includes(activeTab) && (
                     <div className="flex-1 flex items-center justify-center text-zinc-400 font-black text-[11px] uppercase tracking-[0.2em] animate-pulse">
-                        &lt; Daha Fazla Sekmesi Araçları Hazırlanıyor... &gt;
+                        &lt; Preparing More Tab Tools... &gt;
                     </div>
                 )}
             </div>

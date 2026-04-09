@@ -99,7 +99,7 @@ export default function Home() {
           const mediaFiles = Object.keys(content2.files).filter(p =>
             p.startsWith("ppt/media/") && (p.endsWith(".png") || p.endsWith(".jpg") || p.endsWith(".jpeg"))
           );
-          if (mediaFiles.length === 0) { alert("Görsel içerik bulunamadı."); return; }
+          if (mediaFiles.length === 0) { alert("Visual content not found."); return; }
           if (mediaFiles.length === 1) {
             const imgData = await content2.files[mediaFiles[0]].async("blob");
             saveAs(imgData, file.name.replace(/\.[^/.]+$/, "") + ".png");
@@ -149,7 +149,7 @@ export default function Home() {
             slide.addText(chunk, { x: 0.5, y: 0.5, w: 9, h: 4.5, fontSize: 16, color: "334155", valign: "top" });
           }
           await pptx.writeFile({ fileName: file.name.replace(/\.[^/.]+$/, "") + ".pptx" });
-          alert("Başarıyla dönüştürüldü!");
+          alert("Successfully converted!");
         } catch (err) {
           console.error("DOCX to PPTX error:", err);
           alert("Dönüştürme hatası.");
@@ -213,10 +213,10 @@ export default function Home() {
             }
             const outName = file.name.replace(/\.[^/.]+$/, "") + ".pptx";
             await pptx.writeFile({ fileName: outName });
-            alert("Başarıyla dönüştürüldü! Sayfa düzeni korundu.");
+            alert("Successfully converted! Page layout preserved.");
           } catch (err) {
             console.error("PDF to PPTX error:", err);
-            alert("Dönüştürme hatası.");
+            alert("Conversion error.");
           }
         }
       };
@@ -238,7 +238,7 @@ export default function Home() {
               (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg"))
             );
             if (mediaFiles.length === 0) {
-              alert("Görsel içerik bulunamadı.");
+              alert("Visual content not found.");
               return;
             }
             const pdf = new jsPDF({ unit: 'px', compress: true });
@@ -291,7 +291,7 @@ export default function Home() {
         const file = (e.target as HTMLInputElement).files?.[0];
         if (file) {
           setView("editor");
-          setInitialContent("<p>Lütfen bekleyin, Word belgesi dönüştürülüyor...</p>");
+          setInitialContent("<p>Please wait, Word document is being converted...</p>");
 
           try {
             const mammoth = await import("mammoth");
@@ -301,12 +301,12 @@ export default function Home() {
 
             if (!html || html.trim() === "") {
               console.error("Mammoth returned empty HTML");
-              throw new Error("Belge boş veya okunamadı.");
+              throw new Error("Document is empty or could not be read.");
             }
 
             console.log("Mammoth HTML length:", html.length);
 
-            setInitialContent("<p>PDF oluşturuluyor, lütfen bekleyin...</p>");
+            setInitialContent("<p>PDF is being created, please wait...</p>");
 
             // Gizli bir element oluşturup içeriği içine koyalım
             const container = document.createElement("div");
@@ -373,7 +373,7 @@ export default function Home() {
           } catch (err) {
             console.error("Conversion error:", err);
             setView("editor");
-            setInitialContent("<p>Belge dönüştürülürken bir hata oluştu.</p>");
+            setInitialContent("<p>An error occurred while converting the document.</p>");
           }
         }
       };
@@ -405,7 +405,7 @@ export default function Home() {
           pdf.save(outName);
         } catch (err) {
           console.error("PNG to PDF error:", err);
-          alert("Dönüştürme hatası oluştu.");
+          alert("A conversion error occurred.");
         }
       };
       input.click();
@@ -514,7 +514,7 @@ export default function Home() {
           document.body.removeChild(container);
         } catch (err) {
           console.error("DOCX to PNG error:", err);
-          alert("Dönüştürme hatası oluştu.");
+          alert("A conversion error occurred.");
         }
       };
       input.click();

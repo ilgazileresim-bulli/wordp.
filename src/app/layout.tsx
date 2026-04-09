@@ -13,21 +13,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Word P. — Ücretsiz Online Word ve PDF Editörü",
-  description: "Word P. ile profesyonel Word belgeleri ve PDF dosyaları oluşturun, düzenleyin ve dönüştürün. Ücretsiz, tarayıcı tabanlı, kurulum gerektirmez.",
-  keywords: ["word editörü", "pdf editörü", "online belge düzenleyici", "ücretsiz word", "pdf düzenleme", "belge oluşturma", "Word P"],
+  title: "Word P. — Free Online Word and PDF Editor",
+  description: "Create, edit, and convert professional Word documents and PDF files with Word P. Free, browser-based, no installation required.",
+  keywords: ["word editor", "pdf editor", "online document editor", "free word", "edit pdf", "document creation", "Word P"],
   authors: [{ name: "Word P." }],
   openGraph: {
-    title: "Word P. — Ücretsiz Online Word ve PDF Editörü",
-    description: "Profesyonel belge düzenleme deneyimi. Word & PDF desteği. Kurulum gerektirmez.",
+    title: "Word P. — Free Online Word and PDF Editor",
+    description: "Professional document editing experience. Word & PDF support. No installation required.",
     type: "website",
-    locale: "tr_TR",
+    locale: "en_US",
     siteName: "Word P.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Word P. — Ücretsiz Online Word ve PDF Editörü",
-    description: "Profesyonel belge düzenleme deneyimi. Word & PDF desteği.",
+    title: "Word P. — Free Online Word and PDF Editor",
+    description: "Professional document editing experience. Word & PDF support.",
   },
   robots: { index: true, follow: true },
   other: {
@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

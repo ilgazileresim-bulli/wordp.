@@ -6,41 +6,44 @@ import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, 
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import ThemeToggle from "./ThemeToggle";
+import LanguageSelector from "./LanguageSelector";
 import { TEMPLATES, TEMPLATE_CATEGORIES } from "../data/templates";
 import { getRecentDocuments, deleteRecentDocument, clearRecentDocuments, type RecentDocument } from "../utils/recentDocuments";
+import Calculator from "./Calculator";
+
 
 const ALL_TOOLS = [
-    { id: "pptx-editor", title: "PowerPoint Editörü", icon: PieChart, color: "from-red-500 to-orange-500", desc: "Sunum Oluştur & Düzenle", badge: "YENİ", group: "powerpoint" },
-    { id: "pptx-open", title: "PPTX Dosyası Aç", icon: Library, color: "from-amber-500 to-orange-500", desc: "Mevcut Sunumu Düzenle", group: "powerpoint" },
-    { id: "pdf-to-pptx", title: "PDF'den PPTX'e", icon: PieChart, color: "from-orange-500 to-orange-600", desc: "PDF'i Sunuma Çevir", group: "converters" },
-    { id: "pptx-to-pdf", title: "PPTX'ten PDF'e", icon: Library, color: "from-blue-500 to-blue-600", desc: "Sunumu PDF Yap", group: "converters" },
-    { id: "pptx-to-png", title: "PPTX'ten PNG'ye", icon: Image, color: "from-teal-500 to-emerald-500", desc: "Slaytları Görsele Çevir", group: "converters" },
-    { id: "docx-to-pptx", title: "Word'den PPTX'e", icon: FileText, color: "from-sky-500 to-blue-600", desc: "Belgeden Sunum Oluştur", group: "converters" },
-    { id: "pdf-to-word", title: "PDF'den Word'e", icon: FileText, color: "from-indigo-500 to-indigo-600", desc: "PDF'i Metne Çevir", group: "converters" },
-    { id: "word-to-pdf", title: "Word'den PDF'e", icon: FileSearch, color: "from-red-500 to-red-600", desc: "Word'ü PDF Yap", group: "converters" },
-    { id: "png-to-pdf", title: "PNG'den PDF'e", icon: Image, color: "from-emerald-500 to-emerald-600", desc: "Görseli PDF Yap", group: "converters" },
-    { id: "png-to-docx", title: "PNG'den Word'e", icon: FileImage, color: "from-violet-500 to-violet-600", desc: "Görseli DOCX Yap", group: "converters" },
-    { id: "docx-to-png", title: "Word'den PNG'ye", icon: FileSearch, color: "from-pink-500 to-pink-600", desc: "DOCX'i Görsel Yap", group: "converters" },
-    { id: "pdf-to-png", title: "PDF'den PNG'ye", icon: Image, color: "from-cyan-500 to-cyan-600", desc: "PDF'i Görsel Yap", group: "converters" },
-    { id: "universal-converter", title: "Tüm Format Dönüştürücü", icon: RefreshCw, color: "from-blue-600 to-indigo-600", desc: "Her Dosyayı Dönüştür", badge: "YENİ", group: "converters" },
-    { id: "pdf", title: "PDF Düzenleyici", icon: FileSearch, color: "from-rose-500 to-red-600", desc: "PDF Aç ve Düzenle", badge: "YENİ", group: "pdf" },
-    { id: "pdf-merge-split", title: "PDF Birleştir & Ayır", icon: Combine, color: "from-blue-500 to-cyan-500", desc: "PDF'leri Yönet", badge: "YENİ", group: "pdf" },
-    { id: "ocr-tool", title: "Resimden Yazıya (OCR)", icon: FileSearch, color: "from-amber-500 to-orange-600", desc: "Metni Çıkar", badge: "YENİ", group: "office" },
-    { id: "excel-editor", title: "Excel (Tablo) Editörü", icon: PieChart, color: "from-emerald-500 to-teal-600", desc: "Tablo Oluştur", badge: "YENİ", group: "office" },
-    { id: "excel-open", title: "Excel Dosyası Aç", icon: Library, color: "from-teal-500 to-cyan-600", desc: "Mevcut Tabloyu Düzenle", group: "office" },
-    { id: "cv-wizard", title: "CV Özgeçmiş Oluşturucu", icon: FileText, color: "from-purple-500 to-pink-500", desc: "Hızlıca CV Hazırla", badge: "YENİ", group: "office" },
-    { id: "invoice-wizard", title: "Fatura Kesici", icon: FileText, color: "from-indigo-400 to-purple-600", desc: "PDF Fatura Çıkar", badge: "YENİ", group: "office" },
-    { id: "bg-remover", title: "Arka Plan Kaldırıcı", icon: Image, color: "from-fuchsia-500 to-purple-600", desc: "Arka Planı Sil", badge: "YENİ", group: "photo" },
-    { id: "word-modifier", title: "Word Seç (Stil Uygula)", icon: Type, color: "from-indigo-600 to-purple-600", desc: "Kelime Stilini Değiştir", badge: "YENİ", group: "office" },
-    { id: "image-cropper", title: "Fotoğraf Kesme", icon: Image, color: "from-indigo-500 to-cyan-600", desc: "Fotoğraf Boyutlandır", badge: "YENİ", group: "photo" },
-    { id: "image-enhancer", title: "Bulanıklık Giderici", icon: Image, color: "from-emerald-500 to-teal-600", desc: "Fotoğrafı Netleştir", badge: "YENİ", group: "photo" },
-    { id: "canva-clone", title: "Tasarım Stüdyosu (Canva)", icon: LayoutTemplate, color: "from-fuchsia-500 to-rose-500", desc: "Tasarım ve Afiş Yap", badge: "YENİ", group: "photo" },
-    { id: "birthday-message", title: "Doğum Günü Mesajı", icon: Heart, color: "from-pink-500 to-rose-500", desc: "Uzun Mesaj Oluştur", badge: "YENİ", group: "office", content: "<h1>İyi ki Doğdun!</h1><p>İyi ki doğdun! Hayatının yeni yaşının sana sağlık, mutluluk, başarı ve huzur getirmesini diliyorum. Umarım tüm hayallerin gerçek olur ve yüzün hep böyle güler. Seninle geçirdiğim her an o kadar kıymetli ki, iyi ki varsın ve iyi ki hayatımızdasın. Birlikte daha nice güzel anılar biriktireceğimiz harika bir yıl olsun. Yeni yaşın kutlu olsun! Dünyanın en şanslı insanıyım çünkü senin gibi harika bir dosta/insana sahibim. Hayat bazen zorlayıcı olabilir ama seninle her şeyin üstesinden gelmek o kadar kolay ve eğlenceli ki... Gülüşmen yüzünden eksik olmasın, kalbin her zamankinden daha umut dolu atsın. Hep mutlu ol, hiçbir şey için canını sıkma, her şey dilediğin gibi güzel geçsin yaşantında. Uzun lafın kısası, her şey gönlünce olsun. Nice mutlu yıllara!</p>" },
-    { id: "code-editor-html", title: "HTML Editörü", icon: FileCode, color: "from-orange-500 to-red-500", desc: "HTML Kodunu Yaz ve Görüntüle", badge: "YENİ", group: "code" },
-    { id: "code-editor-css", title: "CSS Editörü", icon: Braces, color: "from-blue-500 to-cyan-500", desc: "CSS Stillerini Düzenle", badge: "YENİ", group: "code" },
-    { id: "code-editor-js", title: "JavaScript Editörü", icon: FileCode2, color: "from-yellow-400 to-orange-500", desc: "JS Kodu Yaz ve Çalıştır", badge: "YENİ", group: "code" },
-    { id: "folder-code-editor", title: "Normal Kod Editörü", icon: FolderOpen, color: "from-violet-500 to-indigo-600", desc: "Klasörden Gerçek Proje Aç", badge: "YENİ", group: "code" },
-    { id: "cps-test", title: "Tıklama Hızı (CPS)", icon: MousePointer2, color: "from-yellow-400 to-orange-600", desc: "Saniye Başına Tıklama Testi", badge: "YENİ", group: "performance" },
+    { id: "pptx-editor", title: "PowerPoint Editor", icon: PieChart, color: "from-red-500 to-orange-500", desc: "Create & Edit Presentations", badge: "NEW", group: "powerpoint" },
+    { id: "pptx-open", title: "Open PPTX File", icon: Library, color: "from-amber-500 to-orange-500", desc: "Edit Existing Presentation", group: "powerpoint" },
+    { id: "pdf-to-pptx", title: "PDF to PPTX", icon: PieChart, color: "from-orange-500 to-orange-600", desc: "Convert PDF to Slides", group: "converters" },
+    { id: "pptx-to-pdf", title: "PPTX to PDF", icon: Library, color: "from-blue-500 to-blue-600", desc: "Make Presentation PDF", group: "converters" },
+    { id: "pptx-to-png", title: "PPTX to PNG", icon: Image, color: "from-teal-500 to-emerald-500", desc: "Convert Slides to Images", group: "converters" },
+    { id: "docx-to-pptx", title: "Word to PPTX", icon: FileText, color: "from-sky-500 to-blue-600", desc: "Create Slides from Document", group: "converters" },
+    { id: "pdf-to-word", title: "PDF to Word", icon: FileText, color: "from-indigo-500 to-indigo-600", desc: "Convert PDF to Text", group: "converters" },
+    { id: "word-to-pdf", title: "Word to PDF", icon: FileSearch, color: "from-red-500 to-red-600", desc: "Convert Word to PDF", group: "converters" },
+    { id: "png-to-pdf", title: "PNG to PDF", icon: Image, color: "from-emerald-500 to-emerald-600", desc: "Make Image PDF", group: "converters" },
+    { id: "png-to-docx", title: "PNG to Word", icon: FileImage, color: "from-violet-500 to-violet-600", desc: "Convert Image to DOCX", group: "converters" },
+    { id: "docx-to-png", title: "Word to PNG", icon: FileSearch, color: "from-pink-500 to-pink-600", desc: "Convert DOCX to Image", group: "converters" },
+    { id: "pdf-to-png", title: "PDF to PNG", icon: Image, color: "from-cyan-500 to-cyan-600", desc: "Convert PDF to Image", group: "converters" },
+    { id: "universal-converter", title: "Universal Converter", icon: RefreshCw, color: "from-blue-600 to-indigo-600", desc: "Convert Any File", badge: "NEW", group: "converters" },
+    { id: "pdf", title: "PDF Editor", icon: FileSearch, color: "from-rose-500 to-red-600", desc: "Open and Edit PDF", badge: "NEW", group: "pdf" },
+    { id: "pdf-merge-split", title: "PDF Merge & Split", icon: Combine, color: "from-blue-500 to-cyan-500", desc: "Manage PDF Files", badge: "NEW", group: "pdf" },
+    { id: "ocr-tool", title: "Image to Text (OCR)", icon: FileSearch, color: "from-amber-500 to-orange-600", desc: "Extract Text from Images", badge: "NEW", group: "office" },
+    { id: "excel-editor", title: "Excel (Sheet) Editor", icon: PieChart, color: "from-emerald-500 to-teal-600", desc: "Create Spreadsheets", badge: "NEW", group: "office" },
+    { id: "excel-open", title: "Open Excel File", icon: Library, color: "from-teal-500 to-cyan-600", desc: "Edit Existing Sheet", group: "office" },
+    { id: "cv-wizard", title: "CV Resume Builder", icon: FileText, color: "from-purple-500 to-pink-500", desc: "Quick Resume Creation", badge: "NEW", group: "office" },
+    { id: "invoice-wizard", title: "Invoice Generator", icon: FileText, color: "from-indigo-400 to-purple-600", desc: "Export PDF Invoice", badge: "NEW", group: "office" },
+    { id: "bg-remover", title: "Background Remover", icon: Image, color: "from-fuchsia-500 to-purple-600", desc: "Remove Background", badge: "NEW", group: "photo" },
+    { id: "word-modifier", title: "Word Styler", icon: Type, color: "from-indigo-600 to-purple-600", desc: "Apply Text Styles", badge: "NEW", group: "office" },
+    { id: "image-cropper", title: "Image Cropper", icon: Image, color: "from-indigo-500 to-cyan-600", desc: "Resize Images", badge: "NEW", group: "photo" },
+    { id: "image-enhancer", title: "Unblur Image", icon: Image, color: "from-emerald-500 to-teal-600", desc: "Sharpen Photos", badge: "NEW", group: "photo" },
+    { id: "canva-clone", title: "Design Studio (Canva)", icon: LayoutTemplate, color: "from-fuchsia-500 to-rose-500", desc: "Create Designs and Posters", badge: "NEW", group: "photo" },
+    { id: "birthday-message", title: "Birthday Message", icon: Heart, color: "from-pink-500 to-rose-500", desc: "Generate Long Messages", badge: "NEW", group: "office", content: "<h1>Happy Birthday!</h1><p>Happy birthday! I wish your new year of life brings you health, happiness, success, and peace. I hope all your dreams come true and your face always smiles like this. Every moment I spend with you is so precious, I'm glad you exist and I'm glad you're in our lives. May it be a wonderful year where we accumulate many more beautiful memories together. Happy new age! I am the luckiest person in the world because I have such a wonderful friend/person like you. Life can be challenging sometimes, but everything is so easy and fun to overcome with you... May your laughter never be missing from your face, may your heart beat more hopefully than ever. Always be happy, don't let anything worry you, everything go as beautifully as you wish in your life. In short, may everything be as you wish. Many happy years!</p>" },
+    { id: "code-editor-html", title: "HTML Editor", icon: FileCode, color: "from-orange-500 to-red-500", desc: "Write & Preview HTML", badge: "NEW", group: "code" },
+    { id: "code-editor-css", title: "CSS Editor", icon: Braces, color: "from-blue-500 to-cyan-500", desc: "Edit CSS Styles", badge: "NEW", group: "code" },
+    { id: "code-editor-js", title: "JavaScript Editor", icon: FileCode2, color: "from-yellow-400 to-orange-500", desc: "Write & Run JS Code", badge: "NEW", group: "code" },
+    { id: "folder-code-editor", title: "Real Project Editor", icon: FolderOpen, color: "from-violet-500 to-indigo-600", desc: "Open Project from Folder", badge: "NEW", group: "code" },
+    { id: "cps-test", title: "Click Speed (CPS)", icon: MousePointer2, color: "from-yellow-400 to-orange-600", desc: "Test Clicks Per Second", badge: "NEW", group: "performance" },
 ];
 
 function cn(...inputs: ClassValue[]) {
@@ -54,11 +57,11 @@ function formatDate(timestamp: number): string {
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
-    if (minutes < 1) return "Az önce";
-    if (minutes < 60) return `${minutes} dk önce`;
-    if (hours < 24) return `${hours} saat önce`;
-    if (days < 7) return `${days} gün önce`;
-    return new Date(timestamp).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" });
+    if (minutes < 1) return "Just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    if (days < 7) return `${days}d ago`;
+    return new Date(timestamp).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
 }
 
 interface LandingPageProps {
@@ -113,10 +116,11 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                     </div>
                     <div>
                         <span className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100">Word P.</span>
-                        <span className="text-[10px] text-zinc-400 block -mt-1 font-medium">Profesyonel Belge Düzenleyici</span>
+                        <span className="text-[10px] text-zinc-400 block -mt-1 font-medium">Professional Document Editor</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
+                    <LanguageSelector />
                     <ThemeToggle />
                 </div>
             </header>
@@ -133,14 +137,14 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                 >
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-bold mb-6 border border-blue-100 dark:border-blue-800/50">
                         <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 animate-pulse"></span>
-                        Word P. OS 2.0 Yayında
+                        Word P. OS 2.0 Live
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white tracking-tight mb-6" suppressHydrationWarning>
-                        Sınırları Aşan
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 ml-3">Üretkenlik.</span>
+                        Productivity Without
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 ml-3">Boundaries.</span>
                     </h1>
                     <p className="text-zinc-500 dark:text-zinc-400 text-lg md:text-xl font-medium leading-relaxed">
-                        Tüm profesyonel belgelerinizi, tasarımlarınızı ve şablonlarınızı tek bir süper uygulamadan yönetin. Sükunetle hızlanın.
+                        Manage all your professional documents, designs, and templates from a single super app. Accelerate with tranquility.
                     </p>
                 </motion.div>
 
@@ -158,7 +162,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                         </div>
                         <input
                             type="text"
-                            placeholder="Dosya, araç veya şablon arayın..."
+                            placeholder="Search files, tools, or templates..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full pl-4 pr-6 py-5 text-lg font-medium bg-transparent text-zinc-900 dark:text-white focus:outline-none placeholder:text-zinc-400"
@@ -180,8 +184,8 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                             <Library size={20} />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-zinc-800 dark:text-zinc-100">Stüdyolar</h2>
-                            <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium -mt-1">Tüm araçlara alanlarına göre göz atın.</p>
+                            <h2 className="text-2xl font-black text-zinc-800 dark:text-zinc-100">Studios</h2>
+                            <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium -mt-1">Browse all tools by their category.</p>
                         </div>
                     </div>
 
@@ -197,14 +201,14 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                             >
                                     {/* Folders List */}
                                     {[
-                                        { id: "converters", title: "Çeviriciler", subtitle: "PDF, Word, PPTX ve Görüntü formatları arasında 10+ dönüştürücü.", icon: RefreshCw, bg: "from-emerald-400 to-teal-600", borderHover: "hover:border-emerald-500/50", glow: "group-hover:shadow-emerald-500/20" },
-                                        { id: "pdf", title: "PDF Stüdyosu", subtitle: "PDF dosyalarını birleştir, ayır, düzenle ve sayfa bazlı kontrol sağla.", icon: FileSearch, bg: "from-rose-400 to-red-600", borderHover: "hover:border-rose-500/50", glow: "group-hover:shadow-rose-500/20" },
-                                        { id: "code", title: "Kod Editörü", subtitle: "HTML, CSS ve JavaScript kodlarını canlı önizlemeyle yaz, düzenle ve çalıştır.", icon: Code, bg: "from-violet-500 to-indigo-600", borderHover: "hover:border-violet-500/50", glow: "group-hover:shadow-violet-500/20" },
-                                        { id: "photo", title: "Fotoğraf Stüdyosu", subtitle: "Canva stili tasarım posterleri, arka plan kaldırma araçları.", icon: Image, bg: "from-fuchsia-400 to-purple-600", borderHover: "hover:border-fuchsia-500/50", glow: "group-hover:shadow-fuchsia-500/20" },
-                                        { id: "word", title: "Şablonlar & Sahneler", subtitle: "50'den fazla hazır sektörel şablon tasarımıyla hemen başla.", icon: LayoutTemplate, bg: "from-blue-400 to-indigo-600", borderHover: "hover:border-blue-500/50", glow: "group-hover:shadow-blue-500/20" },
-                                        { id: "office", title: "Ofis Araçları", subtitle: "Gelişmiş Excel tablo düzenleyici ve akıllı asistanlar.", icon: Type, bg: "from-indigo-400 to-violet-600", borderHover: "hover:border-indigo-500/50", glow: "group-hover:shadow-indigo-500/20" },
-                                        { id: "performance", title: "Hız & Performans", subtitle: "CPS testi ve tıklama hızı ölçme araçları.", icon: Zap, bg: "from-yellow-400 to-orange-600", borderHover: "hover:border-yellow-500/50", glow: "group-hover:shadow-yellow-500/20" },
-                                        { id: "powerpoint", title: "Sunum (PPTX)", subtitle: "Profesyonel slayt sunumları oluşturun ve sahne tasarımları yapın.", icon: PieChart, bg: "from-amber-400 to-orange-600", borderHover: "hover:border-amber-500/50", glow: "group-hover:shadow-amber-500/20" }
+                                        { id: "converters", title: "Converters", subtitle: "10+ converters between PDF, Word, PPTX and Image formats.", icon: RefreshCw, bg: "from-emerald-400 to-teal-600", borderHover: "hover:border-emerald-500/50", glow: "group-hover:shadow-emerald-500/20" },
+                                        { id: "pdf", title: "PDF Studio", subtitle: "Merge, split, edit and manage PDF pages with full control.", icon: FileSearch, bg: "from-rose-400 to-red-600", borderHover: "hover:border-rose-500/50", glow: "group-hover:shadow-rose-500/20" },
+                                        { id: "code", title: "Code Editor", subtitle: "Write, edit and run HTML, CSS and JavaScript with live preview.", icon: Code, bg: "from-violet-500 to-indigo-600", borderHover: "hover:border-violet-500/50", glow: "group-hover:shadow-violet-500/20" },
+                                        { id: "photo", title: "Photo Studio", subtitle: "Canva-style design tools and background removal utilities.", icon: Image, bg: "from-fuchsia-400 to-purple-600", borderHover: "hover:border-fuchsia-500/50", glow: "group-hover:shadow-fuchsia-500/20" },
+                                        { id: "word", title: "Templates & Scenes", subtitle: "Start instantly with over 50 ready-made professional templates.", icon: LayoutTemplate, bg: "from-blue-400 to-indigo-600", borderHover: "hover:border-blue-500/50", glow: "group-hover:shadow-blue-500/20" },
+                                        { id: "office", title: "Office Tools", subtitle: "Advanced Excel sheet editor and intelligent assistants.", icon: Type, bg: "from-indigo-400 to-violet-600", borderHover: "hover:border-indigo-500/50", glow: "group-hover:shadow-indigo-500/20" },
+                                        { id: "performance", title: "Speed & Performance", subtitle: "CPS test and click speed measurement tools.", icon: Zap, bg: "from-yellow-400 to-orange-600", borderHover: "hover:border-yellow-500/50", glow: "group-hover:shadow-yellow-500/20" },
+                                        { id: "powerpoint", title: "Presentation (PPTX)", subtitle: "Create professional slide presentations and scene designs.", icon: PieChart, bg: "from-amber-400 to-orange-600", borderHover: "hover:border-amber-500/50", glow: "group-hover:shadow-amber-500/20" }
                                     ].map((folder, i) => (
                                         <motion.button
                                             key={folder.id}
@@ -244,10 +248,10 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                             onClick={() => setActiveToolGroup(null)}
                                             className="flex items-center gap-2 px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-lg text-sm font-bold text-zinc-700 dark:text-zinc-300 transition-colors"
                                         >
-                                            <ArrowLeft size={16} /> Geri Dön
+                                            <ArrowLeft size={16} /> Back
                                         </button>
                                         <h3 className="text-lg font-black text-zinc-800 dark:text-zinc-200">
-                                            Şablonlarla Başlayın
+                                            Start with Templates
                                         </h3>
                                     </div>
                                     <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1 sm:pb-0">
@@ -260,7 +264,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                                     : "bg-white dark:bg-slate-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-slate-600 hover:border-blue-300 hover:text-blue-600"
                                             )}
                                         >
-                                            Tümü
+                                            All
                                         </button>
                                         {TEMPLATE_CATEGORIES.map(cat => (
                                             <button
@@ -310,10 +314,10 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                         onClick={() => setActiveToolGroup(null)}
                                         className="flex items-center gap-2 px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-lg text-sm font-bold text-zinc-700 dark:text-zinc-300 transition-colors"
                                     >
-                                        <ArrowLeft size={16} /> Geri Dön
+                                        <ArrowLeft size={16} /> Back
                                     </button>
                                     <h3 className="text-lg font-black text-zinc-800 dark:text-zinc-200">
-                                        {activeToolGroup === "converters" ? "Çeviriciler" : activeToolGroup === "pdf" ? "PDF Stüdyosu" : activeToolGroup === "photo" ? "Fotoğraf Stüdyosu" : activeToolGroup === "office" ? "Ofis Araçları" : activeToolGroup === "code" ? "Kod Editörü" : activeToolGroup === "performance" ? "Hız & Performans" : "PowerPoint Stüdyosu"}
+                                        {activeToolGroup === "converters" ? "Converters" : activeToolGroup === "pdf" ? "PDF Studio" : activeToolGroup === "photo" ? "Photo Studio" : activeToolGroup === "office" ? "Office Tools" : activeToolGroup === "code" ? "Code Editor" : activeToolGroup === "performance" ? "Speed & Performance" : "PowerPoint Studio"}
                                     </h3>
                                 </div>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -356,10 +360,10 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                             <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600">
                                 <Clock size={18} />
                             </div>
-                            <h2 className="text-xl font-bold text-zinc-800 dark:text-zinc-100">Son Belgeler</h2>
+                            <h2 className="text-xl font-bold text-zinc-800 dark:text-zinc-100">Recent Documents</h2>
                             {recentDocs.length > 0 && (
                                 <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
-                                    {recentDocs.length} belge
+                                    {recentDocs.length} files
                                 </span>
                             )}
                         </div>
@@ -369,7 +373,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                 className="text-xs font-bold text-red-400 hover:text-red-600 transition-colors flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50"
                             >
                                 <Trash2 size={12} />
-                                Tümünü Temizle
+                                Clear All
                             </button>
                         )}
                     </div>
@@ -379,8 +383,8 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                             <div className="w-14 h-14 bg-zinc-50 rounded-full flex items-center justify-center mb-3">
                                 <FolderOpen size={28} className="text-zinc-300" />
                             </div>
-                            <p className="text-base font-medium">Son belge bulunamadı</p>
-                            <p className="text-sm">Yukarıdan bir şablon seçerek başlayın.</p>
+                            <p className="text-base font-medium">No recent documents found</p>
+                            <p className="text-sm">Choose a template above to get started.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -403,7 +407,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                             <button
                                                 onClick={(e) => handleDeleteDoc(doc.id, e)}
                                                 className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-red-50 rounded-lg text-zinc-400 hover:text-red-500"
-                                                title="Belgeyi sil"
+                                                title="Delete document"
                                             >
                                                 <Trash2 size={14} />
                                             </button>
@@ -425,7 +429,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                                 <Clock size={10} />
                                                 {formatDate(doc.lastModified)}
                                             </span>
-                                            <span className="font-medium">{doc.wordCount} kelime</span>
+                                            <span className="font-medium">{doc.wordCount} words</span>
                                         </div>
 
                                         {/* Open indicator */}
@@ -443,10 +447,12 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                         </div>
                     )}
                 </section>
+
+                <Calculator />
             </main>
 
             <footer className="p-6 text-center text-zinc-400 dark:text-slate-500 text-sm border-t border-zinc-200/50 dark:border-slate-700/50">
-                &copy; 2026 Word P. Tüm hakları saklıdır.
+                &copy; 2026 Word P. All rights reserved.
             </footer>
         </div>
     );

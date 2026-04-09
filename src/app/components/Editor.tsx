@@ -213,7 +213,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
         TableCell,
         TiptapImage.configure({ allowBase64: true }),
         TiptapLink.configure({ openOnClick: false }),
-        Placeholder.configure({ placeholder: 'Yazmaya başlayın...' }),
+        Placeholder.configure({ placeholder: 'Start typing...' }),
         CharacterCount,
         Indent,
         VideoExtension,
@@ -225,8 +225,8 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
         extensions,
         onUpdate: checkHeight,
         content: initialContent?.startsWith("PDF_IMPORT:")
-            ? "<p>PDF metni ayıklanıyor...</p>"
-            : (initialContent || `<h1>Adsız Belge</h1><p>Yazmaya başlayın...</p>`),
+            ? "<p>Extracting PDF text...</p>"
+            : (initialContent || `<h1>Untitled Document</h1><p>Start typing...</p>`),
         editorProps: {
             attributes: {
                 class: "focus:outline-none w-full prose prose-zinc max-w-none",
@@ -257,14 +257,14 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
                 const pageText = textContent.items
                     .map((item: any) => item.str)
                     .join(" ");
-                fullText += `<h2>Sayfa ${i}</h2><p>${pageText}</p>`;
+                fullText += `<h2>Page ${i}</h2><p>${pageText}</p>`;
             }
 
-            editor?.commands.setContent(fullText || "<p>PDF'den metin ayıklanamadı.</p>");
+            editor?.commands.setContent(fullText || "<p>Could not extract text from PDF.</p>");
             setTimeout(checkHeight, 100);
         } catch (error) {
             console.error("PDF extraction error:", error);
-            editor?.commands.setContent("<p>PDF ayıklanırken bir hata oluştu.</p>");
+            editor?.commands.setContent("<p>An error occurred while extracting PDF.</p>");
             setTimeout(checkHeight, 100);
         }
     }, [editor]);
@@ -273,7 +273,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
         if (initialContent?.startsWith("PDF_IMPORT:") && editor) {
             const file = (window as any).__pdfImportFile;
             if (file) {
-                editor.commands.setContent("<p>PDF dosyası okunuyor, lütfen bekleyin...</p>");
+                editor.commands.setContent("<p>Reading PDF file, please wait...</p>");
                 extractTextFromPDF(file);
             }
         }
@@ -356,10 +356,10 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
                 pdf.addImage(imgData, 'PNG', 0, -(i * pdfHeight), pdfWidth, imgHeightMm);
             }
 
-            pdf.save('belge.pdf');
+            pdf.save('document.pdf');
         } catch (error) {
             console.error('PDF Export failed:', error);
-            alert('PDF oluşturulurken bir hata oluştu.');
+            alert('An error occurred while creating PDF.');
         } finally {
             setIsSaving(false);
         }
@@ -372,14 +372,14 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
             const response = await fetch('/api/export-docx', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ html, title: 'belge' }),
+                body: JSON.stringify({ html, title: 'document' }),
             });
             if (!response.ok) throw new Error('Export failed');
             const docxBlob = await response.blob();
-            saveAs(docxBlob, 'belge.docx');
+            saveAs(docxBlob, 'document.docx');
         } catch (error) {
             console.error('Error generating docx:', error);
-            alert('Belge oluşturulurken bir hata oluştu.');
+            alert('An error occurred while creating document.');
         }
     }, [editor]);
 
@@ -397,7 +397,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
     const insertDate = useCallback(() => {
         if (!editor) return;
         const now = new Date();
-        const dateStr = now.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        const dateStr = now.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
         editor.chain().focus().insertContent(dateStr).run();
     }, [editor]);
 
@@ -473,7 +473,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
 
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            alert("Tarayıcınız sesli dikte özelliğini desteklemiyor. Lütfen Chrome kullanın.");
+            alert("Your browser does not support voice dictation. Please use Chrome.");
             return;
         }
 
@@ -595,7 +595,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
                 onExportJson={() => {
                     const json = editor.getJSON();
                     const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
-                    saveAs(blob, 'belge.json');
+                    saveAs(blob, 'document.json');
                 }}
                 stats={{
                     words: wordCount,
@@ -616,7 +616,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
                         <button
                             onClick={() => setIsFocusMode(false)}
                             className="fixed top-8 right-8 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all border border-white/10 backdrop-blur-md group"
-                            title="Odak Modundan Çık"
+                            title="Exit Focus Mode"
                         >
                             <X size={24} className="group-hover:rotate-90 transition-transform duration-300" />
                         </button>
@@ -624,7 +624,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
                             <EditorContent editor={editor} />
                         </div>
                         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-2 bg-white/5 border border-white/10 rounded-full backdrop-blur-md text-white/40 text-[10px] uppercase font-black tracking-[0.3em]">
-                            Odaklanma Modu
+                            Focus Mode
                         </div>
                     </motion.div>
                 )}
