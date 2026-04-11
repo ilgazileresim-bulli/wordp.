@@ -2,15 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart, LayoutTemplate, ArrowLeft, Code, FileCode, Braces, FileCode2, Zap } from "lucide-react";
+import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart, LayoutTemplate, ArrowLeft, Code, FileCode, Braces, FileCode2, Zap, Video, Music, MonitorPlay, Mic, Headphones, Film, TerminalSquare, SearchCode, Network, KeyRound, Fingerprint, TextCursorInput, FileDigit, AlignLeft, Table, TableProperties, Tags, MonitorSmartphone, Clock4, Contrast, Unlock, Link, Code2, Archive, Hash, Calculator as CalculatorIcon, Briefcase, Coffee, TrendingUp, LineChart, Wallet, PiggyBank, TrendingDown, Home, Coins, Receipt, CreditCard, BarChart3, Landmark, Scale, Compass, Target, Percent, Car, Bitcoin, Megaphone, Shield, Eye, PenTool, Monitor, Keyboard, LayoutGrid } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSelector from "./LanguageSelector";
 import { TEMPLATES, TEMPLATE_CATEGORIES } from "../data/templates";
 import { getRecentDocuments, deleteRecentDocument, clearRecentDocuments, type RecentDocument } from "../utils/recentDocuments";
-import Calculator from "./Calculator";
-
 
 const ALL_TOOLS = [
     { id: "pptx-editor", title: "PowerPoint Editor", icon: PieChart, color: "from-red-500 to-orange-500", desc: "Create & Edit Presentations", badge: "NEW", group: "powerpoint" },
@@ -44,6 +42,223 @@ const ALL_TOOLS = [
     { id: "code-editor-js", title: "JavaScript Editor", icon: FileCode2, color: "from-yellow-400 to-orange-500", desc: "Write & Run JS Code", badge: "NEW", group: "code" },
     { id: "folder-code-editor", title: "Real Project Editor", icon: FolderOpen, color: "from-violet-500 to-indigo-600", desc: "Open Project from Folder", badge: "NEW", group: "code" },
     { id: "cps-test", title: "Click Speed (CPS)", icon: MousePointer2, color: "from-yellow-400 to-orange-600", desc: "Test Clicks Per Second", badge: "NEW", group: "performance" },
+    { id: "video-converter", title: "Video Dönüştürücü", icon: RefreshCw, color: "from-pink-500 to-rose-500", desc: "Video formatlarını dönüştürün", badge: "POPÜLER", group: "video-audio" },
+    { id: "audio-converter", title: "Ses Dönüştürücü", icon: RefreshCw, color: "from-fuchsia-500 to-purple-500", desc: "Ses formatlarını dönüştürün", badge: "POPÜLER", group: "video-audio" },
+    { id: "video-to-mp3", title: "Videodan MP3'e", icon: Headphones, color: "from-indigo-500 to-blue-500", desc: "Videoları MP3'e çevirin", badge: "POPÜLER", group: "video-audio" },
+    { id: "video-compressor", title: "Video Sıkıştırıcı", icon: Combine, color: "from-blue-500 to-cyan-500", desc: "Video boyutunu küçültün", badge: "POPÜLER", group: "video-audio" },
+    { id: "trim-video", title: "Videoyu Kısalt", icon: Film, color: "from-violet-500 to-purple-500", desc: "Videoları kesin veya kısaltın", badge: "YENİ", group: "video-audio" },
+    { id: "trim-audio", title: "Ses Kesici", icon: Music, color: "from-pink-500 to-rose-500", desc: "Ses dosyalarını kesin", badge: "YENİ", group: "video-audio" },
+    { id: "video-to-gif", title: "Videodan GIF'e", icon: Image, color: "from-rose-500 to-red-500", desc: "Videoları GIF animasyonuna çevirin", badge: "YENİ", group: "video-audio" },
+    { id: "gif-to-video", title: "GIF'den Videoya", icon: Film, color: "from-indigo-500 to-violet-500", desc: "GIF'leri videoya çevirin", badge: "YENİ", group: "video-audio" },
+    { id: "merge-videos", title: "Videoları Birleştir", icon: Combine, color: "from-blue-500 to-indigo-500", desc: "Birden fazla videoyu birleştirin", badge: "YENİ", group: "video-audio" },
+    { id: "merge-audio", title: "Ses Birleştirici", icon: Music, color: "from-purple-500 to-indigo-500", desc: "Ses dosyalarını birleştirin", badge: "YENİ", group: "video-audio" },
+    { id: "video-thumbnail", title: "Video Küçük Resmi", icon: Image, color: "from-slate-700 to-slate-900", desc: "Videodan küçük resim çıkar", badge: "YENİ", group: "video-audio" },
+    { id: "mute-video", title: "Videoyu Sessize Al", icon: Headphones, color: "from-indigo-500 to-purple-500", desc: "Videonun sesini kaldırın", badge: "YENİ", group: "video-audio" },
+    { id: "mp3-to-wav", title: "MP3'ten WAV'a", icon: Music, color: "from-fuchsia-500 to-pink-500", desc: "MP3 sesini WAV formatına çevir", badge: "YENİ", group: "video-audio" },
+    { id: "wav-to-mp3", title: "WAV'dan MP3'e", icon: Music, color: "from-purple-500 to-fuchsia-500", desc: "WAV sesini MP3 formatına çevir", badge: "YENİ", group: "video-audio" },
+    { id: "m4a-to-mp3", title: "M4A'dan MP3'e", icon: Music, color: "from-violet-500 to-purple-500", desc: "M4A sesini MP3 formatına çevir", badge: "YENİ", group: "video-audio" },
+    { id: "flac-to-mp3", title: "FLAC'tan MP3'e", icon: Music, color: "from-indigo-500 to-violet-500", desc: "FLAC sesini MP3 formatına çevir", badge: "YENİ", group: "video-audio" },
+    { id: "ogg-to-mp3", title: "OGG'dan MP3'e", icon: Music, color: "from-pink-500 to-rose-500", desc: "OGG sesini MP3 formatına çevir", badge: "YENİ", group: "video-audio" },
+    { id: "aac-to-mp3", title: "AAC'dan MP3'e", icon: Music, color: "from-rose-500 to-red-500", desc: "AAC sesini MP3 formatına çevir", badge: "YENİ", group: "video-audio" },
+    { id: "mov-to-mp4", title: "MOV'dan MP4'e", icon: Film, color: "from-fuchsia-500 to-purple-500", desc: "MOV videoyu MP4'e çevir", badge: "YENİ", group: "video-audio" },
+    { id: "avi-to-mp4", title: "AVI'den MP4'e", icon: Film, color: "from-violet-500 to-indigo-500", desc: "AVI videoyu MP4'e çevir", badge: "POPÜLER", group: "video-audio" },
+    { id: "webm-to-mp4", title: "WebM'den MP4'e", icon: Film, color: "from-purple-500 to-pink-500", desc: "WebM videoyu MP4'e çevir", badge: "POPÜLER", group: "video-audio" },
+    { id: "mkv-to-mp4", title: "MKV'dan MP4'e", icon: Film, color: "from-indigo-500 to-blue-500", desc: "MKV videoyu MP4'e çevir", badge: "POPÜLER", group: "video-audio" },
+
+    // PDF STUDIO (PDF Araçları)
+    { id: "pdf-compress", title: "PDF Sıkıştır", icon: FileSearch, color: "from-blue-500 to-cyan-500", desc: "Kaliteyi korurken PDF dosya boyutunu azaltın.", badge: "POPÜLER", group: "pdf" },
+    { id: "pdf-merge", title: "PDF Birleştir", icon: Combine, color: "from-cyan-500 to-teal-500", desc: "Birden fazla PDF dosyasını tek bir belgede birleştirin.", badge: "POPÜLER", group: "pdf" },
+    { id: "pdf-split", title: "PDF Ayır", icon: FileCode2, color: "from-teal-500 to-emerald-500", desc: "PDF'yi birden fazla dosyaya bölün.", group: "pdf" },
+    { id: "pdf-to-word", title: "PDF'den Word'e", icon: FileText, color: "from-emerald-500 to-green-500", desc: "PDF dosyalarını düzenlenebilir Word belgelerine dönüştürün.", badge: "POPÜLER", group: "pdf" },
+    { id: "pdf-to-image", title: "PDF'den Görüntüye", icon: Image, color: "from-indigo-500 to-violet-500", desc: "PDF sayfalarını yüksek kaliteli JPEG/PNG'ye çevirin.", group: "pdf" },
+    { id: "image-to-pdf", title: "Görüntüden PDF'ye", icon: FileImage, color: "from-violet-500 to-purple-500", desc: "Resim dosyalarından anında PDF oluşturun.", group: "pdf" },
+    { id: "pdf-rotate", title: "PDF Döndür", icon: RefreshCw, color: "from-purple-500 to-fuchsia-500", desc: "PDF sayfalarını 90°, 180° veya 270° döndürün.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-flatten", title: "PDF Düzleştir", icon: AlignLeft, color: "from-fuchsia-500 to-pink-500", desc: "PDF form alanlarını ve notları düzleştirir.", group: "pdf" },
+    { id: "pdf-unlock", title: "PDF Kilidini Aç", icon: Unlock, color: "from-pink-500 to-rose-500", desc: "PDF'lerden şifre korumasını kaldırın.", group: "pdf" },
+    { id: "pdf-to-text", title: "PDF'den Metne", icon: FileText, color: "from-rose-500 to-red-500", desc: "PDF içindeki yazıları metin formatında dökün.", group: "pdf" },
+    { id: "pdf-add-page-numbers", title: "Sayfa Numaraları Ekle", icon: FileDigit, color: "from-red-500 to-orange-500", desc: "PDF'nize profesyonel sayfa numaraları ekleyin.", group: "pdf" },
+    { id: "html-to-pdf", title: "HTML'den PDF'ye", icon: Code2, color: "from-orange-500 to-amber-500", desc: "Web sayfalarını ve HTML kodunu PDF yapın.", group: "pdf" },
+    { id: "excel-to-pdf", title: "Excel'den PDF'ye", icon: TableProperties, color: "from-amber-500 to-yellow-500", desc: "Excel tablolarını bozulmadan PDF'ye dönüştürün.", group: "pdf" },
+    { id: "pdf-to-excel", title: "PDF'den Excel'e", icon: Table, color: "from-yellow-500 to-lime-500", desc: "PDF'den yapılandırılmış Excel tabloları çıkarın.", badge: "POPÜLER", group: "pdf" },
+    { id: "pdf-watermark", title: "PDF Filigranı", icon: Shield, color: "from-lime-500 to-green-500", desc: "Özel metin filigranları ile damgalayın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-redact", title: "PDF Kapat", icon: Eye, color: "from-stone-500 to-slate-600", desc: "Hassas bilgileri kalıcı olarak siyahbant ile karartın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-resize", title: "PDF Boyutlandır", icon: LayoutTemplate, color: "from-cyan-600 to-blue-600", desc: "A4, Letter, Legal gibi standart formatlara boyutlandırın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-sign", title: "PDF İmzala", icon: PenTool, color: "from-blue-600 to-indigo-600", desc: "Belgelerinize güvenli dijital imza ekleyin.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-ocr", title: "PDF OCR", icon: SearchCode, color: "from-indigo-600 to-violet-600", desc: "AI tabanlı OCR kullanarak taranmış metni okuyun.", badge: "POPÜLER", group: "pdf" },
+    { id: "pdf-crop", title: "PDF Kırp", icon: Image, color: "from-violet-600 to-purple-600", desc: "Sayfa boyutunu kırpıp gereksiz boşlukları atın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-extract-pages", title: "Sayfaları Çıkar", icon: FileCode, color: "from-purple-600 to-fuchsia-600", desc: "PDF içinden sadece belirli sayfaları ayırın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-delete-pages", title: "Sayfaları Sil", icon: Trash2, color: "from-fuchsia-600 to-pink-600", desc: "Gereksiz gördüğünüz PDF sayfalarını kalıcı olarak silin.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-to-pdf-a", title: "PDF'den PDF/A'ya", icon: Archive, color: "from-slate-600 to-slate-800", desc: "Gelecekte veri kaybetmemek için arşiv standardı yapın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-repair", title: "PDF Onar", icon: Heart, color: "from-rose-600 to-red-600", desc: "Bozulmuş veya hasar görmüş PDF dosyalarını düzeltin.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-compare", title: "PDF'leri Karşılaştır", icon: ArrowRightLeft, color: "from-sky-500 to-indigo-500", desc: "İki PDF dosyasını piksel düzeyinde farklılıkları için haritalayın.", badge: "YENİ", group: "pdf" },
+    { id: "word-to-pdf", title: "Word'den PDF'ye", icon: FileText, color: "from-blue-400 to-cyan-500", desc: "Word dosyalarını orijinal haliyle PDF yapın.", group: "pdf" },
+    { id: "ppt-to-pdf", title: "PPT'den PDF'ye", icon: Monitor, color: "from-orange-400 to-rose-400", desc: "PowerPoint sunum slaytlarınızı PDF olarak kaydedin.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-edit-metadata", title: "Meta Verileri Düzenle", icon: TextCursorInput, color: "from-teal-400 to-emerald-400", desc: "Yazar, başlık ve oluşturma özelliklerini düzenleyin.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-to-html", title: "PDF'den HTML'ye", icon: Code, color: "from-fuchsia-400 to-pink-400", desc: "PDF dosyalarını internet tarayıcısı HTML formatına çevirin.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-to-ppt", title: "PDF'den PPT'ye", icon: LayoutTemplate, color: "from-violet-400 to-purple-400", desc: "PDF sayfalarını düzenlenebilir PPTX slaydı yapın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-fill-form", title: "PDF Formunu Doldur", icon: Keyboard, color: "from-emerald-400 to-green-400", desc: "Araç üzerinden direkt etkileşimli PDF formlarını girin.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-grayscale", title: "Gri tonlamalı PDF", icon: Contrast, color: "from-zinc-500 to-zinc-700", desc: "PDF'leri tamamen siyah beyaz renge bürü.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-extract-images", title: "Görüntüleri Çıkar", icon: Image, color: "from-cyan-400 to-blue-400", desc: "PDF belgesine gömülü fotoğrafları klasörlük ayıkla.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-header-footer", title: "Başlık ve Altbilgi", icon: ArrowLeft, color: "from-slate-400 to-slate-600", desc: "Sayfa üst ve altına özel yazılar / tarihler basın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-bates", title: "Bates Numaralandırma", icon: Hash, color: "from-stone-600 to-stone-800", desc: "Avukatlar ve mahkemeler için Bates endeksi oluşturun.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-layout", title: "Sayfa Düzeni", icon: LayoutGrid, color: "from-indigo-400 to-violet-400", desc: "Birden fazla PDF sayfasını 2'li veya 4'lü yapraklara çevirin.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-to-markdown", title: "PDF'den Markdown'a", icon: FileDigit, color: "from-pink-400 to-rose-400", desc: "PDF verisini hiyerarşik yapılandırılmış MD koduna ayırın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-to-csv", title: "PDF'den CSV'ye", icon: TableProperties, color: "from-teal-500 to-emerald-500", desc: "PDF tablolarını güvenilir CSV dökümanı yapın.", badge: "YENİ", group: "pdf" },
+    { id: "pdf-stamp", title: "PDF Mühürü", icon: Briefcase, color: "from-amber-600 to-orange-700", desc: "Onay, Denetim vb. hazır profesyonel damgalar basın.", badge: "YENİ", group: "pdf" },
+    
+    // IMAGE TOOLS (Görüntü Araçları)
+    { id: "image-compressor", title: "Görüntü Sıkıştır", icon: Image, color: "from-blue-500 to-indigo-500", desc: "Fotoğraf ve grafikleri toplu olarak sıkıştırın", badge: "POPÜLER", group: "photo" },
+    { id: "image-resizer", title: "Görüntü Boyutlandır", icon: Image, color: "from-indigo-500 to-purple-500", desc: "Herhangi bir platform için resimleri boyutlandır", badge: "POPÜLER", group: "photo" },
+    { id: "image-converter", title: "Görüntü Dönüştür", icon: RefreshCw, color: "from-purple-500 to-pink-500", desc: "Görüntü dosyalarını toplu dönüştürün", badge: "POPÜLER", group: "photo" },
+    { id: "image-cropper-2", title: "Görüntü Kırp", icon: Image, color: "from-pink-500 to-rose-500", desc: "Canlı çıktı önizlemesiyle fotoğrafları kesin", group: "photo" },
+    { id: "image-watermark", title: "Görüntü Filigranı", icon: FileImage, color: "from-amber-500 to-orange-500", desc: "Metin veya logo filigranları uygulayın", badge: "YENİ", group: "photo" },
+    
+    // FORMAT CONVERTERS (HEIC vb.)
+    { id: "heic-to-jpg", title: "HEIC'den JPG'ye", icon: RefreshCw, color: "from-teal-500 to-emerald-500", desc: "Apple HEIC fotoğraflarını JPG yap", badge: "YENİ", group: "photo" },
+    { id: "heic-to-png", title: "HEIC'den PNG'ye", icon: RefreshCw, color: "from-emerald-500 to-cyan-500", desc: "Apple HEIC fotoğraflarını PNG yap", group: "photo" },
+    { id: "heic-to-webp", title: "HEIC'den WebP'ye", icon: RefreshCw, color: "from-cyan-500 to-blue-500", desc: "Apple HEIC fotoğraflarını WebP yap", badge: "YENİ", group: "photo" },
+    { id: "heic-to-gif", title: "HEIC'den GIF'e", icon: RefreshCw, color: "from-blue-500 to-indigo-500", desc: "Apple HEIC fotoğraflarını GIF'e çevir", badge: "YENİ", group: "photo" },
+    { id: "heif-to-jpg", title: "HEIF'den JPG'ye", icon: RefreshCw, color: "from-indigo-500 to-violet-500", desc: "HEIF formatını JPG yap", badge: "YENİ", group: "photo" },
+    { id: "png-to-jpg", title: "PNG'den JPG'ye", icon: RefreshCw, color: "from-violet-500 to-purple-500", desc: "PNG resimlerini JPG formatına çevir", badge: "POPÜLER", group: "photo" },
+    { id: "jpg-to-png", title: "JPG'den PNG'ye", icon: RefreshCw, color: "from-purple-500 to-fuchsia-500", desc: "JPG resimlerini PNG formatına çevir", group: "photo" },
+    { id: "webp-to-png", title: "WebP'den PNG'ye", icon: RefreshCw, color: "from-fuchsia-500 to-pink-500", desc: "WebP formatından PNG'ye çevir", group: "photo" },
+    { id: "webp-to-jpg", title: "WebP'den JPG'ye", icon: RefreshCw, color: "from-pink-500 to-rose-500", desc: "WebP formatından JPG'ye çevir", group: "photo" },
+    { id: "png-to-webp", title: "PNG'den WebP'ye", icon: RefreshCw, color: "from-gray-600 to-gray-800", desc: "PNG formatından WebP'ye çevir", group: "photo" },
+    { id: "jpg-to-webp", title: "JPG'den WebP'ye", icon: RefreshCw, color: "from-gray-700 to-gray-900", desc: "JPG formatından WebP'ye çevir", group: "photo" },
+    { id: "svg-to-png", title: "SVG'den PNG'ye", icon: RefreshCw, color: "from-orange-500 to-red-500", desc: "Vektörel SVG'leri PNG yap", group: "photo" },
+    { id: "gif-to-png", title: "GIF'den PNG'ye", icon: RefreshCw, color: "from-red-500 to-rose-500", desc: "GIF karelerini PNG yap", group: "photo" },
+    { id: "bmp-to-jpg", title: "BMP'den JPG'ye", icon: RefreshCw, color: "from-rose-500 to-pink-500", desc: "BMP resimleri JPG formatına çevir", group: "photo" },
+    { id: "tiff-to-jpg", title: "TIFF'den JPG'ye", icon: RefreshCw, color: "from-pink-500 to-purple-500", desc: "TIFF belgelerini JPG yap", badge: "YENİ", group: "photo" },
+    { id: "tiff-to-png", title: "TIFF'den PNG'ye", icon: RefreshCw, color: "from-purple-500 to-indigo-500", desc: "TIFF belgelerini PNG yap", badge: "YENİ", group: "photo" },
+    { id: "jpg-to-bmp", title: "JPG'den BMP'ye", icon: RefreshCw, color: "from-indigo-500 to-cyan-500", desc: "JPG resimlerini BMP yap", badge: "YENİ", group: "photo" },
+    { id: "png-to-bmp", title: "PNG'den BMP'ye", icon: RefreshCw, color: "from-cyan-500 to-teal-500", desc: "PNG resimlerini BMP yap", badge: "YENİ", group: "photo" },
+    { id: "avif-to-jpg", title: "AVIF'den JPG'ye", icon: RefreshCw, color: "from-teal-500 to-emerald-500", desc: "AVIF formatını JPG yap", badge: "YENİ", group: "photo" },
+    { id: "avif-to-png", title: "AVIF'den PNG'ye", icon: RefreshCw, color: "from-emerald-500 to-green-500", desc: "AVIF formatını PNG yap", badge: "YENİ", group: "photo" },
+    { id: "ico-to-png", title: "ICO'dan PNG'ye", icon: RefreshCw, color: "from-yellow-400 to-orange-500", desc: "Windows ikonlarını PNG yap", badge: "YENİ", group: "photo" },
+    { id: "gif-to-jpg", title: "GIF'ten JPG'ye", icon: RefreshCw, color: "from-orange-500 to-red-500", desc: "GIF animasyonlarını JPG yap", badge: "YENİ", group: "photo" },
+    
+    // PHOTO ADJUSTMENTS
+    { id: "brightness-contrast", title: "Parlaklık & Kontrast", icon: Image, color: "from-yellow-300 to-orange-400", desc: "Görüntü parlaklığını ve kontrastını ayarlayın", badge: "POPÜLER", group: "photo" },
+    { id: "hue-saturation", title: "Renk Tonu & Doygunluk", icon: Image, color: "from-fuchsia-500 to-pink-500", desc: "Profesyonel HSL renk ayarı", badge: "POPÜLER", group: "photo" },
+    { id: "exposure", title: "Pozlama", icon: Image, color: "from-slate-200 to-slate-400", desc: "Görüntü pozlamasını ayarlayın ve düzeltin", badge: "YENİ", group: "photo" },
+    { id: "color-balance", title: "Renk Dengesi", icon: Image, color: "from-blue-400 to-cyan-400", desc: "Profesyonel renk dengesi ayarı", badge: "YENİ", group: "photo" },
+    { id: "levels", title: "Seviyeler", icon: Image, color: "from-gray-500 to-slate-600", desc: "Profesyonel histogram ve nokta-eğrisi ayarları", badge: "POPÜLER", group: "photo" },
+    { id: "curves", title: "Eğriler", icon: Image, color: "from-violet-500 to-fuchsia-500", desc: "Renk uyumunu ve RGB ton eğrilerini yönetin", badge: "POPÜLER", group: "photo" },
+    { id: "vibrance", title: "Canlılık", icon: Image, color: "from-orange-400 to-rose-400", desc: "Cilt tonlarını koruyarak renkleri artırın", badge: "YENİ", group: "photo" },
+    { id: "white-balance", title: "Beyaz Dengesi", icon: Image, color: "from-zinc-100 to-zinc-300", desc: "Sıcaklığı ayarlayın ve ton kaymalarını nötralize edin", badge: "YENİ", group: "photo" },
+    { id: "channel-mixer", title: "Kanal Karıştırıcı", icon: Image, color: "from-red-400 to-blue-400", desc: "Gelişmiş RGB kanalı değiştirme", badge: "YENİ", group: "photo" },
+    { id: "selective-color", title: "Seçici Renk", icon: Image, color: "from-emerald-400 to-teal-500", desc: "Belirli renk aralıklarını hedefleyin", badge: "YENİ", group: "photo" },
+    { id: "sharpen", title: "Keskinleştir", icon: Image, color: "from-sky-400 to-indigo-500", desc: "Unsharp mask ve yüksek geçişli keskinleştirme", badge: "YENİ", group: "photo" },
+    { id: "vignette", title: "Vinyet Efekti", icon: Image, color: "from-slate-800 to-black", desc: "Sinematik karanlık veya beyaz kenarlar oluşturun", badge: "YENİ", group: "photo" },
+    { id: "dust-noise", title: "Toz & Gürültü", icon: Image, color: "from-stone-400 to-stone-600", desc: "Film greni ekleyin veya dijital gürültüyü kaldırın", badge: "YENİ", group: "photo" },
+    
+    // FILTERS & EFFECTS
+    { id: "duotone", title: "İki Ton Efekti", icon: Image, color: "from-fuchsia-600 to-rose-600", desc: "Spotify tarzı Duotone renk haritaları uygulayın", badge: "YENİ", group: "photo" },
+    { id: "3d-lut", title: "3D LUT", icon: Image, color: "from-indigo-600 to-slate-800", desc: "Sinematik Look-Up Tabloları uygulayın", badge: "YENİ", group: "photo" },
+    { id: "posterize", title: "Postere Dönüştür", icon: Image, color: "from-yellow-500 to-red-500", desc: "Sanatsal posterizasyon ve renk bantlama", badge: "YENİ", group: "photo" },
+    { id: "threshold", title: "Eşik", icon: Image, color: "from-black to-white", desc: "Yüksek kontrastlı siyah beyaz dönüştürme", badge: "YENİ", group: "photo" },
+    { id: "invert-colors", title: "Renkleri Ters Çevir", icon: Image, color: "from-violet-600 to-lime-500", desc: "Anında renkleri tersine ve negatife çevirin", badge: "YENİ", group: "photo" },
+    { id: "sepia-vintage", title: "Sepya & Vintage", icon: Image, color: "from-amber-700 to-yellow-900", desc: "Otantik sepya ve eski film efektleri", badge: "YENİ", group: "photo" },
+    { id: "shadow-highlight", title: "Gölge & Vurgu", icon: Image, color: "from-slate-300 to-slate-600", desc: "Dinamik aralığı dengeleyin", badge: "YENİ", group: "photo" },
+    { id: "clarity-texture", title: "Açıklık & Doku", icon: Image, color: "from-teal-600 to-emerald-700", desc: "Orta ton kontrastını ve dokuyu artırın", badge: "YENİ", group: "photo" },
+    { id: "dehaze", title: "Bulanıklığı Gider", icon: Image, color: "from-cyan-300 to-blue-500", desc: "Sisi, buharı ve dumanı kaldırın", badge: "YENİ", group: "photo" },
+    { id: "color-grading", title: "Renk Derecelendirme", icon: Image, color: "from-violet-800 to-fuchsia-800", desc: "Profesyonel sinematik renk derecelendirme", badge: "YENİ", group: "photo" },
+    { id: "chromatic-aberration", title: "Kromatik Aberasyon", icon: Image, color: "from-red-500 to-cyan-500", desc: "Renk sızıntılarını ve bozulmaları düzeltin", badge: "YENİ", group: "photo" },
+    
+    // TRANSFORMS & FUN
+    { id: "rotate-flip", title: "Döndür & Çevir", icon: Image, color: "from-blue-400 to-indigo-500", desc: "Fotoğraf yönünü anında düzeltin", badge: "YENİ", group: "photo" },
+    { id: "perspective", title: "Perspektif", icon: Image, color: "from-stone-500 to-stone-700", desc: "Eğik ufuk ve keystone düzeltmesi", badge: "YENİ", group: "photo" },
+    { id: "tilt-shift", title: "Eğik Kaydırma", icon: Image, color: "from-lime-500 to-green-600", desc: "Minyatürşehir bulanıklık efekti oluşturun", badge: "YENİ", group: "photo" },
+    { id: "mirror-effect", title: "Ayna", icon: Image, color: "from-cyan-400 to-sky-500", desc: "Kaleidoskop ve yansıma efektleri", badge: "YENİ", group: "photo" },
+    { id: "distortion", title: "Bozulma", icon: Image, color: "from-purple-400 to-pink-500", desc: "Fisheye, swirl ve pinch efektleri", badge: "YENİ", group: "photo" },
+    { id: "photo-filters", title: "Fotoğraf Filtreleri", icon: Image, color: "from-rose-400 to-orange-400", desc: "Hazır renk filtreleri uygulayın", badge: "YENİ", group: "photo" },
+    { id: "text-overlay", title: "Metin Üst Katmanı", icon: Type, color: "from-indigo-400 to-blue-500", desc: "Fotoğraflara gösterişli tipografi ekleyin", badge: "YENİ", group: "photo" },
+    { id: "border-frame", title: "Kenar & Çerçeve", icon: Image, color: "from-amber-600 to-orange-700", desc: "Fotoğraflara premium sınırlar ekleyin", badge: "YENİ", group: "photo" },
+    { id: "collage-maker", title: "Kolaj Oluşturucu", icon: LayoutTemplate, color: "from-fuchsia-500 to-violet-500", desc: "Şık fotoğraf kolajları oluşturun", badge: "YENİ", group: "photo" },
+    { id: "meme-generator", title: "Meme Oluşturucu", icon: Image, color: "from-yellow-400 to-red-400", desc: "Hızlıca memeler hazırlayın", badge: "YENİ", group: "photo" },
+    { id: "batch-edit", title: "Toplu Düzenleme", icon: Library, color: "from-slate-600 to-slate-800", desc: "Görselleri toplu yeniden boyutlandır ve filtrele", badge: "POPÜLER", group: "photo" },
+    { id: "replace-color", title: "Renk Değiştir", icon: Image, color: "from-teal-400 to-emerald-500", desc: "Resimdeki belirli renkleri değiştirin", badge: "YENİ", group: "photo" },
+    
+    // UTILITIES
+    { id: "histogram", title: "Histogram", icon: PieChart, color: "from-blue-600 to-indigo-700", desc: "Görüntü pozlama ve renk analizörü", badge: "YENİ", group: "photo" },
+    { id: "exif-editor", title: "EXIF Düzenleyici", icon: FileText, color: "from-gray-500 to-slate-700", desc: "Görüntü meta verilerini düzenleyin ve çıkarın", badge: "YENİ", group: "photo" },
+    { id: "social-media-resizer", title: "Sosyal Medya Yeniden Boyutlandır", icon: Image, color: "from-pink-500 to-purple-600", desc: "Instagram, YouTube ve TikTok için kırp", badge: "POPÜLER", group: "photo" },
+    { id: "sketch-effect", title: "Eskiz Efekti", icon: Image, color: "from-stone-300 to-stone-500", desc: "Görüntüyü kurşun kalem eskizine çevir", badge: "YENİ", group: "photo" },
+    { id: "gradient-map", title: "Gradyan Haritası", icon: Image, color: "from-cyan-500 to-fuchsia-500", desc: "Karmaşık renk derecelendirme haritaları", badge: "YENİ", group: "photo" },
+    { id: "split-toning", title: "Bölünmüş Tonlama", icon: Image, color: "from-amber-400 to-indigo-400", desc: "Gölge ve vurgu tonlaması ayrımı", badge: "YENİ", group: "photo" },
+    { id: "liquify", title: "Sıvılaştır", icon: Image, color: "from-emerald-400 to-cyan-500", desc: "Photoshop tarzı etkileşimli sıvılaştırma", badge: "YENİ", group: "photo" },
+    { id: "photo-mosaic", title: "Fotoğraf Mozaik", icon: LayoutTemplate, color: "from-purple-500 to-pink-500", desc: "Binlerce resimden foto mozaik oluştur", badge: "YENİ", group: "photo" },
+    { id: "overlay-blend", title: "Üst Katman & Karıştır", icon: Image, color: "from-rose-400 to-red-500", desc: "16 farklı karışım modu dokusu", badge: "YENİ", group: "photo" },
+    { id: "compare-images", title: "Görüntüleri Karşılaştır", icon: ArrowRightLeft, color: "from-slate-400 to-slate-600", desc: "İki görüntüyü yan yana detaylı karşılaştır", badge: "YENİ", group: "photo" },
+    { id: "color-picker", title: "Renk Seçici", icon: MousePointer2, color: "from-blue-400 to-teal-400", desc: "Resimden damlalık ile renk seç", badge: "YENİ", group: "photo" },
+    { id: "color-palette", title: "Renk Paleti", icon: Image, color: "from-fuchsia-400 to-purple-500", desc: "Resimlerden en iyi renk paletini çıkar", badge: "POPÜLER", group: "photo" },
+    { id: "screenshot-beautifier", title: "Ekran Görüntüsü Güzelleştirici", icon: MonitorPlay, color: "from-indigo-400 to-sky-400", desc: "Ekran görüntülerini gölge be arkaplan ile süsle", badge: "POPÜLER", group: "photo" },
+    
+    // TEXT TOOLS (Metin Araçları)
+    { id: "word-counter", title: "Kelime Sayacı", icon: Type, color: "from-blue-500 to-cyan-500", desc: "Kelime, harf ve paragraf sayacı", badge: "POPÜLER", group: "text-tools" },
+    { id: "case-converter", title: "Büyük/Küçük Harf Dönüştürücü", icon: Type, color: "from-indigo-500 to-purple-500", desc: "Metin boyutunu ve formatını değiştirin", group: "text-tools" },
+    { id: "lorem-ipsum", title: "Lorem İpsum", icon: FileText, color: "from-slate-500 to-slate-700", desc: "Rastgele yer tutucu metin oluşturun", group: "text-tools" },
+    { id: "text-diff", title: "Metin Farkı", icon: ArrowRightLeft, color: "from-orange-500 to-red-500", desc: "İki metin arasındaki farkları bulun", badge: "YENİ", group: "text-tools" },
+    { id: "fancy-text", title: "Şık Metin", icon: Type, color: "from-pink-500 to-rose-500", desc: "Sosyal medya için şekilli metin yazma", badge: "POPÜLER", group: "text-tools" },
+    { id: "text-cleaner", title: "Metin Temizleyici", icon: RefreshCw, color: "from-teal-500 to-emerald-500", desc: "Hatalı boşlukları ve fazlalıkları sil", badge: "YENİ", group: "text-tools" },
+    { id: "invisible-text", title: "Görünmez Metin", icon: Type, color: "from-slate-300 to-slate-400", desc: "Kopyalanabilir boş karakter oluştur", badge: "YENİ", group: "text-tools" },
+    { id: "slug-generator", title: "Slug Üretici", icon: FileText, color: "from-cyan-500 to-blue-500", desc: "URL dostu metin dönüştürücü", badge: "YENİ", group: "text-tools" },
+    { id: "binary-converter", title: "İkili Dönüştürücü", icon: Code, color: "from-green-500 to-emerald-600", desc: "Metni bilgisayar ikili sistemine çevir", badge: "YENİ", group: "text-tools" },
+    { id: "reverse-text", title: "Metni Ters Çevir", icon: ArrowRightLeft, color: "from-purple-500 to-indigo-500", desc: "Metninizi sağdan sola ters çevirin", badge: "YENİ", group: "text-tools" },
+    { id: "remove-duplicates", title: "Yinelenenleri Kaldır", icon: Trash2, color: "from-red-400 to-rose-500", desc: "Aynı satır ve kelimeleri silin", badge: "YENİ", group: "text-tools" },
+    { id: "text-repeater", title: "Metin Tekrarlayıcı", icon: RefreshCw, color: "from-yellow-400 to-orange-500", desc: "Metni binlerce kez otomatik yazdırın", badge: "YENİ", group: "text-tools" },
+    { id: "zalgo-text", title: "Zalgo Metni", icon: Type, color: "from-zinc-700 to-black", desc: "Lanetli ve korkutucu metin efekti", badge: "YENİ", group: "text-tools" },
+    { id: "text-to-speech", title: "Metinden Sese", icon: Mic, color: "from-fuchsia-600 to-purple-600", desc: "Yazıları tarayıcıda sesli okutun", badge: "POPÜLER", group: "text-tools" },
+
+    // BUSINESS TOOLS (İş & Finans Araçları)
+    { id: "biz-compound", title: "Bileşik Faiz", icon: CalculatorIcon, color: "from-emerald-500 to-teal-500", desc: "Yatırımlarınızın bileşik getirisini hesaplayın", badge: "POPÜLER", group: "business" },
+    { id: "biz-loan", title: "Kredi Hesaplayıcı", icon: Briefcase, color: "from-blue-500 to-indigo-500", desc: "Aylık kredi ödemeleri ve faiz cetveli", badge: "POPÜLER", group: "business" },
+    { id: "biz-tip", title: "Bahşiş Hesaplayıcı", icon: Coffee, color: "from-orange-400 to-amber-500", desc: "Restoran hesaplarını ve bahşişleri kolayca bölün", badge: "YENİ", group: "business" },
+    { id: "biz-percentage", title: "Yüzde Hesaplama", icon: PieChart, color: "from-rose-400 to-red-500", desc: "Hızlı orantı ve basit yüzde problemleri", badge: "POPÜLER", group: "business" },
+    { id: "biz-discount", title: "İndirim Hesaplama", icon: Tags, color: "from-pink-500 to-rose-500", desc: "İndirim oranları ve net tutarı hesaplayın", badge: "YENİ", group: "business" },
+    { id: "biz-margin", title: "Kar Marjı", icon: TrendingUp, color: "from-lime-500 to-green-600", desc: "Ürün maliyeti üzerinden satış kârını analiz edin", badge: "YENİ", group: "business" },
+    { id: "biz-roi", title: "ROI Hesaplayıcı", icon: LineChart, color: "from-cyan-500 to-blue-600", desc: "Yatırım Getirisi (Return on Investment) oranı", badge: "YENİ", group: "business" },
+    { id: "biz-salary", title: "Maaş Hesaplayıcı", icon: Wallet, color: "from-violet-500 to-purple-600", desc: "Brüt, net maaş ve saatlik kazanç dökümü", badge: "YENİ", group: "business" },
+    { id: "biz-savings", title: "Tasarruf Hedefi", icon: PiggyBank, color: "from-fuchsia-400 to-pink-500", desc: "Güvenli gelecek için tasarruf planlayıcısı", badge: "YENİ", group: "business" },
+    { id: "biz-inflation", title: "Enflasyon", icon: TrendingDown, color: "from-red-500 to-rose-600", desc: "Yıllara göre paranın alım gücü kaybı", badge: "YENİ", group: "business" },
+    { id: "biz-mortgage", title: "İpotek Hesaplama", icon: Home, color: "from-teal-500 to-emerald-600", desc: "Ev kredileri ve ipotek maliyeti çıkarın", badge: "POPÜLER", group: "business" },
+    { id: "biz-currency", title: "Para Birimi", icon: Coins, color: "from-amber-400 to-yellow-500", desc: "Döviz kurları arası anında fiyat dönüştürücü", badge: "POPÜLER", group: "business" },
+    { id: "biz-paycheck", title: "Maaş Çeki", icon: Receipt, color: "from-sky-400 to-blue-500", desc: "Kesinti ve vergi sonrası maaş çeki hesapla", badge: "POPÜLER", group: "business" },
+    { id: "biz-emi", title: "EMI Hesaplayıcı", icon: CreditCard, color: "from-indigo-400 to-violet-500", desc: "Eşit Aylık Taksit (Equated Monthly Installment)", badge: "POPÜLER", group: "business" },
+    { id: "biz-sip", title: "SIP Hesaplayıcı", icon: BarChart3, color: "from-purple-500 to-fuchsia-600", desc: "Sistematik Yatırım Planı servet tahmini", badge: "POPÜLER", group: "business" },
+    { id: "biz-debt", title: "Borç Ödeme", icon: Landmark, color: "from-rose-500 to-red-600", desc: "Borç sıfırlama stratejileri ve zaman çizelgesi", badge: "YENİ", group: "business" },
+    { id: "biz-budget", title: "Bütçe", icon: CalculatorIcon, color: "from-green-400 to-emerald-500", desc: "Kişisel finans ve aylık gider bütçeleme", badge: "YENİ", group: "business" },
+    { id: "biz-networth", title: "Net Değer", icon: Scale, color: "from-blue-400 to-cyan-500", desc: "Tüm varlıklar - yükümlülükler net servet analizi", badge: "YENİ", group: "business" },
+    { id: "biz-retirement", title: "Emeklilik", icon: Compass, color: "from-yellow-500 to-orange-500", desc: "Erken emeklilik ve birikim fonu hesaplaması", badge: "POPÜLER", group: "business" },
+    { id: "biz-investment", title: "Yatırım Hedefi", icon: Target, color: "from-teal-400 to-cyan-500", desc: "Finansal bağımsızlık için gereken yatırım hedefleri", badge: "YENİ", group: "business" },
+    { id: "biz-vat", title: "KDV Hesaplayıcı", icon: Percent, color: "from-sky-500 to-indigo-500", desc: "Dahil veya hariç Katma Değer Vergisi matrahı", badge: "POPÜLER", group: "business" },
+    { id: "biz-creditcard", title: "Kredi Kartı Ödemesi", icon: CreditCard, color: "from-violet-400 to-purple-500", desc: "Kredi kartı borcunu faizden kurtulmak için ne zaman ödemelisin?", badge: "YENİ", group: "business" },
+    { id: "biz-auto", title: "Otomobil Kredisi", icon: Car, color: "from-rose-400 to-pink-500", desc: "Taşıt kredisi taksitleri ve geri ödemesi", badge: "POPÜLER", group: "business" },
+    { id: "biz-crypto", title: "Kripto Kar", icon: Bitcoin, color: "from-amber-400 to-yellow-600", desc: "Kripto para trade işlemlerinizde Kar/Zarar hesabı", badge: "POPÜLER", group: "business" },
+    { id: "biz-breakeven", title: "Başabaş", icon: ArrowRightLeft, color: "from-emerald-400 to-teal-500", desc: "Bir girişimin zarardan kara geçme noktasını bulun", badge: "YENİ", group: "business" },
+    { id: "biz-cpm", title: "CPM Hesaplayıcı", icon: Megaphone, color: "from-cyan-500 to-blue-500", desc: "Bin Gösterim Başına Maliyet (Cost Per Mille)", badge: "YENİ", group: "business" },
+    { id: "biz-cagr", title: "CAGR Hesaplayıcı", icon: TrendingUp, color: "from-purple-500 to-pink-500", desc: "Bileşik Yıllık Büyüme Oranı performans metriği", badge: "POPÜLER", group: "business" },
+    { id: "biz-tvm", title: "TVM Hesaplayıcı", icon: Clock, color: "from-orange-400 to-red-400", desc: "Paranın Zaman Değeri (Time Value of Money)", badge: "YENİ", group: "business" },
+    { id: "biz-rentvsbuy", title: "Kiralama vs Satın Alma", icon: Home, color: "from-indigo-400 to-blue-500", desc: "Emlak kiralamanın mı satın almanın mı karlı olduğu", badge: "YENİ", group: "business" },
+
+    // DEV TOOLS (Geliştirici Araçları)
+    { id: "json-formatter", title: "JSON Biçimlendirici", icon: Code2, color: "from-emerald-500 to-teal-500", desc: "JSON kodunu temizleyin ve formatlayın", badge: "POPÜLER", group: "dev-tools" },
+    { id: "json-graph", title: "JSON Grafiği", icon: Network, color: "from-teal-500 to-cyan-500", desc: "JSON verisini ağaç yapısında görselleştirin", badge: "POPÜLER", group: "dev-tools" },
+    { id: "base64", title: "Base64", icon: FileCode2, color: "from-cyan-500 to-blue-500", desc: "Base64 formatında kodlayın veya çözün", badge: "POPÜLER", group: "dev-tools" },
+    { id: "hash-generator", title: "Hash Üretici", icon: KeyRound, color: "from-blue-500 to-indigo-500", desc: "MD5, SHA-256 ve SHA-512 şifreleme", badge: "POPÜLER", group: "dev-tools" },
+    { id: "uuid-generator", title: "UUID Üretici", icon: Fingerprint, color: "from-indigo-500 to-violet-500", desc: "Rastgele güvenli V4 kimlikleri oluşturun", badge: "POPÜLER", group: "dev-tools" },
+    { id: "regex-tester", title: "Regex Test Aracı", icon: TextCursorInput, color: "from-violet-500 to-purple-500", desc: "Düzenli ifadeleri test edin ve hata ayıklayın", badge: "POPÜLER", group: "dev-tools" },
+    { id: "markdown-editor", title: "Markdown Editörü", icon: FileDigit, color: "from-purple-500 to-fuchsia-500", desc: "Canlı önizlemeli MD kod oluşturucu", badge: "YENİ", group: "dev-tools" },
+    { id: "code-formatter", title: "Kod Biçimlendirici", icon: AlignLeft, color: "from-fuchsia-500 to-pink-500", desc: "HTML, CSS ve JavaScript kodlarını düzenleyin", badge: "POPÜLER", group: "dev-tools" },
+    { id: "json-to-csv", title: "JSON'dan CSV'ye", icon: TableProperties, color: "from-pink-500 to-rose-500", desc: "JSON dizilerini Excel formatına çevirin", badge: "POPÜLER", group: "dev-tools" },
+    { id: "meta-tag-generator", title: "Meta Etiket Üretici", icon: Tags, color: "from-rose-500 to-red-500", desc: "SEO için head tagleri ve meta veriler", badge: "YENİ", group: "dev-tools" },
+    { id: "og-preview", title: "OG Önizleme", icon: MonitorSmartphone, color: "from-red-500 to-orange-500", desc: "Open Graph sosyal medya kartlarını test edin", badge: "POPÜLER", group: "dev-tools" },
+    { id: "cron-expression", title: "CRON İfadesi", icon: Clock4, color: "from-orange-500 to-amber-500", desc: "Zamanlanmış görev sözdizimi üretin", badge: "POPÜLER", group: "dev-tools" },
+    { id: "color-contrast", title: "Renk Kontrastı", icon: Contrast, color: "from-amber-500 to-yellow-500", desc: "Erişilebilirlik oranı ve HEX testi", badge: "POPÜLER", group: "dev-tools" },
+    { id: "json-schema", title: "JSON Şeması", icon: Braces, color: "from-yellow-500 to-lime-500", desc: "Veri modelinizden ts/json şeması çıkarın", badge: "POPÜLER", group: "dev-tools" },
+    { id: "jwt-decoder", title: "JWT Çözücü", icon: Unlock, color: "from-lime-500 to-green-500", desc: "JSON Web Token (JWT) içeriğini anında görün", badge: "POPÜLER", group: "dev-tools" },
+    { id: "html-entities", title: "HTML Varlığı", icon: Code, color: "from-green-500 to-emerald-500", desc: "Karakterleri güvenli HTML entity'sine çevir", badge: "POPÜLER", group: "dev-tools" },
+    { id: "url-encoder", title: "URL Kodlayıcı", icon: Link, color: "from-emerald-600 to-teal-600", desc: "Bağlantıları kodlayın (URI encoding)", badge: "POPÜLER", group: "dev-tools" }
 ];
 
 function cn(...inputs: ClassValue[]) {
@@ -204,11 +419,15 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                         { id: "converters", title: "Converters", subtitle: "10+ converters between PDF, Word, PPTX and Image formats.", icon: RefreshCw, bg: "from-emerald-400 to-teal-600", borderHover: "hover:border-emerald-500/50", glow: "group-hover:shadow-emerald-500/20" },
                                         { id: "pdf", title: "PDF Studio", subtitle: "Merge, split, edit and manage PDF pages with full control.", icon: FileSearch, bg: "from-rose-400 to-red-600", borderHover: "hover:border-rose-500/50", glow: "group-hover:shadow-rose-500/20" },
                                         { id: "code", title: "Code Editor", subtitle: "Write, edit and run HTML, CSS and JavaScript with live preview.", icon: Code, bg: "from-violet-500 to-indigo-600", borderHover: "hover:border-violet-500/50", glow: "group-hover:shadow-violet-500/20" },
+                                        { id: "dev-tools", title: "Dev Tools", subtitle: "JSON parsing, crypto hashing, formatting and data testing.", icon: TerminalSquare, bg: "from-emerald-400 to-teal-600", borderHover: "hover:border-emerald-500/50", glow: "group-hover:shadow-emerald-500/20" },
+                                        { id: "business", title: "Business Tools", subtitle: "Financial calculators, interest, ROI and company insights.", icon: LineChart, bg: "from-blue-400 to-cyan-600", borderHover: "hover:border-blue-500/50", glow: "group-hover:shadow-blue-500/20" },
                                         { id: "photo", title: "Photo Studio", subtitle: "Canva-style design tools and background removal utilities.", icon: Image, bg: "from-fuchsia-400 to-purple-600", borderHover: "hover:border-fuchsia-500/50", glow: "group-hover:shadow-fuchsia-500/20" },
+                                        { id: "text-tools", title: "Text Studio", subtitle: "String manipulation, formatting and robust text generation.", icon: Type, bg: "from-sky-400 to-blue-600", borderHover: "hover:border-sky-500/50", glow: "group-hover:shadow-sky-500/20" },
                                         { id: "word", title: "Templates & Scenes", subtitle: "Start instantly with over 50 ready-made professional templates.", icon: LayoutTemplate, bg: "from-blue-400 to-indigo-600", borderHover: "hover:border-blue-500/50", glow: "group-hover:shadow-blue-500/20" },
                                         { id: "office", title: "Office Tools", subtitle: "Advanced Excel sheet editor and intelligent assistants.", icon: Type, bg: "from-indigo-400 to-violet-600", borderHover: "hover:border-indigo-500/50", glow: "group-hover:shadow-indigo-500/20" },
                                         { id: "performance", title: "Speed & Performance", subtitle: "CPS test and click speed measurement tools.", icon: Zap, bg: "from-yellow-400 to-orange-600", borderHover: "hover:border-yellow-500/50", glow: "group-hover:shadow-yellow-500/20" },
-                                        { id: "powerpoint", title: "Presentation (PPTX)", subtitle: "Create professional slide presentations and scene designs.", icon: PieChart, bg: "from-amber-400 to-orange-600", borderHover: "hover:border-amber-500/50", glow: "group-hover:shadow-amber-500/20" }
+                                        { id: "powerpoint", title: "Presentation (PPTX)", subtitle: "Create professional slide presentations and scene designs.", icon: PieChart, bg: "from-amber-400 to-orange-600", borderHover: "hover:border-amber-500/50", glow: "group-hover:shadow-amber-500/20" },
+                                        { id: "video-audio", title: "Video & Audio Studio", subtitle: "Edit, convert and manage video and audio files.", icon: Video, bg: "from-pink-500 to-rose-600", borderHover: "hover:border-pink-500/50", glow: "group-hover:shadow-pink-500/20" }
                                     ].map((folder, i) => (
                                         <motion.button
                                             key={folder.id}
@@ -317,7 +536,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                         <ArrowLeft size={16} /> Back
                                     </button>
                                     <h3 className="text-lg font-black text-zinc-800 dark:text-zinc-200">
-                                        {activeToolGroup === "converters" ? "Converters" : activeToolGroup === "pdf" ? "PDF Studio" : activeToolGroup === "photo" ? "Photo Studio" : activeToolGroup === "office" ? "Office Tools" : activeToolGroup === "code" ? "Code Editor" : activeToolGroup === "performance" ? "Speed & Performance" : "PowerPoint Studio"}
+                                        {activeToolGroup === "converters" ? "Converters" : activeToolGroup === "pdf" ? "PDF Studio" : activeToolGroup === "photo" ? "Photo Studio" : activeToolGroup === "office" ? "Office Tools" : activeToolGroup === "text-tools" ? "Text Studio" : activeToolGroup === "dev-tools" ? "Developer Tools" : activeToolGroup === "business" ? "Business Tools" : activeToolGroup === "code" ? "Code Editor" : activeToolGroup === "performance" ? "Speed & Performance" : activeToolGroup === "video-audio" ? "Video & Audio Studio" : "PowerPoint Studio"}
                                     </h3>
                                 </div>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -447,8 +666,6 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                         </div>
                     )}
                 </section>
-
-                <Calculator />
             </main>
 
             <footer className="p-6 text-center text-zinc-400 dark:text-slate-500 text-sm border-t border-zinc-200/50 dark:border-slate-700/50">

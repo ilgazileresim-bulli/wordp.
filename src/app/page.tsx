@@ -22,6 +22,11 @@ const CanvaClone = dynamic<{ onBack: () => void }>(() => import("./components/Ca
 const CodeEditor = dynamic<{ onBack: () => void; initialLang?: "html" | "css" | "js" }>(() => import("./components/CodeEditor"), { ssr: false });
 const FolderCodeEditor = dynamic<{ onBack: () => void }>(() => import("./components/FolderCodeEditor"), { ssr: false });
 const CpsTest = dynamic<{ onBack: () => void }>(() => import("./components/CpsTest"), { ssr: false });
+const MediaStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/MediaStudio"), { ssr: false });
+const TextStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/TextStudio"), { ssr: false });
+const ImageStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/ImageStudio"), { ssr: false });
+const DevStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/DevStudio"), { ssr: false });
+const BusinessStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/BusinessStudio"), { ssr: false });
 
 // ─── Image helper utilities ───────────────────────────────────────────────────
 function loadImageDataUrl(file: File): Promise<{ dataUrl: string; width: number; height: number }> {
@@ -45,12 +50,17 @@ function loadImageDimensions(file: File): Promise<{ width: number; height: numbe
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard" | "canva-clone" | "code-editor" | "folder-code-editor" | "cps-test">("landing");
+  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard" | "canva-clone" | "code-editor" | "folder-code-editor" | "cps-test" | "media-studio" | "text-studio" | "image-studio" | "dev-studio" | "business-studio">("landing");
   const [codeEditorLang, setCodeEditorLang] = useState<"html" | "css" | "js">("html");
   const [initialContent, setInitialContent] = useState<string>("");
   const [initialPdfFile, setInitialPdfFile] = useState<File | null>(null);
   const [initialPptxFile, setInitialPptxFile] = useState<File | null>(null);
   const [initialExcelFile, setInitialExcelFile] = useState<File | null>(null);
+  const [activeMediaTool, setActiveMediaTool] = useState<string>("video-converter");
+  const [activeTextTool, setActiveTextTool] = useState<string>("word-counter");
+  const [activeImageTool, setActiveImageTool] = useState<string>("brightness-contrast");
+  const [activeDevTool, setActiveDevTool] = useState<string>("json-formatter");
+  const [activeBusinessTool, setActiveBusinessTool] = useState<string>("biz-compound");
   const currentDocIdRef = useRef<string | undefined>(undefined);
 
   const handleEditorBack = useCallback((content?: string) => {
@@ -615,6 +625,23 @@ export default function Home() {
       setView("folder-code-editor");
     } else if (id === "cps-test") {
       setView("cps-test");
+    } else if (["video-converter", "audio-converter", "video-to-mp3", "video-compressor", "trim-video", "trim-audio", "video-to-gif", "gif-to-video", "merge-videos", "merge-audio", "video-thumbnail", "mute-video", "mp3-to-wav", "wav-to-mp3", "m4a-to-mp3", "flac-to-mp3", "ogg-to-mp3", "aac-to-mp3", "mov-to-mp4", "avi-to-mp4", "webm-to-mp4", "mkv-to-mp4", "image-compressor", "image-resizer", "image-converter", "heic-to-jpg", "heic-to-png", "heic-to-webp", "heic-to-gif", "heif-to-jpg", "png-to-jpg", "jpg-to-png", "webp-to-png", "webp-to-jpg", "png-to-webp", "jpg-to-webp", "svg-to-png", "gif-to-png", "bmp-to-jpg", "tiff-to-jpg", "tiff-to-png", "jpg-to-bmp", "png-to-bmp", "avif-to-jpg", "avif-to-png", "ico-to-png", "gif-to-jpg"].includes(id)) {
+      setActiveMediaTool(id);
+      setView("media-studio");
+    } else if (["word-counter", "case-converter", "lorem-ipsum", "text-diff", "fancy-text", "text-cleaner", "invisible-text", "slug-generator", "binary-converter", "reverse-text", "remove-duplicates", "text-repeater", "zalgo-text", "sort-lines", "character-counter", "random-string", "text-to-speech"].includes(id)) {
+      setActiveTextTool(id);
+      setView("text-studio");
+    } else if (["brightness-contrast", "hue-saturation", "exposure", "color-balance", "levels", "curves", "vibrance", "white-balance", "channel-mixer", "selective-color", "sharpen", "vignette", "dust-noise", "duotone", "3d-lut", "posterize", "threshold", "invert-colors", "sepia-vintage", "shadow-highlight", "clarity-texture", "dehaze", "color-grading", "chromatic-aberration", "rotate-flip", "perspective", "tilt-shift", "mirror-effect", "distortion", "photo-filters", "text-overlay", "border-frame", "collage-maker", "meme-generator", "batch-edit", "replace-color", "histogram", "exif-editor", "social-media-resizer", "sketch-effect", "gradient-map", "split-toning", "liquify", "photo-mosaic", "overlay-blend", "compare-images", "color-picker", "color-palette", "screenshot-beautifier"].includes(id)) {
+      setActiveImageTool(id);
+      setView("image-studio");
+    } else if (["json-formatter", "json-graph", "base64", "hash-generator", "uuid-generator", "regex-tester", "markdown-editor", "code-formatter", "json-to-csv", "meta-tag-generator", "og-preview", "cron-expression", "color-contrast", "json-schema", "jwt-decoder", "html-entities", "url-encoder"].includes(id)) {
+      setActiveDevTool(id);
+      setView("dev-studio");
+    } else if (["pdf", "pdf-compress", "pdf-merge", "pdf-split", "pdf-to-word", "pdf-to-image", "image-to-pdf", "pdf-rotate", "pdf-flatten", "pdf-unlock", "pdf-to-text", "pdf-add-page-numbers", "html-to-pdf", "excel-to-pdf", "pdf-to-excel", "pdf-watermark", "pdf-redact", "pdf-resize", "pdf-sign", "pdf-ocr", "pdf-crop", "pdf-extract-pages", "pdf-delete-pages", "pdf-to-pdf-a", "pdf-repair", "pdf-compare", "word-to-pdf", "ppt-to-pdf", "pdf-edit-metadata", "pdf-to-html", "pdf-to-ppt", "pdf-fill-form", "pdf-grayscale", "pdf-extract-images", "pdf-header-footer", "pdf-bates", "pdf-layout", "pdf-to-markdown", "pdf-to-csv", "pdf-stamp"].includes(id)) {
+      setView("pdf");
+    } else if (["biz-compound", "biz-loan", "biz-tip", "biz-percentage", "biz-discount", "biz-margin", "biz-roi", "biz-salary", "biz-savings", "biz-inflation", "biz-mortgage", "biz-currency", "biz-paycheck", "biz-emi", "biz-sip", "biz-debt", "biz-budget", "biz-networth", "biz-retirement", "biz-investment", "biz-vat", "biz-creditcard", "biz-auto", "biz-crypto", "biz-breakeven", "biz-cpm", "biz-cagr", "biz-tvm", "biz-rentvsbuy"].includes(id)) {
+      setActiveBusinessTool(id);
+      setView("business-studio");
     } else {
 
       setInitialContent(content);
@@ -665,6 +692,16 @@ export default function Home() {
         <FolderCodeEditor onBack={() => setView("landing")} />
       ) : view === "cps-test" ? (
         <CpsTest onBack={() => setView("landing")} />
+      ) : view === "media-studio" ? (
+        <MediaStudio onBack={() => setView("landing")} initialToolId={activeMediaTool} />
+      ) : view === "text-studio" ? (
+        <TextStudio onBack={() => setView("landing")} initialToolId={activeTextTool} />
+      ) : view === "image-studio" ? (
+        <ImageStudio onBack={() => setView("landing")} initialToolId={activeImageTool} />
+      ) : view === "dev-studio" ? (
+        <DevStudio onBack={() => setView("landing")} initialToolId={activeDevTool} />
+      ) : view === "business-studio" ? (
+        <BusinessStudio onBack={() => setView("landing")} initialToolId={activeBusinessTool} />
       ) : (
         <PdfEditor onBack={() => setView("landing")} initialFile={initialPdfFile || undefined} />
       )}
