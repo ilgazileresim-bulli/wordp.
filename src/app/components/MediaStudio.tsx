@@ -181,7 +181,7 @@ export default function MediaStudio({ onBack, initialToolId }: MediaStudioProps)
       }
       await ffmpeg.deleteFile(outputName);
 
-      const blob = new Blob([(data as Uint8Array).buffer], { type: `video/${outputExt}` });
+      const blob = new Blob([data as any], { type: `video/${outputExt}` });
       const url = URL.createObjectURL(blob);
       setOutputUrl(url);
       setLogs(prev => [...prev, "Process completed entirely locally!"]);

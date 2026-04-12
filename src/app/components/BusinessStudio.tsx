@@ -179,10 +179,10 @@ export default function BusinessStudio({ onBack, initialToolId }: { onBack: () =
       } else if (initialToolId === 'biz-creditcard') {
          if (val1 && val2 && val3) {
              const r = v2/100/12;
-             if (v3 <= val1 * r) setOutput("Uyarı: Aylık ödemeniz sadece aylık faizin altındadır, borcunuz asla bitmez!");
+             if (v3 <= v1 * r) setOutput("Uyarı: Aylık ödemeniz sadece aylık faizin altındadır, borcunuz asla bitmez!");
              else {
-                const months = -(Math.log(1 - (val1 * r) / v3) / Math.log(1 + r));
-                setOutput(`Borcun Kapanma Süresi: ${Math.ceil(months)} Ay\\nToplam Ödenecek Faiz: ${((v3 * Math.ceil(months)) - val1).toFixed(2)}`);
+                const months = -(Math.log(1 - (v1 * r) / v3) / Math.log(1 + r));
+                setOutput(`Borcun Kapanma Süresi: ${Math.ceil(months)} Ay\\nToplam Ödenecek Faiz: ${((v3 * Math.ceil(months)) - v1).toFixed(2)}`);
              }
          } else setOutput("");
       } else if (initialToolId === 'biz-crypto') {
