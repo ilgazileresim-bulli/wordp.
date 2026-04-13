@@ -119,13 +119,13 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
         if (!sourceImage) return;
 
         setIsProcessing(true);
-        setStatusText("Arka plan siliniyor...");
+        setStatusText("Removing background...");
         setProgress(0);
 
         try {
             const config: Config = {
                 progress: (key, current, total) => {
-                    setStatusText(`İşleniyor: ${key}`);
+                    setStatusText(`Processing: ${key}`);
                     // Avoid NaN
                     if (total > 0) {
                         setProgress(Math.round((current / total) * 100));
@@ -138,16 +138,16 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
             const resultUrl = URL.createObjectURL(resultBlob);
             
             setTransparentImage(resultUrl);
-            setStatusText("İşlem tamamlandı!");
+            setStatusText("Process completed!");
             setProgress(100);
             setTimeout(() => {
                 setIsProcessing(false);
             }, 1000);
         } catch (error) {
-            console.error("Arka plan kaldırma hatası:", error);
-            setStatusText("Bir hata oluştu.");
+            console.error("Background removal error:", error);
+            setStatusText("An error occurred.");
             setIsProcessing(false);
-            alert("Arka plan kaldırılırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.");
+            alert("An error occurred while removing the background. Please try again later.");
         }
     };
 
@@ -160,7 +160,7 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "arka-plan-kaldirilmis.png";
+            a.download = "background-removed.png";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -191,8 +191,8 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                             <Wand2 size={20} />
                         </div>
                         <div>
-                            <h1 className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 leading-tight">Arka Plan Kaldırıcı</h1>
-                            <p className="text-[11px] font-medium text-zinc-400">Yapay Zeka Destekli</p>
+                            <h1 className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 leading-tight">Background Remover</h1>
+                            <p className="text-[11px] font-medium text-zinc-400">AI Powered</p>
                         </div>
                     </div>
                 </div>
@@ -204,7 +204,7 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                             className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-zinc-200 dark:border-slate-700 rounded-xl text-sm font-bold text-zinc-600 dark:text-zinc-300 hover:text-red-500 hover:border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all shadow-sm"
                         >
                             <Trash2 size={16} />
-                            Temizle
+                            Clear
                         </button>
                     )}
                     {(transparentImage || bgImage || bgColor) && (
@@ -213,7 +213,7 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                             className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-200 dark:shadow-blue-900/20 transition-all hover:scale-105"
                         >
                             <Download size={16} />
-                            İndir
+                            Download
                         </button>
                     )}
                 </div>
@@ -230,12 +230,12 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                                 <div className="w-20 h-20 bg-fuchsia-100 dark:bg-fuchsia-900/30 text-fuchsia-600 dark:text-fuchsia-400 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
                                     <ImageIcon size={40} />
                                 </div>
-                                <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-2">Fotoğraf Yükleyin</h2>
-                                <p className="text-zinc-500 dark:text-zinc-400 text-center mb-8 max-w-md">Arka planını kaldırmak istediğiniz fotoğrafı seçin. Yapay zeka saniyeler içinde arka planı temizleyecektir.</p>
+                                <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-2">Upload Photo</h2>
+                                <p className="text-zinc-500 dark:text-zinc-400 text-center mb-8 max-w-md">Select the photo you want to remove the background from. AI will clean the background in seconds.</p>
                                 
                                 <label className="flex items-center gap-2 px-8 py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-bold hover:scale-105 transition-all cursor-pointer shadow-lg shadow-zinc-200 dark:shadow-none hover:shadow-xl">
                                     <Upload size={20} />
-                                    Fotoğraf Seç
+                                    Select Photo
                                     <input type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleUploadSource} />
                                 </label>
                             </div>
@@ -292,13 +292,13 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                             <div className="w-10 h-10 bg-fuchsia-50 dark:bg-fuchsia-900/20 text-fuchsia-600 dark:text-fuchsia-400 rounded-xl flex items-center justify-center">
                                 <Settings size={20} />
                             </div>
-                            <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">Araçlar</h3>
+                            <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">Tools</h3>
                         </div>
 
                         <div className="space-y-6">
                             {/* Actions */}
                             <div className="space-y-3">
-                                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">İşlemler</h4>
+                                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Actions</h4>
                                 <button
                                     onClick={handleRemoveBackground}
                                     disabled={!sourceImage || isProcessing || transparentImage !== null}
@@ -310,7 +310,7 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                                     )}
                                 >
                                     <Wand2 size={18} />
-                                    Arka Planı Kaldır
+                                    Remove Background
                                 </button>
                                 
                                 <label className={cn(
@@ -318,7 +318,7 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                                     "border-zinc-200 dark:border-slate-700 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 text-zinc-600 dark:text-zinc-300"
                                 )}>
                                     <RefreshCw size={18} />
-                                    Yeni Fotoğraf Yükle
+                                    Upload New Photo
                                     <input type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleUploadSource} />
                                 </label>
                             </div>
@@ -331,12 +331,12 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                                         animate={{ opacity: 1, height: "auto" }}
                                         className="space-y-5 pt-4 border-t border-zinc-100 dark:border-slate-700"
                                     >
-                                        <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Arka Plan Ekle</h4>
+                                        <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Add Background</h4>
                                         
                                         {/* Color Presets */}
                                         <div>
                                             <label className="text-sm font-medium text-zinc-600 dark:text-zinc-300 flex items-center gap-2 mb-3">
-                                                <PaintBucket size={16} /> Renk Seç
+                                                <PaintBucket size={16} /> Select Color
                                             </label>
                                             <div className="grid grid-cols-5 gap-2">
                                                 {PRESET_COLORS.map((color, idx) => (
@@ -352,7 +352,7 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                                                             color === "" && "bg-[url('https://transparenttextures.com/patterns/cubes.png')] bg-zinc-200"
                                                         )}
                                                         style={{ backgroundColor: color || "transparent" }}
-                                                        title={color === "" ? "Şeffaf" : color}
+                                                        title={color === "" ? "Transparent" : color}
                                                     >
                                                         {color === "" && <div className="absolute inset-0 bg-red-400 w-full h-[2px] rotate-45 top-1/2 -translate-y-1/2 opacity-50"></div>}
                                                     </button>
@@ -377,12 +377,12 @@ export default function BackgroundRemover({ onBack }: BackgroundRemoverProps) {
                                         {/* Image Upload */}
                                         <div>
                                             <label className="text-sm font-medium text-zinc-600 dark:text-zinc-300 flex items-center gap-2 mb-3">
-                                                <ImageIcon size={16} /> Görsel Yükle
+                                                <ImageIcon size={16} /> Upload Image
                                             </label>
                                             <label className="flex items-center justify-center gap-2 w-full py-8 border-2 border-dashed border-zinc-200 dark:border-slate-600 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-slate-700/50 transition-colors">
                                                 <div className="flex flex-col items-center text-zinc-500">
                                                     <Upload size={24} className="mb-2" />
-                                                    <span className="text-sm font-medium">Görsel Seç</span>
+                                                    <span className="text-sm font-medium">Select Image</span>
                                                 </div>
                                                 <input type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleUploadBackground} />
                                             </label>

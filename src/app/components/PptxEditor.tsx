@@ -284,7 +284,7 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                 }
             }
             await pptx.writeFile({ fileName: `${fileName}.pptx` });
-        } catch (err) { console.error("PPTX export error:", err); alert("PPTX dışa aktarılırken hata oluştu."); }
+        } catch (err) { console.error("PPTX export error:", err); alert("An error occurred while exporting PPTX."); }
     };
 
     const importPptx = async (file: File) => {
@@ -301,7 +301,7 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
             }
             if (!newSlides.length) newSlides.push(createSlide("title"));
             pushHistory(newSlides); setCurrentSlideIdx(0);
-        } catch (err) { console.error("Import error:", err); alert("PPTX açılırken hata oluştu."); }
+        } catch (err) { console.error("Import error:", err); alert("An error occurred while opening PPTX."); }
     };
 
     const handleFileOpen = (e: React.ChangeEvent<HTMLInputElement>) => { const f = e.target.files?.[0]; if (f) importPptx(f); e.target.value = ""; };

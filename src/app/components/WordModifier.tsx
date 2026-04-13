@@ -27,14 +27,14 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
     };
     const [isBold, setIsBold] = useState(false);
     const [isItalic, setIsItalic] = useState(false);
-    const [color, setColor] = useState("#ff0000"); // Varsayılan Kırmızı
+    const [color, setColor] = useState("#ff0000"); // Default Red
     const [isUnderline, setIsUnderline] = useState(false);
     
     const [isProcessing, setIsProcessing] = useState(false);
     const [status, setStatus] = useState("");
 
     const highlightedHtml = useMemo(() => {
-        if (!previewHtml || targetWords.length === 0) return previewHtml || "<p>İçerik boş veya okunabiliyor metin bulunamadı.</p>";
+        if (!previewHtml || targetWords.length === 0) return previewHtml || "<p>Content is empty or no readable text found.</p>";
         let styleStr = "";
         if (isBold) styleStr += "font-weight: bold; ";
         if (isItalic) styleStr += "font-style: italic; ";
@@ -59,8 +59,8 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                 const result = await mammoth.convertToHtml({ arrayBuffer });
                 setPreviewHtml(result.value);
             } catch (err) {
-                console.error("Önizleme hatası:", err);
-                setPreviewHtml("<p class='text-red-500'>Önizleme yüklenemedi.</p>");
+                console.error("Preview error:", err);
+                setPreviewHtml("<p class='text-red-500'>Preview could not be loaded.</p>");
             } finally {
                 setIsLoadingPreview(false);
             }
@@ -70,7 +70,7 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
     const processWordFile = async () => {
         if (!file || targetWords.length === 0) return;
         setIsProcessing(true);
-        setStatus("Belge okunuyor...");
+        setStatus("Reading document...");
 
         try {
             const JSZip = (await import("jszip")).default;
@@ -79,7 +79,7 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
             const zip = new JSZip();
             const docArchive = await zip.loadAsync(file);
             
-            setStatus("Kelimeler aranıyor ve değiştiriliyor...");
+            setStatus("Searching and replacing words...");
             
             const parser = new DOMParser();
             const serializer = new XMLSerializer();
@@ -171,11 +171,11 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                 }
             }
 
-            setStatus("Belge kaydediliyor...");
+            setStatus("Saving document...");
             const modifiedBlob = await docArchive.generateAsync({ type: "blob" });
-            saveAs(modifiedBlob, "Degistirilmis_" + file.name);
+            saveAs(modifiedBlob, "Modified_" + file.name);
             
-            setStatus(`Başarılı! Toplam ${totalReplacements} yerde değişiklik yapıldı.`);
+            setStatus(`Success! A total of ${totalReplacements} changes were made.`);
             setTimeout(() => {
                 setIsProcessing(false);
                 setFile(null);
@@ -185,8 +185,8 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
             }, 3000);
 
         } catch (err) {
-            console.error("Word düzenleme hatası:", err);
-            setStatus("Hata oluştu! Lütfen geçerli bir Word belgesi yükleyin.");
+            console.error("Word edit error:", err);
+            setStatus("An error occurred! Please upload a valid Word document.");
             setIsProcessing(false);
         }
     };
@@ -203,8 +203,8 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                             <Type size={20} />
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Word Metin Stili Değiştirici</h1>
-                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Word belgenizdeki spesifik bir kelimeye otomatik stil verin</p>
+                            <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Word Text Style Modifier</h1>
+                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Automatically style specific words in your Word document</p>
                         </div>
                     </div>
                 </div>
@@ -221,8 +221,8 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                                 <div className="w-20 h-20 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform text-indigo-500">
                                     <Upload size={36} />
                                 </div>
-                                <span className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">Word (DOCX) Belgenizi Yükleyin</span>
-                                <span className="text-sm text-slate-500 dark:text-slate-400">Üzerinde değişiklik yapılacak olan dosyayı seçin</span>
+                                <span className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">Upload Your Word (DOCX) Document</span>
+                                <span className="text-sm text-slate-500 dark:text-slate-400">Select the file to be modified</span>
                                 <input 
                                     type="file" 
                                     accept=".docx" 
@@ -247,19 +247,19 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                                         onClick={() => handleFileSelect(null)}
                                         className="text-xs font-bold text-red-500 hover:text-red-600 dark:hover:text-red-400 px-3 py-1.5 bg-red-50 dark:bg-red-900/20 rounded-lg transition-colors"
                                     >
-                                        Değiştir
+                                        Change
                                     </button>
                                 </div>
 
                                 {/* Document Preview */}
                                 <div className="w-full h-48 md:h-64 overflow-y-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-inner relative">
                                     <div className="sticky top-0 float-right bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-300 text-[10px] font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl z-20 shadow-sm border border-indigo-200 dark:border-indigo-800">
-                                        BELGE ÖNİZLEME
+                                        DOCUMENT PREVIEW
                                     </div>
                                     {isLoadingPreview ? (
                                         <div className="flex flex-col items-center justify-center h-full gap-3 text-slate-400">
                                             <RefreshCw size={24} className="animate-spin text-indigo-500" />
-                                            <span className="text-sm font-medium">Önizleme hazırlanıyor...</span>
+                                            <span className="text-sm font-medium">Preparing preview...</span>
                                         </div>
                                     ) : (
                                         <div 
@@ -272,7 +272,7 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                                 {/* Form Settings */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="flex flex-col gap-3">
-                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Hedef Kelimeler (Enter tuşu ile ekleyin)</label>
+                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Target Words (Add with Enter key)</label>
                                         <div className="w-full flex flex-wrap gap-2 p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl transition-all focus-within:ring-2 focus-within:ring-indigo-500 min-h-[56px] items-center">
                                             {targetWords.map((word, idx) => (
                                                 <span key={idx} className="flex items-center gap-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm">
@@ -287,33 +287,33 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                                                 value={wordInput}
                                                 onChange={(e) => setWordInput(e.target.value)}
                                                 onKeyDown={handleWordKeyDown}
-                                                placeholder={targetWords.length === 0 ? "Örn: elma (yazıp Enter'a basın)" : "Yeni kelime..."} 
+                                                placeholder={targetWords.length === 0 ? "e.g.: apple (type and press Enter)" : "New word..."} 
                                                 className="flex-1 min-w-[150px] bg-transparent outline-none text-slate-700 dark:text-slate-200 font-medium"
                                             />
                                         </div>
-                                        <p className="text-[11px] text-slate-500">Bu kelimelerin tümü belgede bulunduğunda belirttiğiniz stile dönüşecek.</p>
+                                        <p className="text-[11px] text-slate-500">All these words will be converted to the style you specify when found in the document.</p>
                                     </div>
 
                                     <div className="flex flex-col gap-3">
-                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Stil Ayarları</label>
+                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Style Settings</label>
                                         <div className="flex flex-wrap items-center gap-3">
                                             <button 
                                                 onClick={() => setIsBold(!isBold)}
                                                 className={cn("w-12 h-12 rounded-xl flex items-center justify-center font-serif text-lg transition-all", isBold ? "bg-slate-800 text-white dark:bg-indigo-500 dark:text-white shadow-md font-bold" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700")}
                                             >
-                                                K
+                                                B
                                             </button>
                                             <button 
                                                 onClick={() => setIsItalic(!isItalic)}
                                                 className={cn("w-12 h-12 rounded-xl flex items-center justify-center font-serif text-lg italic transition-all", isItalic ? "bg-slate-800 text-white dark:bg-indigo-500 dark:text-white shadow-md" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700")}
                                             >
-                                                T
+                                                I
                                             </button>
                                             <button 
                                                 onClick={() => setIsUnderline(!isUnderline)}
                                                 className={cn("w-12 h-12 rounded-xl flex items-center justify-center font-serif text-lg underline transition-all", isUnderline ? "bg-slate-800 text-white dark:bg-indigo-500 dark:text-white shadow-md" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700")}
                                             >
-                                                A
+                                                U
                                             </button>
                                             
                                             <div className="relative flex items-center ml-2">
@@ -343,12 +343,12 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                                         {isProcessing ? (
                                             <>
                                                 <RefreshCw size={20} className="animate-spin" />
-                                                <span>{status || "İşleniyor..."}</span>
+                                                <span>{status || "Processing..."}</span>
                                             </>
                                         ) : (
                                             <>
                                                 <Wand2 size={20} />
-                                                <span>Stili Uygula ve İndir</span>
+                                                <span>Apply Style and Download</span>
                                             </>
                                         )}
                                     </button>

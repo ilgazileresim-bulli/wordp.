@@ -66,10 +66,10 @@ export default function CvWizard({ onBack }: CvWizardProps) {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${formData.name || "Isimsiz"}-CV.pdf`);
+      pdf.save(`${formData.name || "Unnamed"}-CV.pdf`);
     } catch (err) {
       console.error(err);
-      alert("PDF oluşturulurken hata oluştu.");
+      alert("An error occurred while generating the PDF.");
     } finally {
       setIsGenerating(false);
     }
@@ -94,7 +94,7 @@ export default function CvWizard({ onBack }: CvWizardProps) {
           {/* Kişisel Bilgiler */}
           <section>
             <h2 className="text-sm font-bold text-blue-600 uppercase tracking-wider mb-4 flex items-center gap-2">
-              <User size={16} /> Kişisel Bilgiler
+              <User size={16} /> Personal Information
             </h2>
             <div className="space-y-4">
               <div>
@@ -107,17 +107,17 @@ export default function CvWizard({ onBack }: CvWizardProps) {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-500 mb-1">E-Posta</label>
-                  <input type="email" value={formData.email} onChange={e => updateField("email", e.target.value)} className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" placeholder="mail@ornek.com" />
+                  <label className="block text-xs font-semibold text-zinc-500 mb-1">Email</label>
+                  <input type="email" value={formData.email} onChange={e => updateField("email", e.target.value)} className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" placeholder="mail@example.com" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-500 mb-1">Telefon</label>
-                  <input type="tel" value={formData.phone} onChange={e => updateField("phone", e.target.value)} className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" placeholder="0555..." />
+                  <label className="block text-xs font-semibold text-zinc-500 mb-1">Phone</label>
+                  <input type="tel" value={formData.phone} onChange={e => updateField("phone", e.target.value)} className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" placeholder="555..." />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-zinc-500 mb-1">Özet</label>
-                <textarea rows={3} value={formData.summary} onChange={e => updateField("summary", e.target.value)} className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm resize-none" placeholder="Kendinizden kısaca bahsedin..." />
+                <label className="block text-xs font-semibold text-zinc-500 mb-1">Summary</label>
+                <textarea rows={3} value={formData.summary} onChange={e => updateField("summary", e.target.value)} className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm resize-none" placeholder="Briefly describe yourself..." />
               </div>
             </div>
           </section>
@@ -125,49 +125,49 @@ export default function CvWizard({ onBack }: CvWizardProps) {
           {/* Deneyim */}
           <section>
             <h2 className="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Briefcase size={16} /> Deneyimler
+              <Briefcase size={16} /> Experience
             </h2>
             <div className="space-y-6">
               {formData.experience.map((exp, i) => (
                 <div key={i} className="p-4 border border-zinc-200 rounded-xl bg-zinc-50 relative">
                   <div className="space-y-3">
-                    <input type="text" value={exp.company} onChange={e => handleExpChange(i, "company", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm font-bold" placeholder="Şirket Adı" />
+                    <input type="text" value={exp.company} onChange={e => handleExpChange(i, "company", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm font-bold" placeholder="Company Name" />
                     <div className="grid grid-cols-2 gap-3">
-                      <input type="text" value={exp.role} onChange={e => handleExpChange(i, "role", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm" placeholder="Pozisyon" />
-                      <input type="text" value={exp.duration} onChange={e => handleExpChange(i, "duration", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm" placeholder="2020 - Devam" />
+                      <input type="text" value={exp.role} onChange={e => handleExpChange(i, "role", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm" placeholder="Position" />
+                      <input type="text" value={exp.duration} onChange={e => handleExpChange(i, "duration", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm" placeholder="2020 - Present" />
                     </div>
-                    <textarea rows={2} value={exp.desc} onChange={e => handleExpChange(i, "desc", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm resize-none" placeholder="Açıklama" />
+                    <textarea rows={2} value={exp.desc} onChange={e => handleExpChange(i, "desc", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm resize-none" placeholder="Description" />
                   </div>
                 </div>
               ))}
-              <button onClick={addExperience} className="text-sm font-bold text-emerald-600 w-full p-2 border border-dashed border-emerald-300 rounded-lg hover:bg-emerald-50">+ Deneyim Ekle</button>
+              <button onClick={addExperience} className="text-sm font-bold text-emerald-600 w-full p-2 border border-dashed border-emerald-300 rounded-lg hover:bg-emerald-50">+ Add Experience</button>
             </div>
           </section>
 
           {/* Eğitim */}
           <section>
             <h2 className="text-sm font-bold text-amber-600 uppercase tracking-wider mb-4 flex items-center gap-2">
-              <GraduationCap size={16} /> Eğitim
+              <GraduationCap size={16} /> Education
             </h2>
             <div className="space-y-4">
               {formData.education.map((edu, i) => (
                 <div key={i} className="p-3 border border-zinc-200 rounded-xl bg-zinc-50 space-y-2">
-                  <input type="text" value={edu.school} onChange={e => handleEduChange(i, "school", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm font-bold" placeholder="Okul / Üniversite" />
+                  <input type="text" value={edu.school} onChange={e => handleEduChange(i, "school", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm font-bold" placeholder="School / University" />
                   <div className="grid grid-cols-2 gap-2">
-                    <input type="text" value={edu.degree} onChange={e => handleEduChange(i, "degree", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm" placeholder="Bölüm" />
-                    <input type="text" value={edu.year} onChange={e => handleEduChange(i, "year", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm" placeholder="Yıl" />
+                    <input type="text" value={edu.degree} onChange={e => handleEduChange(i, "degree", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm" placeholder="Department" />
+                    <input type="text" value={edu.year} onChange={e => handleEduChange(i, "year", e.target.value)} className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm" placeholder="Year" />
                   </div>
                 </div>
               ))}
-              <button onClick={addEducation} className="text-sm font-bold text-amber-600 w-full p-2 border border-dashed border-amber-300 rounded-lg hover:bg-amber-50">+ Eğitim Ekle</button>
+              <button onClick={addEducation} className="text-sm font-bold text-amber-600 w-full p-2 border border-dashed border-amber-300 rounded-lg hover:bg-amber-50">+ Add Education</button>
             </div>
           </section>
 
           <section>
             <h2 className="text-sm font-bold text-purple-600 uppercase tracking-wider mb-4 flex items-center gap-2">
-              <CheckCircle2 size={16} /> Yetenekler
+              <CheckCircle2 size={16} /> Skills
             </h2>
-             <textarea rows={3} value={formData.skills} onChange={e => updateField("skills", e.target.value)} className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm resize-none" placeholder="Örn: React, Node.js, Tasarım (Virgülle ayırın)" />
+             <textarea rows={3} value={formData.skills} onChange={e => updateField("skills", e.target.value)} className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm resize-none" placeholder="e.g.: React, Node.js, Design (Separate with commas)" />
           </section>
 
         </div>
@@ -175,7 +175,7 @@ export default function CvWizard({ onBack }: CvWizardProps) {
         <div className="p-4 border-t border-zinc-200 bg-zinc-50/80">
           <button onClick={generatePDF} disabled={isGenerating} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2">
             <Download size={18} />
-            {isGenerating ? "Hazırlanıyor..." : "PDF Olarak İndir"}
+            {isGenerating ? "Preparing..." : "Download as PDF"}
           </button>
         </div>
       </div>
@@ -236,7 +236,7 @@ export default function CvWizard({ onBack }: CvWizardProps) {
             <div>
               {formData.summary && (
                 <div className="mb-8">
-                   <h3 className="text-lg font-bold text-zinc-900 uppercase tracking-wider mb-4 border-b border-zinc-200 pb-2">Profil Özeti</h3>
+                   <h3 className="text-lg font-bold text-zinc-900 uppercase tracking-wider mb-4 border-b border-zinc-200 pb-2">Profile Summary</h3>
                    <p className="text-zinc-700 leading-relaxed text-sm">{formData.summary}</p>
                 </div>
               )}

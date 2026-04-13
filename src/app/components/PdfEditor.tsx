@@ -62,12 +62,12 @@ interface Annotation {
 }
 
 const STAMP_PRESETS = [
-  { label: "ONAYLANDI", color: "#16a34a" },
-  { label: "REDDEDİLDİ", color: "#dc2626" },
-  { label: "TASLAK", color: "#d97706" },
-  { label: "GİZLİ", color: "#7c3aed" },
-  { label: "ACİL", color: "#e11d48" },
-  { label: "KOPYA", color: "#6b7280" },
+  { label: "APPROVED", color: "#16a34a" },
+  { label: "REJECTED", color: "#dc2626" },
+  { label: "DRAFT", color: "#d97706" },
+  { label: "CONFIDENTIAL", color: "#7c3aed" },
+  { label: "URGENT", color: "#e11d48" },
+  { label: "COPY", color: "#6b7280" },
 ];
 
 const ZOOM_PRESETS = [50, 75, 100, 125, 150, 200];
@@ -164,7 +164,7 @@ function SignatureModal({
             className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
           >
             <div className="p-4 border-b flex items-center justify-between">
-              <h3 className="text-zinc-900 font-bold">İmza Oluştur</h3>
+              <h3 className="text-zinc-900 font-bold">Create Signature</h3>
               <button onClick={onClose}>
                 <X size={20} className="text-zinc-400" />
               </button>
@@ -184,7 +184,7 @@ function SignatureModal({
                 className="bg-white border-2 border-dashed border-zinc-200 rounded-xl cursor-crosshair shadow-inner"
               />
               <p className="text-[10px] text-zinc-400 mt-4 uppercase font-bold tracking-widest">
-                Aşağıya imzanızı atın
+                Sign below
               </p>
             </div>
             <div className="p-4 bg-white flex gap-3">
@@ -192,13 +192,13 @@ function SignatureModal({
                 onClick={clear}
                 className="flex-1 py-2 text-zinc-600 font-bold text-sm hover:bg-zinc-100 rounded-lg transition-colors border border-zinc-200"
               >
-                Temizle
+                Clear
               </button>
               <button
                 onClick={handleSave}
                 className="flex-1 py-2 bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm rounded-lg transition-colors shadow-lg"
               >
-                İmza Ekle
+                Add Signature
               </button>
             </div>
           </motion.div>
@@ -222,7 +222,7 @@ export default function PdfEditor({
   const [zoom, setZoom] = useState(125);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [fileName, setFileName] = useState("Dosya Seçilmedi");
+  const [fileName, setFileName] = useState("No File Selected");
   const [activeTool, setActiveTool] = useState("select");
   const [pdfDoc, setPdfDoc] = useState<any>(null);
   const [pageRatio, setPageRatio] = useState(1.414); // A4 default
@@ -256,7 +256,7 @@ export default function PdfEditor({
   };
 
   const clearAll = () => {
-    if (confirm("Tüm düzenlemeleri temizlemek istediğinize emin misiniz?")) {
+    if (confirm("Are you sure you want to clear all edits?")) {
       saveToHistory([]);
       setSelectedId(null);
       setIsEditingText(false);
@@ -278,7 +278,7 @@ export default function PdfEditor({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isEditingText, setIsEditingText] = useState(false);
   const [isRenderingPdf, setIsRenderingPdf] = useState(false);
-  const [activeTab, setActiveTab] = useState("giriş");
+  const [activeTab, setActiveTab] = useState("home");
   const [brushThickness, setBrushThickness] = useState(4);
   const [brushColor, setBrushColor] = useState("#000000");
   const [showStampMenu, setShowStampMenu] = useState(false);
@@ -294,15 +294,15 @@ export default function PdfEditor({
   const renderTaskRef = useRef<any>(null);
 
   const tools = [
-    { id: "select", icon: MousePointer2, label: "Seç" },
-    { id: "draw", icon: Pencil, label: "Çiz" },
-    { id: "text", icon: Type, label: "Metin Ekle" },
-    { id: "highlight", icon: Highlighter, label: "Vurgula" },
-    { id: "erase", icon: Eraser, label: "Sil" },
-    { id: "sign", icon: Signature, label: "İmzala" },
-    { id: "stamp", icon: Stamp, label: "Damga" },
-    { id: "shape", icon: Square, label: "Şekil" },
-    { id: "note", icon: StickyNote, label: "Not" },
+    { id: "select", icon: MousePointer2, label: "Select" },
+    { id: "draw", icon: Pencil, label: "Draw" },
+    { id: "text", icon: Type, label: "Add Text" },
+    { id: "highlight", icon: Highlighter, label: "Highlight" },
+    { id: "erase", icon: Eraser, label: "Erase" },
+    { id: "sign", icon: Signature, label: "Sign" },
+    { id: "stamp", icon: Stamp, label: "Stamp" },
+    { id: "shape", icon: Square, label: "Shape" },
+    { id: "note", icon: StickyNote, label: "Note" },
   ];
 
   const addStamp = (label: string, color: string) => {
@@ -323,7 +323,7 @@ export default function PdfEditor({
   };
 
   const addNote = () => {
-    const noteText = prompt("Not metnini girin:");
+    const noteText = prompt("Enter note text:");
     if (noteText) {
       const newAnnotation: Annotation = {
         id: Math.random().toString(36).substr(2, 9),
@@ -362,13 +362,13 @@ export default function PdfEditor({
       setPdfDoc(pdf);
     } catch (error) {
       console.error("Rotation error:", error);
-      alert("Sayfa döndürülürken bir hata oluştu.");
+      alert("An error occurred while rotating the page.");
     }
   };
 
   const processPdfFile = async (file: File) => {
     if (!file || file.type !== "application/pdf") {
-      alert("Lütfen geçerli bir PDF dosyası seçin.");
+      alert("Please select a valid PDF file.");
       return;
     }
 
@@ -389,7 +389,7 @@ export default function PdfEditor({
       const bytesForSaving = new Uint8Array(arrayBuffer.slice(0));
       const bytesForLoading = new Uint8Array(arrayBuffer.slice(0));
 
-      if (bytesForSaving.length === 0) throw new Error("Dosya boş görünüyor.");
+      if (bytesForSaving.length === 0) throw new Error("The file appears to be empty.");
 
       console.log("PDF: Byte array length:", bytesForSaving.length);
       pdfBytesRef.current = bytesForSaving;
@@ -409,8 +409,8 @@ export default function PdfEditor({
     } catch (error) {
       console.error("PDF loading error:", error);
       alert(
-        "PDF dosyası yüklenirken bir hata oluştu: " +
-          (error instanceof Error ? error.message : "Bilinmeyen hata"),
+        "An error occurred while loading the PDF file: " +
+          (error instanceof Error ? error.message : "Unknown error"),
       );
     } finally {
       setIsLoading(false);
@@ -442,7 +442,7 @@ export default function PdfEditor({
     const bytes = pdfBytesRef.current;
     if (!bytes || bytes.length === 0) {
       alert(
-        "Belge verisi bulunamadı. Lütfen PDF dosyasını tekrar yüklemeyi deneyin.",
+        "Document data not found. Please try uploading the PDF file again.",
       );
       return;
     }
@@ -450,9 +450,9 @@ export default function PdfEditor({
     // Validate PDF header (must start with %PDF-)
     const header = String.fromCharCode(...bytes.slice(0, 5));
     if (header !== "%PDF-") {
-      console.error("Geçersiz PDF başlığı:", header);
+      console.error("Invalid PDF header:", header);
       alert(
-        "PDF dosyası bozulmuş olabilir. Lütfen sayfayı yenileyip tekrar deneyin.",
+        "The PDF file may be corrupted. Please refresh the page and try again.",
       );
       return;
     }
@@ -465,7 +465,7 @@ export default function PdfEditor({
       // Add watermark to all pages or just first
       pages.forEach((page) => {
         const { height } = page.getSize();
-        page.drawText("Word P. ile düzenlendi", {
+        page.drawText("Edited with Word P.", {
           x: 50,
           y: height - 30,
           size: 10,
@@ -489,8 +489,8 @@ export default function PdfEditor({
     } catch (error) {
       console.error("PDF save error:", error);
       alert(
-        "PDF kaydedilirken bir hata oluştu: " +
-          (error instanceof Error ? error.message : "Bilinmeyen hata"),
+        "An error occurred while saving the PDF: " +
+          (error instanceof Error ? error.message : "Unknown error"),
       );
     }
   };
@@ -510,7 +510,7 @@ export default function PdfEditor({
       link.click();
     } catch (err) {
       console.error("Export image error:", err);
-      alert("Görsel dışa aktarılırken bir hata oluştu.");
+      alert("An error occurred while exporting the image.");
     }
   };
 

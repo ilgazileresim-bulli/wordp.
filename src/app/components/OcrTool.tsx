@@ -44,7 +44,7 @@ export default function OcrTool({ onBack }: OcrToolProps) {
       setExtractedText(result.data.text);
     } catch (err) {
       console.error("OCR Error:", err);
-      alert("Metin çıkarma sırasında bir hata oluştu.");
+      alert("An error occurred during text extraction.");
     } finally {
       setIsProcessing(false);
     }
@@ -61,7 +61,7 @@ export default function OcrTool({ onBack }: OcrToolProps) {
     if (!extractedText) return;
     setIsCloudSaved(true);
     setTimeout(() => {
-      alert("Metin Bulut'a (Google Drive simülasyonu) başarıyla kaydedildi!");
+      alert("Text successfully saved to Cloud (Google Drive simulation)!");
       setIsCloudSaved(false);
     }, 1500);
   };
@@ -72,7 +72,7 @@ export default function OcrTool({ onBack }: OcrToolProps) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "ocr-sonucu.txt";
+    a.download = "ocr-result.txt";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -86,16 +86,16 @@ export default function OcrTool({ onBack }: OcrToolProps) {
           <button
             onClick={onBack}
             className="p-2 hover:bg-zinc-100 dark:hover:bg-slate-800 rounded-xl transition-colors dark:text-zinc-400"
-            title="Geri Dön"
+            title="Go Back"
           >
             <ArrowLeft size={20} />
           </button>
           <div>
             <h1 className="text-xl font-bold text-zinc-800 dark:text-zinc-100 flex items-center gap-2">
               <FileText className="text-blue-500" size={24} />
-              Gelişmiş OCR Aracı
+              Advanced OCR Tool
             </h1>
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">Görsellerden anında metin çıkarın</span>
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">Instantly extract text from images</span>
           </div>
         </div>
 
@@ -107,7 +107,7 @@ export default function OcrTool({ onBack }: OcrToolProps) {
               className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-medium rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors flex items-center gap-2 shadow-sm"
             >
               {isCloudSaved ? <Loader2 size={16} className="animate-spin" /> : <Cloud size={16} />}
-              {isCloudSaved ? "Kaydediliyor..." : "Buluta Kaydet"}
+              {isCloudSaved ? "Saving..." : "Save to Cloud"}
             </button>
           )}
         </div>
@@ -132,8 +132,8 @@ export default function OcrTool({ onBack }: OcrToolProps) {
               className="w-full h-80 border-2 border-dashed border-zinc-300 dark:border-slate-600 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-zinc-50 dark:hover:bg-slate-800 transition-colors"
             >
               <Upload size={48} className="text-zinc-400 mb-4" />
-              <h3 className="text-lg font-medium text-zinc-700 dark:text-zinc-300">Görsel Seçin veya Sürükleyin</h3>
-              <p className="text-sm text-zinc-500 mt-2">PNG, JPG, JPEG desteklenir</p>
+              <h3 className="text-lg font-medium text-zinc-700 dark:text-zinc-300">Select or Drag an Image</h3>
+              <p className="text-sm text-zinc-500 mt-2">PNG, JPG, JPEG supported</p>
             </div>
           ) : (
             <div className="w-full flex flex-col items-center gap-4">
@@ -146,7 +146,7 @@ export default function OcrTool({ onBack }: OcrToolProps) {
                   onClick={() => fileInputRef.current?.click()}
                   className="flex-1 px-4 py-2.5 bg-zinc-100 dark:bg-slate-700 hover:bg-zinc-200 dark:hover:bg-slate-600 text-zinc-700 dark:text-zinc-200 font-medium rounded-xl transition-colors"
                 >
-                  Başka Seç
+                  Select Another
                 </button>
                 <button
                   onClick={processImage}
@@ -156,10 +156,10 @@ export default function OcrTool({ onBack }: OcrToolProps) {
                   {isProcessing ? (
                     <>
                       <Loader2 size={18} className="animate-spin" />
-                      İşleniyor ({progress}%)
+                      Processing ({progress}%)
                     </>
                   ) : (
-                    "Metni Çıkar (OCR)"
+                    "Extract Text (OCR)"
                   )}
                 </button>
               </div>
@@ -170,7 +170,7 @@ export default function OcrTool({ onBack }: OcrToolProps) {
         {/* Right Column - Results */}
         <div className="bg-white dark:bg-slate-800/60 border border-zinc-200 dark:border-slate-700/60 rounded-2xl shadow-sm p-6 flex flex-col">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">Çıkarılan Metin</h3>
+            <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">Extracted Text</h3>
             {extractedText && (
               <div className="flex gap-2">
                 <button
@@ -178,14 +178,14 @@ export default function OcrTool({ onBack }: OcrToolProps) {
                   className="p-2 bg-zinc-100 dark:bg-slate-700 hover:bg-zinc-200 dark:hover:bg-slate-600 text-zinc-700 dark:text-zinc-300 rounded-lg transition-colors flex items-center gap-1 text-sm font-medium"
                 >
                   {isCopied ? <CheckCircle2 size={16} className="text-green-500" /> : <Copy size={16} />}
-                  Kopyala
+                  Copy
                 </button>
                 <button
                   onClick={downloadText}
                   className="p-2 bg-zinc-100 dark:bg-slate-700 hover:bg-zinc-200 dark:hover:bg-slate-600 text-zinc-700 dark:text-zinc-300 rounded-lg transition-colors flex items-center gap-1 text-sm font-medium"
                 >
                   <Download size={16} />
-                  İndir
+                  Download
                 </button>
               </div>
             )}
@@ -195,18 +195,18 @@ export default function OcrTool({ onBack }: OcrToolProps) {
             {isProcessing ? (
               <div className="w-full h-full flex flex-col items-center justify-center text-zinc-400">
                 <Loader2 size={40} className="animate-spin mb-4 text-blue-500" />
-                <p>Görsel okunuyor, lütfen bekleyin...</p>
+                <p>Reading image, please wait...</p>
               </div>
             ) : extractedText ? (
               <textarea
                 value={extractedText}
                 onChange={(e) => setExtractedText(e.target.value)}
                 className="w-full h-full min-h-[400px] p-4 bg-zinc-50 dark:bg-[#0a0a1a] border border-zinc-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none text-zinc-800 dark:text-zinc-200 font-mono text-sm shadow-inner"
-                placeholder="Düzenlemek için tıklayın..."
+                placeholder="Click to edit..."
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center border-2 border-dashed border-zinc-200 dark:border-slate-700 rounded-xl bg-zinc-50/50 dark:bg-slate-900/50 text-zinc-400">
-                <p>Sonuçlar burada görünecek.</p>
+                <p>Results will appear here.</p>
               </div>
             )}
           </div>

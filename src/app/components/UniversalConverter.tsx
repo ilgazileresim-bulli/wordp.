@@ -11,8 +11,8 @@ const FORMATS: { id: Format; label: string; icon: any; color: string }[] = [
     { id: "docx", label: "Word (.docx)", icon: FileText, color: "text-blue-600 bg-blue-50" },
     { id: "pdf", label: "PDF (.pdf)", icon: FileSearch, color: "text-red-500 bg-red-50" },
     { id: "pptx", label: "PowerPoint (.pptx)", icon: PieChart, color: "text-orange-500 bg-orange-50" },
-    { id: "png", label: "PNG Görsel (.png)", icon: ImageIcon, color: "text-emerald-500 bg-emerald-50" },
-    { id: "jpg", label: "JPG Görsel (.jpg)", icon: ImageIcon, color: "text-amber-500 bg-amber-50" },
+    { id: "png", label: "PNG Image (.png)", icon: ImageIcon, color: "text-emerald-500 bg-emerald-50" },
+    { id: "jpg", label: "JPG Image (.jpg)", icon: ImageIcon, color: "text-amber-500 bg-amber-50" },
 ];
 
 const SUPPORTED_CONVERSIONS: Record<Format, Format[]> = {
@@ -55,7 +55,7 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
     const runConversion = async () => {
         if (!selectedFile) return;
         setIsConverting(true);
-        setStatusText("Dönüştürülüyor, lütfen bekleyin...");
+        setStatusText("Converting, please wait...");
         
         try {
             if (inputFormat === "docx" && outputFormat === "pdf") await docxToPdf(selectedFile);
@@ -73,14 +73,14 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
             else if ((inputFormat === "png" || inputFormat === "jpg") && outputFormat === "pdf") await imgToPdf(selectedFile);
             else if ((inputFormat === "png" || inputFormat === "jpg") && outputFormat === "docx") await imgToDocx(selectedFile);
             
-            setStatusText("Dönüştürme Başarılı!");
+            setStatusText("Conversion Successful!");
             setTimeout(() => {
                 setIsConverting(false);
                 setSelectedFile(null);
             }, 2000);
         } catch (err) {
-            console.error("Dönüştürme hatası:", err);
-            setStatusText("Dönüştürme sırasında hata oluştu!");
+            console.error("Conversion error:", err);
+            setStatusText("An error occurred during conversion!");
             setTimeout(() => setIsConverting(false), 3000);
         }
     };
@@ -149,11 +149,11 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
                 if (ctx) {
                     ctx.drawImage(fullCanvas, 0, i * A4_HEIGHT * 2, 794 * 2, A4_HEIGHT * 2, 0, 0, 794 * 2, A4_HEIGHT * 2);
                     const blob: Blob = await new Promise(resolve => pageCanvas.toBlob(b => resolve(b!), "image/png"));
-                    zip.file(`${baseName}_sayfa_${i + 1}.png`, blob);
+                    zip.file(`page_${i + 1}.png`, blob);
                 }
             }
             const zipBlob = await zip.generateAsync({ type: "blob" });
-            saveAs(zipBlob, baseName + "_sayfalar.zip");
+            saveAs(zipBlob, baseName + "_pages.zip");
         }
         document.body.removeChild(container);
     };
@@ -203,7 +203,7 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
         const zip = new JSZip();
         const content2 = await zip.loadAsync(file);
         const mediaFiles = Object.keys(content2.files).filter(p => p.startsWith("ppt/media/") && (p.endsWith(".png") || p.endsWith(".jpg") || p.endsWith(".jpeg")));
-        if (mediaFiles.length === 0) throw new Error("Görsel içerik bulunamadı.");
+        if (mediaFiles.length === 0) throw new Error("No image content found.");
         
         if (mediaFiles.length === 1) {
             const imgData = await content2.files[mediaFiles[0]].async("blob");
@@ -213,10 +213,10 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
             for (let i = 0; i < mediaFiles.length; i++) {
                 const blob = await content2.files[mediaFiles[i]].async("blob");
                 const ext = mediaFiles[i].split(".").pop();
-                outZip.file(`slayt_${i + 1}.${ext}`, blob);
+                outZip.file(`slide_${i + 1}.${ext}`, blob);
             }
             const zipBlob = await outZip.generateAsync({ type: "blob" });
-            saveAs(zipBlob, file.name.replace(/\.[^/.]+$/, "") + "_gorseller.zip");
+            saveAs(zipBlob, file.name.replace(/\.[^/.]+$/, "") + "_images.zip");
         }
     };
 
@@ -227,7 +227,7 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
         const zip = new JSZip();
         const content = await zip.loadAsync(file);
         const mediaFiles = Object.keys(content.files).filter(path => path.startsWith("ppt/media/") && (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")));
-        if (mediaFiles.length === 0) throw new Error("Görsel içerik bulunamadı.");
+        if (mediaFiles.length === 0) throw new Error("No image content found.");
 
         const pdf = new jsPDF({ unit: 'px', compress: true });
         for (let i = 0; i < mediaFiles.length; i++) {
@@ -303,10 +303,10 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
                 canvas.width = viewport.width; canvas.height = viewport.height;
                 await (page as any).render({ canvasContext: canvas.getContext("2d")!, viewport }).promise;
                 const blob: Blob = await new Promise(resolve => canvas.toBlob(b => resolve(b!), "image/png"));
-                zip.file(`${baseName}_sayfa_${i}.png`, blob);
+                zip.file(`${baseName}_page_${i}.png`, blob);
             }
             const zipBlob = await zip.generateAsync({ type: "blob" });
-            saveAs(zipBlob, baseName + "_sayfalar.zip");
+            saveAs(zipBlob, baseName + "_pages.zip");
         }
     };
 
@@ -390,8 +390,8 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
                             <RefreshCw size={20} />
                         </div>
                         <div>
-                            <h1 className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 leading-tight">Evrensel Dönüştürücü</h1>
-                            <p className="text-[11px] font-medium text-zinc-400">Tüm formatlar arasında tek tıkla dönüşüm</p>
+                            <h1 className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 leading-tight">Universal Converter</h1>
+                            <p className="text-[11px] font-medium text-zinc-400">One-click conversion between all formats</p>
                         </div>
                     </div>
                 </div>
@@ -405,14 +405,14 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
 
                     <div className="relative z-10">
                         <div className="text-center mb-10">
-                            <h2 className="text-3xl font-extrabold text-zinc-800 dark:text-zinc-100 mb-3">Format Dönüştürücü</h2>
-                            <p className="text-zinc-500 dark:text-zinc-400">İstediğiniz girdi ve çıktı formatını seçin, gerisini yapay zeka halletsin.</p>
+                            <h2 className="text-3xl font-extrabold text-zinc-800 dark:text-zinc-100 mb-3">Format Converter</h2>
+                            <p className="text-zinc-500 dark:text-zinc-400">Select the input and output format you want, and let AI handle the rest.</p>
                         </div>
 
                         <div className="flex flex-col md:flex-row items-center gap-6 mb-12">
                             {/* Input Format Selector */}
                             <div className="flex-1 w-full bg-zinc-50 dark:bg-slate-700/50 p-6 rounded-2xl border border-zinc-200 dark:border-slate-600">
-                                <label className="block text-sm font-bold text-zinc-600 dark:text-zinc-300 mb-4 uppercase tracking-wider text-center">Girdi Formatı (Dönüşen)</label>
+                                <label className="block text-sm font-bold text-zinc-600 dark:text-zinc-300 mb-4 uppercase tracking-wider text-center">Input Format (Source)</label>
                                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
                                     {FORMATS.map(f => (
                                         <button 
@@ -439,7 +439,7 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
 
                             {/* Output Format Selector */}
                             <div className="flex-1 w-full bg-blue-50/50 dark:bg-indigo-900/10 p-6 rounded-2xl border border-blue-100 dark:border-indigo-800/30">
-                                <label className="block text-sm font-bold text-blue-800 dark:text-indigo-300 mb-4 uppercase tracking-wider text-center">Çıktı Formatı (Dönüştürülen)</label>
+                                <label className="block text-sm font-bold text-blue-800 dark:text-indigo-300 mb-4 uppercase tracking-wider text-center">Output Format (Result)</label>
                                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
                                     {FORMATS.map(f => {
                                         const isSupported = SUPPORTED_CONVERSIONS[inputFormat].includes(f.id);
@@ -473,8 +473,8 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
                                         <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-sm">
                                             <Upload size={32} />
                                         </div>
-                                        <span className="text-lg font-bold mb-1">Dönüştürülecek {inputFormat.toUpperCase()} Dosyasını Seçin</span>
-                                        <span className="text-sm opacity-80">veya sürükleyip bırakın</span>
+                                        <span className="text-lg font-bold mb-1">Select {inputFormat.toUpperCase()} File to Convert</span>
+                                        <span className="text-sm opacity-80">or drag and drop</span>
                                     </div>
                                     <input 
                                         type="file" 
@@ -487,7 +487,7 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
                                 <div className="w-full bg-zinc-50 dark:bg-slate-700/50 border border-zinc-200 dark:border-slate-600 rounded-2xl p-6 flex flex-col items-center">
                                     <File size={48} className="text-blue-500 mb-4" />
                                     <p className="font-bold text-zinc-800 dark:text-zinc-100 mb-2 truncate max-w-sm">{selectedFile.name}</p>
-                                    <p className="text-sm text-zinc-500 mb-6">Boyut: {(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                                    <p className="text-sm text-zinc-500 mb-6">Size: {(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
                                     
                                     <div className="flex gap-4">
                                         <button 
@@ -495,7 +495,7 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
                                             className="px-6 py-3 rounded-xl font-bold text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-slate-600 hover:bg-zinc-100 dark:hover:bg-slate-600 transition-colors"
                                             disabled={isConverting}
                                         >
-                                            İptal
+                                            Cancel
                                         </button>
                                         <button 
                                             onClick={runConversion}
@@ -507,7 +507,7 @@ export default function UniversalConverter({ onBack, onOpenPdfInEditor }: Univer
                                             ) : (
                                                 <Wand2 size={20} />
                                             )}
-                                            Dönüştür ({inputFormat.toUpperCase()} → {outputFormat.toUpperCase()})
+                                            Convert ({inputFormat.toUpperCase()} → {outputFormat.toUpperCase()})
                                         </button>
                                     </div>
 

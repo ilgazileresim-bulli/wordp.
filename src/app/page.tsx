@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import LandingPage from "./components/LandingPage";
 import { saveRecentDocument, type RecentDocument } from "./utils/recentDocuments";
 
-const Editor = dynamic<{ initialContent: string; onBack: (content?: string) => void }>(() => import("./components/Editor"), { ssr: false });
+const Editor = dynamic<{ initialContent?: string; onBack: (content?: string) => void; pendingImage?: string; onImageInserted?: () => void }>(() => import("./components/Editor"), { ssr: false });
 const PdfEditor = dynamic<{ onBack: () => void; initialFile?: File }>(() => import("./components/PdfEditor"), { ssr: false });
 const PptxEditor = dynamic<{ onBack: () => void; initialFile?: File }>(() => import("./components/PptxEditor"), { ssr: false });
 const BackgroundRemover = dynamic<{ onBack: () => void }>(() => import("./components/BackgroundRemover"), { ssr: false });
@@ -150,10 +150,10 @@ export default function Home() {
             const zipBlob = await outZip.generateAsync({ type: "blob" });
             saveAs(zipBlob, file.name.replace(/\.[^/.]+$/, "") + "_gorseller.zip");
           }
-          alert("Başarıyla dönüştürüldü!");
+          alert("Successfully converted!");
         } catch (err) {
           console.error("PPTX to PNG error:", err);
-          alert("Dönüştürme hatası.");
+          alert("Conversion error.");
         }
       };
       input.click();
@@ -189,7 +189,7 @@ export default function Home() {
           alert("Successfully converted!");
         } catch (err) {
           console.error("DOCX to PPTX error:", err);
-          alert("Dönüştürme hatası.");
+          alert("Conversion error.");
         }
       };
       input.click();
@@ -296,10 +296,10 @@ export default function Home() {
               pdf.addImage(`data:image/${format.toLowerCase()};base64,${imgData}`, format, 0, 0, imgWidth, imgHeight);
             }
             pdf.save(file.name.replace(/\.[^/.]+$/, "") + ".pdf");
-            alert("Başarıyla dönüştürüldü!");
+            alert("Successfully converted!");
           } catch (err) {
             console.error("PPTX to PDF error:", err);
-            alert("Dönüştürme hatası.");
+            alert("Conversion error.");
           }
         }
       };
@@ -594,7 +594,7 @@ export default function Home() {
           }
         } catch (err) {
           console.error("PDF to PNG error:", err);
-          alert("Dönüştürme hatası oluştu.");
+          alert("A conversion error occurred.");
         }
       };
       input.click();

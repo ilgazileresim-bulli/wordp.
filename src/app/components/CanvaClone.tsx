@@ -100,11 +100,11 @@ const CurvedText = ({ text, curve, fontSize }: { text: string, curve: number, fo
 type ViewState = "dashboard" | "editor";
 
 const TEMPLATES = [
-    { id: "instagram", name: "Instagram Gönderisi", width: 1080, height: 1080, icon: Instagram, color: "from-pink-500 to-rose-500" },
-    { id: "a4", name: "A4 Belge", width: 794, height: 1123, icon: FileText, color: "from-blue-500 to-indigo-600" },
-    { id: "presentation", name: "Sunum (16:9)", width: 1920, height: 1080, icon: MonitorPlay, color: "from-amber-500 to-orange-500" },
-    { id: "story", name: "Instagram Hikayesi", width: 1080, height: 1920, icon: Smartphone, color: "from-fuchsia-500 to-purple-600" },
-    { id: "card", name: "Kartvizit", width: 1050, height: 600, icon: CreditCard, color: "from-emerald-500 to-teal-600" },
+    { id: "instagram", name: "Instagram Post", width: 1080, height: 1080, icon: Instagram, color: "from-pink-500 to-rose-500" },
+    { id: "a4", name: "A4 Document", width: 794, height: 1123, icon: FileText, color: "from-blue-500 to-indigo-600" },
+    { id: "presentation", name: "Presentation (16:9)", width: 1920, height: 1080, icon: MonitorPlay, color: "from-amber-500 to-orange-500" },
+    { id: "story", name: "Instagram Story", width: 1080, height: 1920, icon: Smartphone, color: "from-fuchsia-500 to-purple-600" },
+    { id: "card", name: "Business Card", width: 1050, height: 600, icon: CreditCard, color: "from-emerald-500 to-teal-600" },
 ];
 
 export default function CanvaClone({ onBack }: { onBack: () => void }) {
@@ -213,9 +213,9 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
 
     const addText = (textType: "h1" | "h2" | "p") => {
         const config = {
-            h1: { fontSize: 48, fontWeight: "bold", content: "Büyük Başlık" },
-            h2: { fontSize: 32, fontWeight: "bold", content: "Alt Başlık" },
-            p: { fontSize: 18, fontWeight: "normal", content: "Gövde metni buraya..." }
+                    h1: { fontSize: 48, fontWeight: "bold", content: "Big Heading" },
+            h2: { fontSize: 32, fontWeight: "bold", content: "Subheading" },
+            p: { fontSize: 18, fontWeight: "normal", content: "Body text here..." }
         };
         const newEl: TextElement = {
             id: generateId(),
@@ -374,12 +374,12 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
             });
 
             const link = document.createElement("a");
-            link.download = `tasarim_${Date.now()}.png`;
+            link.download = `design_${Date.now()}.png`;
             link.href = dataUrl;
             link.click();
         } catch (error) {
             console.error("Export error:", error);
-            alert("Dışa aktarılırken bir hata oluştu.");
+            alert("An error occurred during export.");
         } finally {
             setIsExporting(false);
         }
@@ -403,7 +403,7 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-fuchsia-500 to-rose-500 flex items-center justify-center text-white shadow-lg">
                                 <LayoutTemplate size={18} />
                             </div>
-                            <span className="font-bold text-xl">Word P. Tasarım</span>
+                            <span className="font-bold text-xl">Word P. Design</span>
                         </div>
                     </div>
                 </header>
@@ -468,7 +468,7 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                             </div>
                             <span className="text-zinc-400 font-bold mt-5">×</span>
                             <div className="flex flex-col">
-                                <label className="text-xs text-zinc-400 font-bold mb-1 ml-1 uppercase">Yükseklik</label>
+                                <label className="text-xs text-zinc-400 font-bold mb-1 ml-1 uppercase">Height</label>
                                 <input 
                                     type="number" 
                                     min={100}
@@ -499,16 +499,16 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                     <button
                         onClick={() => setCurrentView("dashboard")}
                         className="p-2 hover:bg-zinc-100 dark:hover:bg-slate-800 rounded-lg text-zinc-600 dark:text-zinc-300 transition-colors flex items-center gap-2"
-                        title="Ana Sayfaya Dön"
+                        title="Back to Home"
                     >
                         <ArrowLeft size={18} />
-                        <span className="text-sm font-semibold max-sm:hidden">Ana Sayfa</span>
+                        <span className="text-sm font-semibold max-sm:hidden">Home</span>
                     </button>
                     <div className="w-px h-6 bg-zinc-200 dark:bg-slate-800" />
                     <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
                         <LayoutTemplate size={16} className="text-fuchsia-500" />
                         <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
-                            Word P. Tasarım - {canvasDimensions.width}x{canvasDimensions.height}px
+                            Word P. Design - {canvasDimensions.width}x{canvasDimensions.height}px
                         </span>
                     </div>
                 </div>
@@ -520,7 +520,7 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                         className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm shadow-blue-200 disabled:opacity-50"
                     >
                         <Download size={16} />
-                        {isExporting ? "Aktarıyor..." : "İndir"}
+                        {isExporting ? "Exporting..." : "Download"}
                     </button>
                 </div>
             </header>
@@ -545,7 +545,7 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                                 )}
                                 <input 
                                     type="text" 
-                                    placeholder="kedi, çiçek, indirim..."
+                                    placeholder="cat, flower, discount..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full pl-8 pr-7 py-2 bg-zinc-50 dark:bg-slate-800 border border-zinc-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -567,7 +567,7 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                                         const stickers = getStickerSuggestions(searchQuery);
                                         return stickers.length > 0 ? (
                                             <div>
-                                                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Etiket Önerileri</p>
+                                                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Tag Suggestions</p>
                                                 <div className="grid grid-cols-2 gap-1.5">
                                                     {stickers.map((s, i) => (
                                                         <button
@@ -586,7 +586,7 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
 
                                     {/* Image results */}
                                     <div>
-                                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Fotoğraflar</p>
+                                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Photos</p>
                                         {isSearchingImage ? (
                                             <div className="grid grid-cols-2 gap-1.5">
                                                 {Array.from({ length: 6 }).map((_, i) => (
@@ -612,14 +612,14 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                                                             }}
                                                         />
                                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                            <span className="text-white text-[9px] font-bold bg-blue-500 px-2 py-0.5 rounded-full">+ Ekle</span>
+                                                            <span className="text-white text-[9px] font-bold bg-blue-500 px-2 py-0.5 rounded-full">+ Add</span>
                                                         </div>
                                                     </button>
                                                 ))}
                                             </div>
                                         ) : (
                                             <div className="text-center text-[10px] text-zinc-400 py-3 bg-zinc-50 dark:bg-slate-800/50 rounded-xl">
-                                                📷 Fotoğraf bulunamadı
+                                                📷 No photos found
                                             </div>
                                         )}
                                     </div>
@@ -633,25 +633,25 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                         
                         {/* Text Group */}
                         <div>
-                            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider hidden md:block mb-3">Metin Ekle</span>
+                            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider hidden md:block mb-3">Add Text</span>
                             <div className="flex flex-col gap-2 relative">
                                 <button onClick={() => addText("h1")} className="flex items-center gap-3 p-3 hover:bg-zinc-50 dark:hover:bg-slate-800 rounded-xl transition-colors border border-transparent hover:border-zinc-200 dark:hover:border-slate-700 text-left">
                                     <div className="w-8 h-8 rounded-lg bg-blue-100/50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                                         <Type size={16} />
                                     </div>
-                                    <span className="font-bold text-lg text-zinc-800 dark:text-zinc-100 hidden md:block">Büyük Başlık</span>
+                                    <span className="font-bold text-lg text-zinc-800 dark:text-zinc-100 hidden md:block">Big Heading</span>
                                 </button>
                                 <button onClick={() => addText("h2")} className="flex items-center gap-3 p-3 hover:bg-zinc-50 dark:hover:bg-slate-800 rounded-xl transition-colors border border-transparent hover:border-zinc-200 dark:hover:border-slate-700 text-left">
                                     <div className="w-8 h-8 rounded-lg bg-blue-100/50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                                         <Type size={14} />
                                     </div>
-                                    <span className="font-bold text-base text-zinc-700 dark:text-zinc-200 hidden md:block">Alt Başlık</span>
+                                    <span className="font-bold text-base text-zinc-700 dark:text-zinc-200 hidden md:block">Subheading</span>
                                 </button>
                                 <button onClick={() => addText("p")} className="flex items-center gap-3 p-3 hover:bg-zinc-50 dark:hover:bg-slate-800 rounded-xl transition-colors border border-transparent hover:border-zinc-200 dark:hover:border-slate-700 text-left">
                                     <div className="w-8 h-8 rounded-lg bg-blue-100/50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                                         <Type size={12} />
                                     </div>
-                                    <span className="font-medium text-sm text-zinc-600 dark:text-zinc-300 hidden md:block">Gövde Metni</span>
+                                    <span className="font-medium text-sm text-zinc-600 dark:text-zinc-300 hidden md:block">Body Text</span>
                                 </button>
                             </div>
                         </div>
@@ -660,19 +660,19 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                         
                         {/* Shape Group */}
                         <div>
-                            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider hidden md:block mb-3">Şekiller</span>
+                            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider hidden md:block mb-3">Shapes</span>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onClick={() => addShape("rectangle")} className="flex flex-col items-center justify-center gap-2 p-3 hover:bg-zinc-50 dark:hover:bg-slate-800 rounded-xl transition-colors border border-zinc-100 dark:border-slate-800">
                                     <Square size={24} className="text-zinc-600 dark:text-zinc-400" />
-                                    <span className="text-[10px] font-bold uppercase hidden md:block text-zinc-500">Kare</span>
+                                    <span className="text-[10px] font-bold uppercase hidden md:block text-zinc-500">Square</span>
                                 </button>
                                 <button onClick={() => addShape("circle")} className="flex flex-col items-center justify-center gap-2 p-3 hover:bg-zinc-50 dark:hover:bg-slate-800 rounded-xl transition-colors border border-zinc-100 dark:border-slate-800">
                                     <Circle size={24} className="text-zinc-600 dark:text-zinc-400" />
-                                    <span className="text-[10px] font-bold uppercase hidden md:block text-zinc-500">Daire</span>
+                                    <span className="text-[10px] font-bold uppercase hidden md:block text-zinc-500">Circle</span>
                                 </button>
                                 <button onClick={() => addShape("triangle")} className="flex flex-col items-center justify-center gap-2 p-3 hover:bg-zinc-50 dark:hover:bg-slate-800 rounded-xl transition-colors border border-zinc-100 dark:border-slate-800 md:col-span-2">
                                     <Triangle size={24} className="text-zinc-600 dark:text-zinc-400" />
-                                    <span className="text-[10px] font-bold uppercase hidden md:block text-zinc-500">Üçgen</span>
+                                    <span className="text-[10px] font-bold uppercase hidden md:block text-zinc-500">Triangle</span>
                                 </button>
                             </div>
                         </div>
@@ -681,10 +681,10 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
 
                         {/* Image Group */}
                         <div>
-                            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider hidden md:block mb-3">Manuel Yükle</span>
+                            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider hidden md:block mb-3">Upload Manually</span>
                             <label className="flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed border-blue-200/80 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-800/30 rounded-xl cursor-pointer transition-colors text-blue-600 dark:text-blue-400">
                                 <ImageIcon size={24} />
-                                <span className="text-sm font-bold hidden md:block text-center">Bilgisayardan<br/>Resim Yükle</span>
+                                <span className="text-sm font-bold hidden md:block text-center">Upload Image<br/>from Computer</span>
                                 <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                             </label>
                         </div>

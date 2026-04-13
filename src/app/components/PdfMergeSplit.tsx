@@ -31,8 +31,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
   };
 
   const handleMerge = async () => {
-    if (mergeFiles.length < 2) {
-      alert("Birleştirmek için en az 2 PDF dosyası seçmelisiniz.");
+      alert("You must select at least 2 PDF files to merge.");
       return;
     }
     setIsMerging(true);
@@ -45,10 +44,10 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
         copiedPages.forEach((page) => mergedPdf.addPage(page));
       }
       const pdfBytes = await mergedPdf.save();
-      downloadBlob(pdfBytes, "Birlestirilmis-Belgeler.pdf");
+      downloadBlob(pdfBytes, "Merged-Document.pdf");
     } catch (err) {
       console.error("Merge error:", err);
-      alert("Birleştirme sırasında hata oluştu.");
+      alert("An error occurred during merging.");
     } finally {
       setIsMerging(false);
     }
@@ -85,8 +84,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
 
   const handleSplit = async () => {
     if (!splitFile) return;
-    if (!splitPages.trim()) {
-      alert("Lütfen çıkarılacak sayfaları belirtin (Örn: 1, 3, 5-10)");
+      alert("Please specify the pages to be extracted (e.g.: 1, 3, 5-10)");
       return;
     }
     setIsSplitting(true);
@@ -95,8 +93,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
       const pdf = await PDFDocument.load(arrayBuffer);
       const indices = parseRange(splitPages, pdf.getPageCount());
 
-      if (indices.length === 0) {
-        alert("Geçerli sayfa numarası bulunamadı.");
+        alert("No valid page numbers found.");
         setIsSplitting(false);
         return;
       }
@@ -106,10 +103,10 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
       copiedPages.forEach((page) => newPdf.addPage(page));
 
       const pdfBytes = await newPdf.save();
-      downloadBlob(pdfBytes, "Ayrilmis-Belge.pdf");
+      downloadBlob(pdfBytes, "Split-Document.pdf");
     } catch (err) {
       console.error("Split error:", err);
-      alert("Ayırma işlemi sırasında hata oluştu.");
+      alert("An error occurred during the split process.");
     } finally {
       setIsSplitting(false);
     }
@@ -135,9 +132,9 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
         </button>
         <div>
           <h1 className="text-xl font-bold text-zinc-800 dark:text-zinc-100 flex items-center gap-2">
-            Gelişmiş PDF Araçları
+            Advanced PDF Tools
           </h1>
-          <span className="text-sm text-zinc-500">PDF Birleştir ve Ayır</span>
+          <span className="text-sm text-zinc-500">Merge and Split PDF</span>
         </div>
       </header>
 
@@ -153,7 +150,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
             }`}
           >
             <Combine size={20} />
-            PDF Birleştir
+            Merge PDF
           </button>
           <button
             onClick={() => setActiveTab("split")}
@@ -164,14 +161,14 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
             }`}
           >
             <SplitSquareHorizontal size={20} />
-            PDF Ayır (Sayfa Çıkar)
+            Split PDF (Extract Pages)
           </button>
         </div>
 
         {/* Tab Content */}
         {activeTab === "merge" && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-zinc-200 dark:border-slate-700 shadow-sm">
-            <h2 className="text-lg font-bold mb-4 text-zinc-800 dark:text-zinc-100">Birleştirilecek Dosyalar</h2>
+            <h2 className="text-lg font-bold mb-4 text-zinc-800 dark:text-zinc-100">Files to Merge</h2>
             <input 
               type="file" 
               accept=".pdf" 
@@ -204,7 +201,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
                 className="w-full p-4 border-2 border-dashed border-blue-300 dark:border-blue-900/50 rounded-xl text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-center gap-2 font-medium"
               >
                 <Plus size={20} />
-                PDF Dosyası Ekle
+                Add PDF File
               </button>
             </div>
 
@@ -214,14 +211,14 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
               className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isMerging ? <Loader2 size={20} className="animate-spin" /> : <Combine size={20} />}
-              {isMerging ? "Birleştiriliyor..." : "Tümünü Birleştir ve İndir"}
+              {isMerging ? "Merging..." : "Merge All and Download"}
             </button>
           </div>
         )}
 
         {activeTab === "split" && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-zinc-200 dark:border-slate-700 shadow-sm">
-            <h2 className="text-lg font-bold mb-4 text-zinc-800 dark:text-zinc-100">Sayfalarını Çıkar</h2>
+            <h2 className="text-lg font-bold mb-4 text-zinc-800 dark:text-zinc-100">Extract Pages</h2>
             <input 
               type="file" 
               accept=".pdf" 
@@ -236,7 +233,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
                 className="w-full p-8 border-2 border-dashed border-emerald-300 dark:border-emerald-900/50 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors flex flex-col items-center justify-center gap-2 font-medium mb-6"
               >
                 <FileText size={40} className="mb-2 opacity-50" />
-                Ana PDF Dosyasını Yükle
+                Upload Main PDF File
               </button>
             ) : (
               <div className="mb-6 flex items-center justify-between p-4 border border-zinc-200 dark:border-slate-700 rounded-xl bg-zinc-50 dark:bg-slate-900/50">
@@ -258,13 +255,13 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
 
             <div className={`transition-opacity ${!splitFile ? "opacity-50 pointer-events-none" : ""}`}>
               <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
-                Hangi sayfaları çıkarmak istiyorsunuz?
+                Which pages do you want to extract?
               </label>
               <input
                 type="text"
                 value={splitPages}
                 onChange={(e) => setSplitPages(e.target.value)}
-                placeholder="Örn: 1, 3, 5-10"
+                placeholder="e.g.: 1, 3, 5-10"
                 className="w-full px-4 py-3 bg-zinc-50 dark:bg-slate-900 border border-zinc-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-zinc-800 dark:text-zinc-100 font-mono mb-6"
               />
 
@@ -274,7 +271,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
                 className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSplitting ? <Loader2 size={20} className="animate-spin" /> : <SplitSquareHorizontal size={20} />}
-                {isSplitting ? "Ayırılıyor..." : "Sayfaları Çıkar ve İndir"}
+                {isSplitting ? "Splitting..." : "Extract Pages and Download"}
               </button>
             </div>
           </div>

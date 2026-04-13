@@ -72,7 +72,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
       setPdfImages(images);
     } catch (err) {
       console.error("PDF to Image conversion error:", err);
-      alert("PDF görsele dönüştürülürken bir hata oluştu.");
+      alert("An error occurred while converting the PDF to an image.");
     } finally {
       setIsProcessing(false);
     }
@@ -114,7 +114,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
         });
         
         const content = await zip.generateAsync({ type: "blob" });
-        saveAs(content, `${files[0].name.replace('.pdf', '')}_gorseller.zip`);
+        saveAs(content, `${files[0].name.replace('.pdf', '')}_images.zip`);
     } catch (err) {
         console.error("Zip error:", err);
     } finally {
@@ -146,8 +146,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
   };
 
   const handleMerge = async () => {
-    if (files.length < 2) {
-        alert("Birleştirmek için en az 2 PDF dosyası seçmelisiniz.");
+        alert("You must select at least 2 PDF files to merge.");
         return;
     }
     setIsProcessing(true);
@@ -160,18 +159,17 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
         copiedPages.forEach((page) => mergedPdf.addPage(page));
       }
       const pdfBytes = await mergedPdf.save();
-      downloadBlob(pdfBytes, "Birleştirilmiş-Belgeler.pdf");
+      downloadBlob(pdfBytes, "Merged-Documents.pdf");
     } catch (err) {
       console.error(err);
-      alert("Hata!");
+      alert("Error!");
     } finally {
       setIsProcessing(false);
     }
   };
 
   const handleSplit = async () => {
-      if (files.length === 0 || !splitRange) {
-          alert("Lütfen bir dosya seçin ve aralık belirtin.");
+          alert("Please select a file and specify a range.");
           return;
       }
       setIsProcessing(true);
@@ -181,8 +179,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
           const pdf = await PDFDocument.load(arrayBuffer);
           const indices = parseRange(splitRange, pdf.getPageCount());
           
-          if (indices.length === 0) {
-              alert("Geçersiz aralık!");
+              alert("Invalid range!");
               return;
           }
 
@@ -191,7 +188,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
           copiedPages.forEach(p => newPdf.addPage(p));
 
           const bytes = await newPdf.save();
-          downloadBlob(bytes, `Ayrılmış-${file.name}`);
+          downloadBlob(bytes, `Split-${file.name}`);
       } catch (err) {
           console.error(err);
       } finally {
@@ -200,10 +197,10 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
   };
 
   const TABS = [
-    { id: 'edit', label: 'Düzenleyici', icon: FileText, desc: 'Not Ekle & İmzala' },
-    { id: 'merge', label: 'Birleştir', icon: Combine, desc: 'Dosyaları Birleştir' },
-    { id: 'split', label: 'Ayır (Kırp)', icon: SplitSquareHorizontal, desc: 'Sayfa Çıkar' },
-    { id: 'to-image', label: 'Görsele Aktar', icon: ImageIcon, desc: 'PNG Olarak Kaydet' },
+    { id: 'edit', label: 'Editor', icon: FileText, desc: 'Add Note & Sign' },
+    { id: 'merge', label: 'Merge', icon: Combine, desc: 'Merge Files' },
+    { id: 'split', label: 'Split (Crop)', icon: SplitSquareHorizontal, desc: 'Extract Pages' },
+    { id: 'to-image', label: 'Export to Image', icon: ImageIcon, desc: 'Save as PNG' },
   ];
 
   return (
@@ -266,10 +263,10 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                 <div className="absolute top-0 right-0 w-16 h-16 bg-rose-500/5 blur-2xl rounded-full" />
                 <div className="flex items-center gap-3 text-rose-400">
                     <Shield size={16} className="animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Güvenlik</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Security</span>
                 </div>
                 <p className="text-[10px] text-slate-500 leading-relaxed font-bold italic">
-                    Tüm işlemler yerel cihazınızda gerçekleşir. Verileriniz %100 gizli kalır.
+                    All operations happen on your local device. Your data remains 100% private.
                 </p>
             </div>
         </div>
@@ -299,9 +296,9 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
               <div className="max-w-4xl mx-auto space-y-8">
                 <div className="space-y-2">
                     <h2 className="text-3xl font-black text-white tracking-tight">
-                        {activeTab === 'merge' ? 'PDF Dosyalarını Birleştir' : 
-                         activeTab === 'split' ? 'PDF Sayfalarını Ayır' :
-                         'PDF\'i Görsele Dönüştür'}
+                        {activeTab === 'merge' ? 'Merge PDF Files' : 
+                         activeTab === 'split' ? 'Split PDF Pages' :
+                         'Convert PDF to Image'}
                     </h2>
                     <p className="text-slate-400 font-medium">
                         {activeTab === 'to-image' ? 'Her sayfayı yüksek kaliteli PNG dosyasına dönüştürün.' : 'Professional grade PDF manipulation engine.'}
@@ -325,10 +322,10 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                         >
                           <UploadCloud size={48} />
                         </motion.div>
-                        <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Döküman Yükleyin</h3>
+                        <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Upload Document</h3>
                         <p className="text-slate-400 text-sm max-w-sm font-medium leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
-                            Dosyalarınızı sürükleyin veya göz atmak için tıklayın.<br/>
-                            <span className="text-rose-500/60 text-[11px] font-black uppercase mt-2 block tracking-widest">Maksimum Gizlilik • %100 Yerel</span>
+                            Drag your files or click to browse.<br/>
+                            <span className="text-rose-500/60 text-[11px] font-black uppercase mt-2 block tracking-widest">Maximum Privacy • 100% Local</span>
                         </p>
                         <input 
                           ref={fileInputRef} 
@@ -353,7 +350,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                                         </div>
                                         <div className="flex flex-col">
                                             <span className="text-lg font-black text-white">{files[0].name}</span>
-                                            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">{pdfImages.length} Sayfa Hazırlandı</span>
+                                            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">{pdfImages.length} Pages Prepared</span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3">
@@ -361,7 +358,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                                             onClick={() => setFiles([])}
                                             className="px-6 py-3 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold"
                                         >
-                                            Yeni Dosya
+                                            New File
                                         </button>
                                         <button 
                                             onClick={handleDownloadAllImages}
@@ -369,7 +366,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                                             className="px-6 py-3 rounded-xl bg-white text-[#0a0a1a] hover:bg-rose-500 hover:text-white transition-all text-sm font-black flex items-center gap-2 shadow-xl"
                                         >
                                             {isProcessing ? <RefreshCw className="animate-spin" size={18} /> : <DownloadCloud size={18} />}
-                                            TÜMÜNÜ İNDİR (ZIP)
+                                            DOWNLOAD ALL (ZIP)
                                         </button>
                                     </div>
                                 </div>
@@ -388,7 +385,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                                             </div>
                                             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a1a] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
                                                 <div className="flex items-center justify-between gap-4">
-                                                    <span className="text-xs font-black text-white tracking-widest uppercase">Sayfa {idx+1}</span>
+                                                    <span className="text-xs font-black text-white tracking-widest uppercase">Page {idx+1}</span>
                                                     <button 
                                                         onClick={() => {
                                                             const a = document.createElement("a");
@@ -412,8 +409,8 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                         ) : (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                    <h3 className="text-sm font-black text-white uppercase tracking-widest">Seçili Dosyalar ({files.length})</h3>
-                                    <button onClick={() => setFiles([])} className="text-[10px] font-bold text-rose-500 hover:text-rose-400 uppercase tracking-tight">Tümünü Temizle</button>
+                                    <h3 className="text-sm font-black text-white uppercase tracking-widest">Selected Files ({files.length})</h3>
+                                    <button onClick={() => setFiles([])} className="text-[10px] font-bold text-rose-500 hover:text-rose-400 uppercase tracking-tight">Clear All</button>
                                 </div>
                                 <div className="grid grid-cols-1 gap-2">
                                     {files.map((file, i) => (
@@ -429,7 +426,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-sm font-bold text-slate-200 truncate max-w-[300px]">{file.name}</span>
-                                                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{(file.size / (1024 * 1024)).toFixed(2)} MB • PDF BELGESİ</span>
+                                                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{(file.size / (1024 * 1024)).toFixed(2)} MB • PDF DOCUMENT</span>
                                                 </div>
                                             </div>
                                             <button onClick={() => removeFile(i)} className="p-2 hover:bg-rose-500/10 text-slate-500 hover:text-rose-400 rounded-lg transition-all">
@@ -441,17 +438,17 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
 
                                 {activeTab === 'split' && (
                                     <div className="bg-[#1e1e3a] p-6 rounded-2xl border border-white/5 space-y-4 shadow-xl">
-                                        <span className="block text-xs uppercase font-black text-slate-400 tracking-widest">Çıkarılacak Sayfalar</span>
+                                        <span className="block text-xs uppercase font-black text-slate-400 tracking-widest">Pages to Extract</span>
                                         <input 
                                             type="text"
                                             value={splitRange}
                                             onChange={(e) => setSplitRange(e.target.value)}
-                                            placeholder="Örn: 1-3, 5, 8-10"
+                                            placeholder="e.g.: 1-3, 5, 8-10"
                                             className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm focus:border-rose-500 outline-none text-white font-mono"
                                         />
                                         <div className="flex items-start gap-3 p-4 bg-rose-500/5 rounded-xl border border-rose-500/10">
                                             <Zap size={14} className="text-rose-500 shrink-0 mt-0.5" />
-                                            <p className="text-[10px] text-slate-400 leading-relaxed font-bold">Sayfaları virgülle ayırın veya bir aralık belirtin. Sistem seçilen sayfaları kapsayan yeni bir döküman oluşturur.</p>
+                                            <p className="text-[10px] text-slate-400 leading-relaxed font-bold">Separate pages with commas or specify a range. The system will create a new document covering the selected pages.</p>
                                         </div>
                                     </div>
                                 )}
@@ -463,7 +460,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                                         className="w-full py-5 bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 disabled:opacity-50 text-white font-black uppercase tracking-widest rounded-2xl shadow-2xl shadow-rose-900/40 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
                                     >
                                         {isProcessing ? <RefreshCw size={20} className="animate-spin" /> : (activeTab === 'merge' ? <Combine size={20} /> : <SplitSquareHorizontal size={20} />)}
-                                        {isProcessing ? 'İşleniyor...' : (activeTab === 'merge' ? 'PDF Dosyalarını Birleştir' : 'Seçili Sayfaları Ayır')}
+                                        {isProcessing ? 'Processing...' : (activeTab === 'merge' ? 'Merge PDF Files' : 'Split Selected Pages')}
                                     </button>
                                 </div>
                             </div>
