@@ -121,12 +121,17 @@ const FontSize = Extension.create({
     },
 });
 
-export default function Editor({ initialContent, onBack }: { initialContent?: string; onBack: (content?: string) => void }) {
+export default function Editor({ initialContent, onBack, pendingImage, onImageInserted }: { 
+    initialContent?: string; 
+    onBack: (content?: string) => void;
+    pendingImage?: string;
+    onImageInserted?: () => void;
+}) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const videoInputRef = useRef<HTMLInputElement>(null);
     const editorContainerRef = useRef<HTMLDivElement | null>(null);
-    const [activeTab, setActiveTab] = useState<'home' | 'insert' | 'design' | 'layout' | 'references' | 'review' | 'view' | 'help'>('home');
+    const [activeTab, setActiveTab] = useState<'home' | 'insert' | 'draw' | 'design' | 'layout' | 'references' | 'review' | 'view' | 'help' | 'convert' | 'charts'>('home');
     const [zoom, setZoom] = useState(100);
     const [pageColor, setPageColor] = useState("#ffffff");
     const [orientation, setOrientation] = useState<"portrait" | "landscape">("portrait");
@@ -294,6 +299,31 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
             }, 1500);
         }
     }, [initialContent, editor]);
+
+    // Handle incoming images from Studio with a slight delay to ensure editor is ready
+    useEffect(() => {
+        if (pendingImage && editor && onImageInserted) {
+            // Use a longer timeout or a more robust check for editor readiness
+            const timer = setTimeout(() => {
+                if (editor && !editor.isDestroyed) {
+                  try {
+                    editor.chain()
+                        .focus()
+                        .insertContent({
+                            type: 'image',
+                            attrs: { src: pendingImage }
+                        })
+                        .run();
+                    onImageInserted();
+                    setTimeout(checkHeight, 300);
+                  } catch (e) {
+                    console.error("Failed to insert chart image:", e);
+                  }
+                }
+            }, 800); // Increased wait for editor to stabilize completely
+            return () => clearTimeout(timer);
+        }
+    }, [pendingImage, editor, onImageInserted, checkHeight]);
 
     const setLink = useCallback(() => {
         if (!editor) return;
@@ -562,6 +592,7 @@ export default function Editor({ initialContent, onBack }: { initialContent?: st
                 zoom={zoom}
                 setZoom={setZoom}
                 onFileClick={() => setShowFileMenu(true)}
+                onOpenChartStudio={(type) => onBack("OPEN_CHART_STUDIO:" + type + ":" + editor?.getHTML())}
             />
 
             <div className="flex-1 flex overflow-hidden relative">

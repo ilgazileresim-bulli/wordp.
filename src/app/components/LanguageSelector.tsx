@@ -3,12 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Languages, ChevronDown, Check, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+import { cn } from "./editor/utils";
 
 // Common languages for quick access, the widget will support "all"
 const LANGUAGES = [

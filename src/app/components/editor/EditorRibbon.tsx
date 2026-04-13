@@ -14,9 +14,10 @@ const ViewTab = React.lazy(() => import("./ribbon/ViewTab"));
 const HelpTab = React.lazy(() => import("./ribbon/HelpTab"));
 const DrawTab = React.lazy(() => import("./ribbon/DrawTab"));
 const ConvertTab = React.lazy(() => import("./ribbon/ConvertTab"));
+const ChartsTab = React.lazy(() => import("./ribbon/ChartsTab"));
 
 interface EditorRibbonProps {
-    activeTab: 'home' | 'insert' | 'draw' | 'design' | 'layout' | 'references' | 'review' | 'view' | 'help' | 'convert';
+    activeTab: 'home' | 'insert' | 'draw' | 'design' | 'layout' | 'references' | 'review' | 'view' | 'help' | 'convert' | 'charts';
     setActiveTab: (tab: any) => void;
     editor: any;
     handleCopy: () => void;
@@ -51,10 +52,11 @@ interface EditorRibbonProps {
     zoom: number;
     setZoom: (zoom: number) => void;
     onFileClick: () => void;
+    onOpenChartStudio?: (type: string) => void;
 }
 
 const EditorRibbon = (props: EditorRibbonProps) => {
-    const { activeTab, setActiveTab, onFileClick } = props;
+    const { activeTab, setActiveTab, onFileClick, onOpenChartStudio } = props;
 
     // Prefetch tabs on hover could be added here for better UX
 
@@ -67,7 +69,7 @@ const EditorRibbon = (props: EditorRibbonProps) => {
                 >
                     File
                 </button>
-                {["home", "insert", "draw", "design", "layout", "references", "review", "view", "help", "convert"].map(tab => (
+                {["home", "insert", "draw", "design", "layout", "references", "review", "view", "help", "convert", "charts"].map(tab => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab as any)}
@@ -85,7 +87,8 @@ const EditorRibbon = (props: EditorRibbonProps) => {
                                                 tab === "review" ? "Review" :
                                                     tab === "view" ? "View" :
                                                         tab === "help" ? "Help" :
-                                                            tab === "convert" ? "Convert" : tab}
+                                                            tab === "convert" ? "Convert" : 
+                                                                tab === "charts" ? "Charts" : tab}
                     </button>
                 ))}
             </div>
@@ -102,9 +105,10 @@ const EditorRibbon = (props: EditorRibbonProps) => {
                     {activeTab === "help" && <HelpTab />}
                     {activeTab === "draw" && <DrawTab />}
                     {activeTab === "convert" && <ConvertTab editor={props.editor} />}
+                    {activeTab === "charts" && <ChartsTab onOpenStudio={onOpenChartStudio} />}
                 </Suspense>
 
-                {!["home", "insert", "draw", "design", "layout", "references", "review", "view", "help", "convert"].includes(activeTab) && (
+                {!["home", "insert", "draw", "design", "layout", "references", "review", "view", "help", "convert", "charts"].includes(activeTab) && (
                     <div className="flex-1 flex items-center justify-center text-zinc-400 font-black text-[11px] uppercase tracking-[0.2em] animate-pulse">
                         &lt; Preparing More Tab Tools... &gt;
                     </div>

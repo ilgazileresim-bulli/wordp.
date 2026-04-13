@@ -3,12 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Upload, Trash2, Download, Sparkles, Wand2, RefreshCw } from "lucide-react";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+import { cn } from "./editor/utils";
 
 interface ImageEnhancerProps {
     onBack: () => void;

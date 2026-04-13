@@ -4,12 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Upload, Trash2, Image as ImageIcon, Download, Settings, RefreshCw, Wand2, PaintBucket, Focus } from "lucide-react";
 import { removeBackground, Config } from "@imgly/background-removal";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+import { cn } from "./editor/utils";
 
 interface BackgroundRemoverProps {
     onBack: () => void;

@@ -27,6 +27,8 @@ const TextStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => 
 const ImageStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/ImageStudio"), { ssr: false });
 const DevStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/DevStudio"), { ssr: false });
 const BusinessStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/BusinessStudio"), { ssr: false });
+const ChartStudio = dynamic<{ onBack: () => void; initialType?: string }>(() => import("./components/ChartStudio"), { ssr: false });
+const PdfStudio = dynamic<{ onBack: () => void; initialTool?: string }>(() => import("./components/PdfStudio"), { ssr: false });
 
 // ─── Image helper utilities ───────────────────────────────────────────────────
 function loadImageDataUrl(file: File): Promise<{ dataUrl: string; width: number; height: number }> {
@@ -50,20 +52,45 @@ function loadImageDimensions(file: File): Promise<{ width: number; height: numbe
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard" | "canva-clone" | "code-editor" | "folder-code-editor" | "cps-test" | "media-studio" | "text-studio" | "image-studio" | "dev-studio" | "business-studio">("landing");
+  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard" | "canva-clone" | "code-editor" | "folder-code-editor" | "cps-test" | "media-studio" | "text-studio" | "image-studio" | "dev-studio" | "business-studio" | "chart-studio" | "pdf-studio">("landing");
   const [codeEditorLang, setCodeEditorLang] = useState<"html" | "css" | "js">("html");
   const [initialContent, setInitialContent] = useState<string>("");
   const [initialPdfFile, setInitialPdfFile] = useState<File | null>(null);
   const [initialPptxFile, setInitialPptxFile] = useState<File | null>(null);
   const [initialExcelFile, setInitialExcelFile] = useState<File | null>(null);
+  const [pendingChartImage, setPendingChartImage] = useState<string | undefined>(undefined);
   const [activeMediaTool, setActiveMediaTool] = useState<string>("video-converter");
   const [activeTextTool, setActiveTextTool] = useState<string>("word-counter");
   const [activeImageTool, setActiveImageTool] = useState<string>("brightness-contrast");
   const [activeDevTool, setActiveDevTool] = useState<string>("json-formatter");
   const [activeBusinessTool, setActiveBusinessTool] = useState<string>("biz-compound");
+  const [activePdfTool, setActivePdfTool] = useState<string>("pdf");
+  const [initialChartType, setInitialChartType] = useState<string>("bar");
   const currentDocIdRef = useRef<string | undefined>(undefined);
 
   const handleEditorBack = useCallback((content?: string) => {
+    if (content && content.startsWith("INSERT_CHART_IMAGE:")) {
+      const dataUrl = content.replace("INSERT_CHART_IMAGE:", "");
+      setPendingChartImage(dataUrl);
+      setView("editor");
+      return;
+    }
+    if (content && content.startsWith("OPEN_CHART_STUDIO:")) {
+      const parts = content.split(":");
+      // Format: OPEN_CHART_STUDIO:type:htmlContent
+      const chartType = parts[1];
+      const realContent = parts.slice(2).join(":");
+      
+      if (chartType) setInitialChartType(chartType);
+      
+      if (realContent) {
+        const id = saveRecentDocument(realContent, currentDocIdRef.current);
+        currentDocIdRef.current = id;
+        setInitialContent(realContent);
+      }
+      setView("chart-studio");
+      return;
+    }
     if (content) {
       const id = saveRecentDocument(content, currentDocIdRef.current);
       currentDocIdRef.current = id;
@@ -185,9 +212,6 @@ export default function Home() {
       input.onchange = async (e) => {
         const file = (e.target as HTMLInputElement).files?.[0];
         if (file) {
-          // Trigger the conversion logic (best to handle this in a dedicated way or just tell them to use the editor)
-          // For UX, let's open the PDF editor with this file if it's PDF -> PPTX or just handle it here.
-          // Since we want it to be a "tool", let's implement the conversion here too.
           try {
             const pdfjsLib = await import("pdfjs-dist");
             pdfjsLib.GlobalWorkerOptions.workerSrc = window.location.origin + "/pdf.worker.min.mjs";
@@ -603,6 +627,9 @@ export default function Home() {
       input.click();
     } else if (id === "pdf-merge-split") {
       setView("pdf-merge-split");
+    } else if (id === "pdf-merge" || id === "pdf-split") {
+      setActivePdfTool(id);
+      setView("pdf-studio");
     } else if (id === "cv-wizard") {
       setView("cv-wizard");
     } else if (id === "invoice-wizard") {
@@ -638,10 +665,13 @@ export default function Home() {
       setActiveDevTool(id);
       setView("dev-studio");
     } else if (["pdf", "pdf-compress", "pdf-merge", "pdf-split", "pdf-to-word", "pdf-to-image", "image-to-pdf", "pdf-rotate", "pdf-flatten", "pdf-unlock", "pdf-to-text", "pdf-add-page-numbers", "html-to-pdf", "excel-to-pdf", "pdf-to-excel", "pdf-watermark", "pdf-redact", "pdf-resize", "pdf-sign", "pdf-ocr", "pdf-crop", "pdf-extract-pages", "pdf-delete-pages", "pdf-to-pdf-a", "pdf-repair", "pdf-compare", "word-to-pdf", "ppt-to-pdf", "pdf-edit-metadata", "pdf-to-html", "pdf-to-ppt", "pdf-fill-form", "pdf-grayscale", "pdf-extract-images", "pdf-header-footer", "pdf-bates", "pdf-layout", "pdf-to-markdown", "pdf-to-csv", "pdf-stamp"].includes(id)) {
-      setView("pdf");
+      setActivePdfTool(id);
+      setView("pdf-studio");
     } else if (["biz-compound", "biz-loan", "biz-tip", "biz-percentage", "biz-discount", "biz-margin", "biz-roi", "biz-salary", "biz-savings", "biz-inflation", "biz-mortgage", "biz-currency", "biz-paycheck", "biz-emi", "biz-sip", "biz-debt", "biz-budget", "biz-networth", "biz-retirement", "biz-investment", "biz-vat", "biz-creditcard", "biz-auto", "biz-crypto", "biz-breakeven", "biz-cpm", "biz-cagr", "biz-tvm", "biz-rentvsbuy"].includes(id)) {
       setActiveBusinessTool(id);
       setView("business-studio");
+    } else if (id.startsWith("chart-")) {
+      setView("chart-studio");
     } else {
 
       setInitialContent(content);
@@ -650,11 +680,16 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <main className="h-full overflow-hidden flex flex-col relative text-zinc-900 dark:text-zinc-100">
       {view === "landing" ? (
         <LandingPage onSelectTemplate={handleSelectTemplate} onOpenRecentDocument={handleOpenRecentDocument} />
       ) : view === "editor" ? (
-        <Editor initialContent={initialContent} onBack={handleEditorBack} />
+        <Editor 
+          initialContent={initialContent} 
+          onBack={handleEditorBack} 
+          pendingImage={pendingChartImage}
+          onImageInserted={() => setPendingChartImage(undefined)}
+        />
       ) : view === "pptx" ? (
         <PptxEditor onBack={() => setView("landing")} initialFile={initialPptxFile || undefined} />
       ) : view === "bg-remover" ? (
@@ -702,6 +737,10 @@ export default function Home() {
         <DevStudio onBack={() => setView("landing")} initialToolId={activeDevTool} />
       ) : view === "business-studio" ? (
         <BusinessStudio onBack={() => setView("landing")} initialToolId={activeBusinessTool} />
+      ) : view === "chart-studio" ? (
+        <ChartStudio onBack={handleEditorBack} initialType={initialChartType} />
+      ) : view === "pdf-studio" ? (
+        <PdfStudio onBack={() => setView("landing")} initialTool={activePdfTool} />
       ) : (
         <PdfEditor onBack={() => setView("landing")} initialFile={initialPdfFile || undefined} />
       )}

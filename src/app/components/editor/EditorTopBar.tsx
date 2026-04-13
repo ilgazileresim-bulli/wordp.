@@ -2,12 +2,7 @@
 
 import React, { memo } from "react";
 import { Save, Undo, Redo, Search, ChevronDown, Printer, X, RefreshCw, FileText, Download, Mic } from "lucide-react";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+import { cn } from "./utils";
 
 interface EditorTopBarProps {
     isSaving: boolean;

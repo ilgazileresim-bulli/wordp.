@@ -5,12 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Upload, Trash2, Download, Crop, Scissors, RefreshCw } from "lucide-react";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+import { cn } from "./editor/utils";
 
 interface ImageCropperProps {
     onBack: () => void;

@@ -3,12 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Calculator as CalculatorIcon, Delete, Equal, Minus, Plus, X, Divide, Percent, RotateCcw } from "lucide-react";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+import { cn } from "./editor/utils";
 
 export default function Calculator() {
     const [display, setDisplay] = useState("0");

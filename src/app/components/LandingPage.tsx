@@ -1,10 +1,10 @@
 "use client";
+// Cache bust: 2026-04-12T19:25:00
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart, LayoutTemplate, ArrowLeft, Code, FileCode, Braces, FileCode2, Zap, Video, Music, MonitorPlay, Mic, Headphones, Film, TerminalSquare, SearchCode, Network, KeyRound, Fingerprint, TextCursorInput, FileDigit, AlignLeft, Table, TableProperties, Tags, MonitorSmartphone, Clock4, Contrast, Unlock, Link, Code2, Archive, Hash, Calculator as CalculatorIcon, Briefcase, Coffee, TrendingUp, LineChart, Wallet, PiggyBank, TrendingDown, Home, Coins, Receipt, CreditCard, BarChart3, Landmark, Scale, Compass, Target, Percent, Car, Bitcoin, Megaphone, Shield, Eye, PenTool, Monitor, Keyboard, LayoutGrid } from "lucide-react";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart, LayoutTemplate, ArrowLeft, Code, FileCode, Braces, FileCode2, Zap, Video, Music, MonitorPlay, Mic, Headphones, Film, TerminalSquare, SearchCode, Network, KeyRound, Fingerprint, TextCursorInput, FileDigit, AlignLeft, Table, TableProperties, Tags, MonitorSmartphone, Clock4, Contrast, Unlock, Link, Code2, Archive, Hash, Calculator as CalculatorIcon, Briefcase, Coffee, TrendingUp, LineChart, Wallet, PiggyBank, TrendingDown, Home, Coins, Receipt, CreditCard, BarChart3, Landmark, Scale, Compass, Target, Percent, Car, Bitcoin, Megaphone, Shield, Eye, PenTool, Monitor, Keyboard, LayoutGrid, Activity } from "lucide-react";
+import { cn } from "./editor/utils";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSelector from "./LanguageSelector";
 import { TEMPLATES, TEMPLATE_CATEGORIES } from "../data/templates";
@@ -64,7 +64,7 @@ const ALL_TOOLS = [
     { id: "avi-to-mp4", title: "AVI'den MP4'e", icon: Film, color: "from-violet-500 to-indigo-500", desc: "AVI videoyu MP4'e çevir", badge: "POPÜLER", group: "video-audio" },
     { id: "webm-to-mp4", title: "WebM'den MP4'e", icon: Film, color: "from-purple-500 to-pink-500", desc: "WebM videoyu MP4'e çevir", badge: "POPÜLER", group: "video-audio" },
     { id: "mkv-to-mp4", title: "MKV'dan MP4'e", icon: Film, color: "from-indigo-500 to-blue-500", desc: "MKV videoyu MP4'e çevir", badge: "POPÜLER", group: "video-audio" },
-
+    
     // PDF STUDIO (PDF Araçları)
     { id: "pdf-compress", title: "PDF Sıkıştır", icon: FileSearch, color: "from-blue-500 to-cyan-500", desc: "Kaliteyi korurken PDF dosya boyutunu azaltın.", badge: "POPÜLER", group: "pdf" },
     { id: "pdf-merge", title: "PDF Birleştir", icon: Combine, color: "from-cyan-500 to-teal-500", desc: "Birden fazla PDF dosyasını tek bir belgede birleştirin.", badge: "POPÜLER", group: "pdf" },
@@ -261,9 +261,6 @@ const ALL_TOOLS = [
     { id: "url-encoder", title: "URL Kodlayıcı", icon: Link, color: "from-emerald-600 to-teal-600", desc: "Bağlantıları kodlayın (URI encoding)", badge: "POPÜLER", group: "dev-tools" }
 ];
 
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
 
 function formatDate(timestamp: number): string {
     const now = Date.now();
