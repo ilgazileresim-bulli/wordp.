@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, FileText, Combine, SplitSquareHorizontal, 
   Settings, Download, UploadCloud, RefreshCw, Layers, 
-  Trash2, Plus, ArrowRight, Shield, Zap, Search, Eye
+  Trash2, Plus, ArrowRight, Shield, Zap, Search, Eye,
+  Image as ImageIcon, DownloadCloud
 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import { cn } from './editor/utils';
@@ -202,6 +203,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
     { id: 'edit', label: 'Düzenleyici', icon: FileText, desc: 'Not Ekle & İmzala' },
     { id: 'merge', label: 'Birleştir', icon: Combine, desc: 'Dosyaları Birleştir' },
     { id: 'split', label: 'Ayır (Kırp)', icon: SplitSquareHorizontal, desc: 'Sayfa Çıkar' },
+    { id: 'to-image', label: 'Görsele Aktar', icon: ImageIcon, desc: 'PNG Olarak Kaydet' },
   ];
 
   return (
@@ -297,100 +299,175 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
               <div className="max-w-4xl mx-auto space-y-8">
                 <div className="space-y-2">
                     <h2 className="text-3xl font-black text-white tracking-tight">
-                        {activeTab === 'merge' ? 'PDF Dosyalarını Birleştir' : 'PDF Sayfalarını Ayır'}
+                        {activeTab === 'merge' ? 'PDF Dosyalarını Birleştir' : 
+                         activeTab === 'split' ? 'PDF Sayfalarını Ayır' :
+                         'PDF\'i Görsele Dönüştür'}
                     </h2>
-                    <p className="text-slate-400 font-medium">Professional grade PDF manipulation engine.</p>
+                    <p className="text-slate-400 font-medium">
+                        {activeTab === 'to-image' ? 'Her sayfayı yüksek kaliteli PNG dosyasına dönüştürün.' : 'Professional grade PDF manipulation engine.'}
+                    </p>
                 </div>
 
                 {/* Unified Upload Area */}
-                <div 
-                    onClick={() => fileInputRef.current?.click()}
-                    className="group border-2 border-dashed border-rose-500/20 hover:border-rose-500/40 bg-[#0a0a1a]/40 backdrop-blur-xl hover:bg-rose-500/5 transition-all duration-700 rounded-[3rem] p-24 flex flex-col items-center justify-center cursor-pointer text-center relative overflow-hidden shadow-2xl"
-                >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.08)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    <motion.div 
-                        animate={{ 
-                            y: [0, -10, 0],
-                            rotate: [0, 5, 0]
-                        }}
-                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        className="w-24 h-24 bg-gradient-to-br from-rose-500/20 to-rose-600/10 text-rose-400 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-all duration-700 shadow-[0_0_50px_rgba(244,63,94,0.2)] border border-rose-500/20"
+                {(files.length === 0 || (activeTab === 'merge' && files.length < 1)) && (
+                    <div 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="group border-2 border-dashed border-rose-500/20 hover:border-rose-500/40 bg-[#0a0a1a]/40 backdrop-blur-xl hover:bg-rose-500/5 transition-all duration-700 rounded-[3rem] p-24 flex flex-col items-center justify-center cursor-pointer text-center relative overflow-hidden shadow-2xl"
                     >
-                      <UploadCloud size={48} />
-                    </motion.div>
-                    <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Döküman Yükleyin</h3>
-                    <p className="text-slate-400 text-sm max-w-sm font-medium leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
-                        Dosyalarınızı sürükleyin veya göz atmak için tıklayın.<br/>
-                        <span className="text-rose-500/60 text-[11px] font-black uppercase mt-2 block tracking-widest">Maksimum Gizlilik • %100 Yerel</span>
-                    </p>
-                    <input 
-                      ref={fileInputRef} 
-                      type="file" 
-                      className="hidden" 
-                      accept=".pdf"
-                      multiple={activeTab === 'merge'} 
-                      onChange={handleFileChange} 
-                    />
-                </div>
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.08)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                        <motion.div 
+                            animate={{ 
+                                y: [0, -10, 0],
+                                rotate: [0, 5, 0]
+                            }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                            className="w-24 h-24 bg-gradient-to-br from-rose-500/20 to-rose-600/10 text-rose-400 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-all duration-700 shadow-[0_0_50px_rgba(244,63,94,0.2)] border border-rose-500/20"
+                        >
+                          <UploadCloud size={48} />
+                        </motion.div>
+                        <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Döküman Yükleyin</h3>
+                        <p className="text-slate-400 text-sm max-w-sm font-medium leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
+                            Dosyalarınızı sürükleyin veya göz atmak için tıklayın.<br/>
+                            <span className="text-rose-500/60 text-[11px] font-black uppercase mt-2 block tracking-widest">Maksimum Gizlilik • %100 Yerel</span>
+                        </p>
+                        <input 
+                          ref={fileInputRef} 
+                          type="file" 
+                          className="hidden" 
+                          accept=".pdf"
+                          multiple={activeTab === 'merge'} 
+                          onChange={handleFileChange} 
+                        />
+                    </div>
+                )}
 
-                {/* File List */}
+                {/* File List & To-Image Grid */}
                 {files.length > 0 && (
-                   <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-sm font-black text-white uppercase tracking-widest">Seçili Dosyalar ({files.length})</h3>
-                            <button onClick={() => setFiles([])} className="text-[10px] font-bold text-rose-500 hover:text-rose-400 uppercase tracking-tight">Tümünü Temizle</button>
-                        </div>
-                        <div className="grid grid-cols-1 gap-2">
-                            {files.map((file, i) => (
-                                <motion.div 
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    key={i} 
-                                    className="flex items-center justify-between bg-[#1e1e3a] p-4 rounded-2xl border border-white/5 hover:border-rose-500/20 transition-all group shadow-sm"
-                                >
+                   <div className="space-y-6">
+                        {activeTab === 'to-image' && pdfImages.length > 0 ? (
+                            <div className="space-y-8">
+                                <div className="flex items-center justify-between bg-white/5 p-6 rounded-3xl border border-white/5 backdrop-blur-xl">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-all duration-500">
-                                            <FileText size={20} />
+                                        <div className="w-12 h-12 rounded-2xl bg-rose-500 flex items-center justify-center text-white shadow-lg shadow-rose-500/20">
+                                            <ImageIcon size={24} />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-bold text-slate-200 truncate max-w-[300px]">{file.name}</span>
-                                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{(file.size / (1024 * 1024)).toFixed(2)} MB • PDF BELGESİ</span>
+                                            <span className="text-lg font-black text-white">{files[0].name}</span>
+                                            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">{pdfImages.length} Sayfa Hazırlandı</span>
                                         </div>
                                     </div>
-                                    <button onClick={() => removeFile(i)} className="p-2 hover:bg-rose-500/10 text-slate-500 hover:text-rose-400 rounded-lg transition-all">
-                                        <Trash2 size={16} />
-                                    </button>
-                                </motion.div>
-                            ))}
-                        </div>
+                                    <div className="flex items-center gap-3">
+                                        <button 
+                                            onClick={() => setFiles([])}
+                                            className="px-6 py-3 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold"
+                                        >
+                                            Yeni Dosya
+                                        </button>
+                                        <button 
+                                            onClick={handleDownloadAllImages}
+                                            disabled={isProcessing}
+                                            className="px-6 py-3 rounded-xl bg-white text-[#0a0a1a] hover:bg-rose-500 hover:text-white transition-all text-sm font-black flex items-center gap-2 shadow-xl"
+                                        >
+                                            {isProcessing ? <RefreshCw className="animate-spin" size={18} /> : <DownloadCloud size={18} />}
+                                            TÜMÜNÜ İNDİR (ZIP)
+                                        </button>
+                                    </div>
+                                </div>
 
-                        {activeTab === 'split' && (
-                            <div className="bg-[#1e1e3a] p-6 rounded-2xl border border-white/5 space-y-4 shadow-xl">
-                                <span className="block text-xs uppercase font-black text-slate-400 tracking-widest">Çıkarılacak Sayfalar</span>
-                                <input 
-                                    type="text"
-                                    value={splitRange}
-                                    onChange={(e) => setSplitRange(e.target.value)}
-                                    placeholder="Örn: 1-3, 5, 8-10"
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm focus:border-rose-500 outline-none text-white font-mono"
-                                />
-                                <div className="flex items-start gap-3 p-4 bg-rose-500/5 rounded-xl border border-rose-500/10">
-                                    <Zap size={14} className="text-rose-500 shrink-0 mt-0.5" />
-                                    <p className="text-[10px] text-slate-400 leading-relaxed font-bold">Sayfaları virgülle ayırın veya bir aralık belirtin. Sistem seçilen sayfaları kapsayan yeni bir döküman oluşturur.</p>
+                                <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {pdfImages.map((img, idx) => (
+                                        <motion.div 
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: idx * 0.05 }}
+                                            key={idx}
+                                            className="group relative bg-[#1e1e3a] rounded-[2rem] overflow-hidden border border-white/5 hover:border-rose-500/40 transition-all duration-500"
+                                        >
+                                            <div className="aspect-[3/4] overflow-hidden bg-black/20">
+                                                <img src={img} alt={`Page ${idx+1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                            </div>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a1a] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <span className="text-xs font-black text-white tracking-widest uppercase">Sayfa {idx+1}</span>
+                                                    <button 
+                                                        onClick={() => {
+                                                            const a = document.createElement("a");
+                                                            a.href = img;
+                                                            a.download = `sayfa_${idx+1}.png`;
+                                                            a.click();
+                                                        }}
+                                                        className="p-3 bg-rose-500 text-white rounded-xl shadow-lg hover:scale-110 active:scale-95 transition-all"
+                                                    >
+                                                        <Download size={18} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="absolute top-4 left-4 bg-[#0a0a1a]/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/5 text-[10px] font-black text-white/80 group-hover:opacity-0 transition-opacity">
+                                                PAGE {idx+1}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-sm font-black text-white uppercase tracking-widest">Seçili Dosyalar ({files.length})</h3>
+                                    <button onClick={() => setFiles([])} className="text-[10px] font-bold text-rose-500 hover:text-rose-400 uppercase tracking-tight">Tümünü Temizle</button>
+                                </div>
+                                <div className="grid grid-cols-1 gap-2">
+                                    {files.map((file, i) => (
+                                        <motion.div 
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            key={i} 
+                                            className="flex items-center justify-between bg-[#1e1e3a] p-4 rounded-2xl border border-white/5 hover:border-rose-500/20 transition-all group shadow-sm"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-all duration-500">
+                                                    <FileText size={20} />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-sm font-bold text-slate-200 truncate max-w-[300px]">{file.name}</span>
+                                                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{(file.size / (1024 * 1024)).toFixed(2)} MB • PDF BELGESİ</span>
+                                                </div>
+                                            </div>
+                                            <button onClick={() => removeFile(i)} className="p-2 hover:bg-rose-500/10 text-slate-500 hover:text-rose-400 rounded-lg transition-all">
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </motion.div>
+                                    ))}
+                                </div>
+
+                                {activeTab === 'split' && (
+                                    <div className="bg-[#1e1e3a] p-6 rounded-2xl border border-white/5 space-y-4 shadow-xl">
+                                        <span className="block text-xs uppercase font-black text-slate-400 tracking-widest">Çıkarılacak Sayfalar</span>
+                                        <input 
+                                            type="text"
+                                            value={splitRange}
+                                            onChange={(e) => setSplitRange(e.target.value)}
+                                            placeholder="Örn: 1-3, 5, 8-10"
+                                            className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm focus:border-rose-500 outline-none text-white font-mono"
+                                        />
+                                        <div className="flex items-start gap-3 p-4 bg-rose-500/5 rounded-xl border border-rose-500/10">
+                                            <Zap size={14} className="text-rose-500 shrink-0 mt-0.5" />
+                                            <p className="text-[10px] text-slate-400 leading-relaxed font-bold">Sayfaları virgülle ayırın veya bir aralık belirtin. Sistem seçilen sayfaları kapsayan yeni bir döküman oluşturur.</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="pt-8 w-full">
+                                    <button 
+                                        onClick={activeTab === 'merge' ? handleMerge : handleSplit}
+                                        disabled={isProcessing || (activeTab === 'merge' && files.length < 2) || (activeTab === 'split' && (files.length === 0 || !splitRange))}
+                                        className="w-full py-5 bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 disabled:opacity-50 text-white font-black uppercase tracking-widest rounded-2xl shadow-2xl shadow-rose-900/40 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
+                                    >
+                                        {isProcessing ? <RefreshCw size={20} className="animate-spin" /> : (activeTab === 'merge' ? <Combine size={20} /> : <SplitSquareHorizontal size={20} />)}
+                                        {isProcessing ? 'İşleniyor...' : (activeTab === 'merge' ? 'PDF Dosyalarını Birleştir' : 'Seçili Sayfaları Ayır')}
+                                    </button>
                                 </div>
                             </div>
                         )}
-
-                        <div className="pt-8 w-full">
-                            <button 
-                                onClick={activeTab === 'merge' ? handleMerge : handleSplit}
-                                disabled={isProcessing || (activeTab === 'merge' && files.length < 2) || (activeTab === 'split' && (files.length === 0 || !splitRange))}
-                                className="w-full py-5 bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 disabled:opacity-50 text-white font-black uppercase tracking-widest rounded-2xl shadow-2xl shadow-rose-900/40 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
-                            >
-                                {isProcessing ? <RefreshCw size={20} className="animate-spin" /> : (activeTab === 'merge' ? <Combine size={20} /> : <SplitSquareHorizontal size={20} />)}
-                                {isProcessing ? 'İşleniyor...' : (activeTab === 'merge' ? 'PDF Dosyalarını Birleştir' : 'Seçili Sayfaları Ayır')}
-                            </button>
-                        </div>
                    </div>
                 )}
               </div>
