@@ -146,6 +146,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
   };
 
   const handleMerge = async () => {
+    if (files.length < 2) {
         alert("You must select at least 2 PDF files to merge.");
         return;
     }
@@ -169,6 +170,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
   };
 
   const handleSplit = async () => {
+    if (!files[0] || !splitRange.trim()) {
           alert("Please select a file and specify a range.");
           return;
       }
@@ -178,7 +180,8 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
           const arrayBuffer = await file.arrayBuffer();
           const pdf = await PDFDocument.load(arrayBuffer);
           const indices = parseRange(splitRange, pdf.getPageCount());
-          
+
+      if (indices.length === 0) {
               alert("Invalid range!");
               return;
           }
@@ -301,7 +304,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                          'Convert PDF to Image'}
                     </h2>
                     <p className="text-slate-400 font-medium">
-                        {activeTab === 'to-image' ? 'Her sayfayı yüksek kaliteli PNG dosyasına dönüştürün.' : 'Professional grade PDF manipulation engine.'}
+                        {activeTab === 'to-image' ? 'Convert each page to a high-quality PNG file.' : 'Professional grade PDF manipulation engine.'}
                     </p>
                 </div>
 
@@ -390,7 +393,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
                                                         onClick={() => {
                                                             const a = document.createElement("a");
                                                             a.href = img;
-                                                            a.download = `sayfa_${idx+1}.png`;
+                                                            a.download = `page_${idx+1}.png`;
                                                             a.click();
                                                         }}
                                                         className="p-3 bg-rose-500 text-white rounded-xl shadow-lg hover:scale-110 active:scale-95 transition-all"

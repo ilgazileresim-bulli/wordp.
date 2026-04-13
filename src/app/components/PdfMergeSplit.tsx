@@ -31,6 +31,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
   };
 
   const handleMerge = async () => {
+    if (mergeFiles.length < 2) {
       alert("You must select at least 2 PDF files to merge.");
       return;
     }
@@ -84,6 +85,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
 
   const handleSplit = async () => {
     if (!splitFile) return;
+    if (!splitPages.trim()) {
       alert("Please specify the pages to be extracted (e.g.: 1, 3, 5-10)");
       return;
     }
@@ -93,6 +95,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
       const pdf = await PDFDocument.load(arrayBuffer);
       const indices = parseRange(splitPages, pdf.getPageCount());
 
+      if (indices.length === 0) {
         alert("No valid page numbers found.");
         setIsSplitting(false);
         return;
@@ -248,7 +251,7 @@ export default function PdfMergeSplit({ onBack }: PdfMergeSplitProps) {
                   onClick={() => setSplitFile(null)}
                   className="text-sm font-medium text-zinc-400 hover:text-red-500 px-3 py-1 bg-zinc-200 dark:bg-slate-800 rounded-lg"
                 >
-                  Değiştir
+                  Change
                 </button>
               </div>
             )}
