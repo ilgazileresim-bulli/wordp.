@@ -420,7 +420,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                         { id: "business", title: "Business Tools", subtitle: "Financial calculators, interest, ROI and company insights.", icon: LineChart, bg: "from-blue-400 to-cyan-600", borderHover: "hover:border-blue-500/50", glow: "group-hover:shadow-blue-500/20" },
                                         { id: "photo", title: "Photo Studio", subtitle: "Canva-style design tools and background removal utilities.", icon: Image, bg: "from-fuchsia-400 to-purple-600", borderHover: "hover:border-fuchsia-500/50", glow: "group-hover:shadow-fuchsia-500/20" },
                                         { id: "text-tools", title: "Text Studio", subtitle: "String manipulation, formatting and robust text generation.", icon: Type, bg: "from-sky-400 to-blue-600", borderHover: "hover:border-sky-500/50", glow: "group-hover:shadow-sky-500/20" },
-                                        { id: "word", title: "Templates & Scenes", subtitle: "Start instantly with over 50 ready-made professional templates.", icon: LayoutTemplate, bg: "from-blue-400 to-indigo-600", borderHover: "hover:border-blue-500/50", glow: "group-hover:shadow-blue-500/20" },
+                                        { id: "word", title: "Word", subtitle: "Open Word files and start with 50+ ready-made professional templates.", icon: FileText, bg: "from-blue-400 to-indigo-600", borderHover: "hover:border-blue-500/50", glow: "group-hover:shadow-blue-500/20" },
                                         { id: "office", title: "Office Tools", subtitle: "Advanced Excel sheet editor and intelligent assistants.", icon: Type, bg: "from-indigo-400 to-violet-600", borderHover: "hover:border-indigo-500/50", glow: "group-hover:shadow-indigo-500/20" },
                                         { id: "performance", title: "Speed & Performance", subtitle: "CPS test and click speed measurement tools.", icon: Zap, bg: "from-yellow-400 to-orange-600", borderHover: "hover:border-yellow-500/50", glow: "group-hover:shadow-yellow-500/20" },
                                         { id: "powerpoint", title: "Presentation (PPTX)", subtitle: "Create professional slide presentations and scene designs.", icon: PieChart, bg: "from-amber-400 to-orange-600", borderHover: "hover:border-amber-500/50", glow: "group-hover:shadow-amber-500/20" },
@@ -467,7 +467,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                             <ArrowLeft size={16} /> Back
                                         </button>
                                         <h3 className="text-lg font-black text-zinc-800 dark:text-zinc-200">
-                                            Start with Templates
+                                            Word
                                         </h3>
                                     </div>
                                     <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1 sm:pb-0">
@@ -498,6 +498,55 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                                         ))}
                                     </div>
                                 </div>
+
+                                {/* Word Tools (Open File + New) */}
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+                                    {/* Open Word File */}
+                                    <motion.button
+                                        whileHover={{ scale: 1.02, translateY: -4 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        initial={{ opacity: 0, y: 15 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0 }}
+                                        onClick={() => onSelectTemplate("word-open", "")}
+                                        className="group relative overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 p-5 rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-blue-500/30 transition-all text-left border-2 border-white/20"
+                                    >
+                                        <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors rounded-2xl" />
+                                        <div className="w-12 h-12 rounded-xl mb-4 flex items-center justify-center bg-white/20 backdrop-blur-sm shadow-inner">
+                                            <FolderOpen size={24} className="text-white" />
+                                        </div>
+                                        <h3 className="font-bold text-sm text-white mb-1">Open Word File</h3>
+                                        <p className="text-[10px] text-blue-100 font-medium line-clamp-2">Open .docx or .doc files in the editor</p>
+                                        <div className="absolute top-3 right-3">
+                                            <span className="bg-white/25 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">NEW</span>
+                                        </div>
+                                    </motion.button>
+
+                                    {/* New Blank Document */}
+                                    <motion.button
+                                        whileHover={{ scale: 1.02, translateY: -4 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        initial={{ opacity: 0, y: 15 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.05 }}
+                                        onClick={() => onSelectTemplate("blank", "<h1>Untitled Document</h1><p>Start typing...</p>")}
+                                        className="group relative overflow-hidden bg-white/80 backdrop-blur-md dark:bg-slate-800/80 p-5 rounded-2xl border-2 border-dashed border-zinc-300 dark:border-slate-600 hover:border-blue-400 hover:shadow-xl transition-all text-left"
+                                    >
+                                        <div className="w-12 h-12 rounded-xl mb-4 flex items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-slate-700 dark:to-slate-600">
+                                            <Plus size={24} className="text-zinc-500 dark:text-zinc-300" />
+                                        </div>
+                                        <h3 className="font-bold text-sm text-zinc-800 dark:text-zinc-100 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400">New Document</h3>
+                                        <p className="text-[10px] text-zinc-400 font-medium line-clamp-2">Start from scratch with a blank document</p>
+                                    </motion.button>
+                                </div>
+
+                                {/* Divider */}
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="flex-1 h-px bg-zinc-200 dark:bg-slate-700" />
+                                    <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Templates & Scenes</span>
+                                    <div className="flex-1 h-px bg-zinc-200 dark:bg-slate-700" />
+                                </div>
+
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                                     {filteredTemplates.map((template, index) => (
                                         <motion.button

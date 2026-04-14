@@ -604,6 +604,30 @@ export default function Home() {
       setView("image-cropper");
     } else if (id === "image-enhancer") {
       setView("image-enhancer");
+    } else if (id === "word-open") {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".docx,.doc";
+      input.onchange = async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        try {
+          const mammoth = await import("mammoth");
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.convertToHtml({ arrayBuffer });
+          const html = result.value;
+          if (!html || html.trim() === "") {
+            setInitialContent(`<h1>${file.name.replace(/\.[^/.]+$/, "")}</h1><p>Word dosyası içeriği okunamadı.</p>`);
+          } else {
+            setInitialContent(html);
+          }
+          setView("editor");
+        } catch (err) {
+          console.error("Word open error:", err);
+          alert("Word dosyası açılırken hata oluştu.");
+        }
+      };
+      input.click();
     } else if (id === "universal-converter") {
       setView("universal-converter");
     } else if (id === "word-modifier") {
