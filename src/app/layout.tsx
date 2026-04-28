@@ -13,20 +13,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Word P. — Free Online Word and PDF Editor",
-  description: "Create, edit, and convert professional Word documents and PDF files with Word P. Free, browser-based, no installation required.",
-  keywords: ["word editor", "pdf editor", "online document editor", "free word", "edit pdf", "document creation", "Word P"],
-  authors: [{ name: "Word P." }],
+  title: "Macrotar — Free Online Word and PDF Editor",
+  description: "Create, edit, and convert professional Word documents and PDF files with Macrotar. Free, browser-based, no installation required.",
+  keywords: ["word editor", "pdf editor", "online document editor", "free word", "edit pdf", "document creation", "Macrotar"],
+  authors: [{ name: "Macrotar" }],
   openGraph: {
-    title: "Word P. — Free Online Word and PDF Editor",
+    title: "Macrotar — Free Online Word and PDF Editor",
     description: "Professional document editing experience. Word & PDF support. No installation required.",
     type: "website",
     locale: "en_US",
-    siteName: "Word P.",
+    siteName: "Macrotar",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Word P. — Free Online Word and PDF Editor",
+    title: "Macrotar — Free Online Word and PDF Editor",
     description: "Professional document editing experience. Word & PDF support.",
   },
   robots: { index: true, follow: true },

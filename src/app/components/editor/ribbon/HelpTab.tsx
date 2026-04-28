@@ -56,7 +56,7 @@ const HelpTab = () => {
 
                     <div className="flex flex-col items-center justify-center p-1.5 hover:bg-white/60 rounded cursor-pointer group w-16"
                         title="Yardım"
-                        onClick={() => alert('Word P. Yardım\n\n• Belgelerinizi düzenleyin ve biçimlendirin\n• PDF ve DOCX olarak dışa aktarın\n• Her sekmede farklı araçlar bulabilirsiniz\n• Kısayolları kullanarak hızlı düzenleme yapın')}>
+                        onClick={() => alert('Macrotar Yardım\n\n• Belgelerinizi düzenleyin ve biçimlendirin\n• PDF ve DOCX olarak dışa aktarın\n• Her sekmede farklı araçlar bulabilirsiniz\n• Kısayolları kullanarak hızlı düzenleme yapın')}>
                         <HelpCircle size={22} className="text-[#2b579a]" strokeWidth={2} />
                         <span className="text-[9px] font-black text-zinc-800 pt-1">Yardım</span>
                     </div>
@@ -115,11 +115,11 @@ const HelpTab = () => {
                         {showAbout && (
                             <div className="absolute top-full right-0 mt-1 bg-white border border-zinc-200 rounded-xl shadow-2xl z-[9999] ribbon-dropdown w-[240px] p-4">
                                 <div className="text-center">
-                                    <h3 className="text-lg font-black text-[#2b579a]">Word P.</h3>
+                                    <h3 className="text-lg font-black text-[#2b579a]">Macrotar</h3>
                                     <p className="text-[10px] text-zinc-500 mt-1">Profesyonel Kelime İşlemci</p>
                                     <div className="my-3 h-px bg-zinc-200" />
                                     <p className="text-[10px] text-zinc-600">Sürüm 2.0</p>
-                                    <p className="text-[9px] text-zinc-400 mt-1">© 2026 Word P. Tüm hakları saklıdır.</p>
+                                    <p className="text-[9px] text-zinc-400 mt-1">© 2026 Macrotar Tüm hakları saklıdır.</p>
                                 </div>
                             </div>
                         )}
@@ -152,7 +152,7 @@ const HelpTab = () => {
                         <Users size={18} className="text-violet-500" strokeWidth={2} />
                         <span className="text-[8px] font-black text-zinc-700 pt-0.5">Topluluk</span>
                     </button>
-                    <button onClick={() => alert('🔒 Gizlilik Politikası\n\nWord P. verilerinizi yerel olarak saklar.\nHiçbir veri sunucuya gönderilmez.')} title="Gizlilik" className="flex flex-col items-center justify-center p-1.5 hover:bg-white/60 rounded cursor-pointer w-14">
+                    <button onClick={() => alert('🔒 Gizlilik Politikası\n\nMacrotar verilerinizi yerel olarak saklar.\nHiçbir veri sunucuya gönderilmez.')} title="Gizlilik" className="flex flex-col items-center justify-center p-1.5 hover:bg-white/60 rounded cursor-pointer w-14">
                         <Shield size={18} className="text-emerald-600" strokeWidth={2} />
                         <span className="text-[8px] font-black text-zinc-700 pt-0.5">Gizlilik</span>
                     </button>
@@ -170,11 +170,11 @@ const HelpTab = () => {
                         <Activity size={18} className="text-red-500" strokeWidth={2} />
                         <span className="text-[8px] font-black text-zinc-700 pt-0.5">Tanılama</span>
                     </button>
-                    <button onClick={() => alert('✅ Word P. Sürüm 2.0\nEn güncel sürümü kullanıyorsunuz.')} title="Güncellemeleri Kontrol Et" className="flex flex-col items-center justify-center p-1.5 hover:bg-white/60 rounded cursor-pointer w-14">
+                    <button onClick={() => alert('✅ Macrotar Sürüm 2.0\nEn güncel sürümü kullanıyorsunuz.')} title="Güncellemeleri Kontrol Et" className="flex flex-col items-center justify-center p-1.5 hover:bg-white/60 rounded cursor-pointer w-14">
                         <RefreshCw size={18} className="text-[#2b579a]" strokeWidth={2} />
                         <span className="text-[8px] font-black text-zinc-700 pt-0.5">Güncelle</span>
                     </button>
-                    <button onClick={() => alert('📄 Lisans: MIT License\n\nWord P. açık kaynak yazılımdır.')} title="Lisans Bilgileri" className="flex flex-col items-center justify-center p-1.5 hover:bg-white/60 rounded cursor-pointer w-14">
+                    <button onClick={() => alert('📄 Lisans: MIT License\n\nMacrotar açık kaynak yazılımdır.')} title="Lisans Bilgileri" className="flex flex-col items-center justify-center p-1.5 hover:bg-white/60 rounded cursor-pointer w-14">
                         <ScrollText size={18} className="text-amber-600" strokeWidth={2} />
                         <span className="text-[8px] font-black text-zinc-700 pt-0.5">Lisans</span>
                     </button>

@@ -64,7 +64,7 @@ const EditorTopBar = ({
             <div className="flex-1 flex justify-center items-center">
                 <div className="flex items-center gap-2 px-6 py-1 bg-white/10 rounded-md border border-white/5 max-w-sm w-full cursor-pointer hover:bg-white/15 transition-colors group">
                     <Search size={14} className="text-white/60 group-hover:text-white" />
-                    <span className="text-xs font-bold text-white/90 truncate">Belge1 - Word P.</span>
+                    <span className="text-xs font-bold text-white/90 truncate">Belge1 - Macrotar</span>
                     <ChevronDown size={14} className="text-white/60 ml-auto" />
                 </div>
             </div>

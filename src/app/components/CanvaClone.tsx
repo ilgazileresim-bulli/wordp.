@@ -403,7 +403,7 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-fuchsia-500 to-rose-500 flex items-center justify-center text-white shadow-lg">
                                 <LayoutTemplate size={18} />
                             </div>
-                            <span className="font-bold text-xl">Word P. Design</span>
+                            <span className="font-bold text-xl">Macrotar Design</span>
                         </div>
                     </div>
                 </header>
@@ -508,7 +508,7 @@ export default function CanvaClone({ onBack }: { onBack: () => void }) {
                     <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
                         <LayoutTemplate size={16} className="text-fuchsia-500" />
                         <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
-                            Word P. Design - {canvasDimensions.width}x{canvasDimensions.height}px
+                            Macrotar Design - {canvasDimensions.width}x{canvasDimensions.height}px
                         </span>
                     </div>
                 </div>

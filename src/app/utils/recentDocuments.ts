@@ -7,7 +7,7 @@ export interface RecentDocument {
     wordCount: number;
 }
 
-const STORAGE_KEY = "wordp_recent_documents";
+const STORAGE_KEY = "macrotar_recent_documents";
 const MAX_DOCUMENTS = 20;
 
 function generateId(): string {

@@ -24,7 +24,9 @@ const FolderCodeEditor = dynamic<{ onBack: () => void }>(() => import("./compone
 const CpsTest = dynamic<{ onBack: () => void }>(() => import("./components/CpsTest"), { ssr: false });
 const MediaStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/MediaStudio"), { ssr: false });
 const TextStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/TextStudio"), { ssr: false });
+const TextBoxStudio = dynamic<{ onBack: () => void }>(() => import("./components/TextBoxStudio"), { ssr: false });
 const ImageStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/ImageStudio"), { ssr: false });
+
 const DevStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/DevStudio"), { ssr: false });
 const BusinessStudio = dynamic<{ onBack: () => void; initialToolId: string }>(() => import("./components/BusinessStudio"), { ssr: false });
 const ChartStudio = dynamic<{ onBack: () => void; initialType?: string }>(() => import("./components/ChartStudio"), { ssr: false });
@@ -52,7 +54,8 @@ function loadImageDimensions(file: File): Promise<{ width: number; height: numbe
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard" | "canva-clone" | "code-editor" | "folder-code-editor" | "cps-test" | "media-studio" | "text-studio" | "image-studio" | "dev-studio" | "business-studio" | "chart-studio" | "pdf-studio">("landing");
+  const [view, setView] = useState<"landing" | "editor" | "pdf" | "pptx" | "bg-remover" | "image-cropper" | "image-enhancer" | "universal-converter" | "word-modifier" | "ocr" | "excel" | "pdf-merge-split" | "cv-wizard" | "invoice-wizard" | "canva-clone" | "code-editor" | "folder-code-editor" | "cps-test" | "media-studio" | "text-studio" | "text-box-studio" | "image-studio" | "dev-studio" | "business-studio" | "chart-studio" | "pdf-studio">("landing");
+
   const [codeEditorLang, setCodeEditorLang] = useState<"html" | "css" | "js">("html");
   const [initialContent, setInitialContent] = useState<string>("");
   const [initialPdfFile, setInitialPdfFile] = useState<File | null>(null);
@@ -679,7 +682,11 @@ export default function Home() {
     } else if (["video-converter", "audio-converter", "video-to-mp3", "video-compressor", "trim-video", "trim-audio", "video-to-gif", "gif-to-video", "merge-videos", "merge-audio", "video-thumbnail", "mute-video", "mp3-to-wav", "wav-to-mp3", "m4a-to-mp3", "flac-to-mp3", "ogg-to-mp3", "aac-to-mp3", "mov-to-mp4", "avi-to-mp4", "webm-to-mp4", "mkv-to-mp4", "image-compressor", "image-resizer", "image-converter", "heic-to-jpg", "heic-to-png", "heic-to-webp", "heic-to-gif", "heif-to-jpg", "png-to-jpg", "jpg-to-png", "webp-to-png", "webp-to-jpg", "png-to-webp", "jpg-to-webp", "svg-to-png", "gif-to-png", "bmp-to-jpg", "tiff-to-jpg", "tiff-to-png", "jpg-to-bmp", "png-to-bmp", "avif-to-jpg", "avif-to-png", "ico-to-png", "gif-to-jpg"].includes(id)) {
       setActiveMediaTool(id);
       setView("media-studio");
-    } else if (["word-counter", "case-converter", "lorem-ipsum", "text-diff", "fancy-text", "text-cleaner", "invisible-text", "slug-generator", "binary-converter", "reverse-text", "remove-duplicates", "text-repeater", "zalgo-text", "sort-lines", "character-counter", "random-string", "text-to-speech"].includes(id)) {
+    } else if (id === "text-box") {
+      setView("text-box-studio");
+    } else if (["word-counter", "case-converter", "lorem-ipsum", "text-diff", "fancy-text", "text-cleaner", "invisible-text", "slug-generator", "binary-converter", "reverse-text", "remove-duplicates", "text-repeater", "zalgo-text", "sort-lines", "character-counter", "random-string", "text-to-speech", "translator"].includes(id)) {
+
+
       setActiveTextTool(id);
       setView("text-studio");
     } else if (["brightness-contrast", "hue-saturation", "exposure", "color-balance", "levels", "curves", "vibrance", "white-balance", "channel-mixer", "selective-color", "sharpen", "vignette", "dust-noise", "duotone", "3d-lut", "posterize", "threshold", "invert-colors", "sepia-vintage", "shadow-highlight", "clarity-texture", "dehaze", "color-grading", "chromatic-aberration", "rotate-flip", "perspective", "tilt-shift", "mirror-effect", "distortion", "photo-filters", "text-overlay", "border-frame", "collage-maker", "meme-generator", "batch-edit", "replace-color", "histogram", "exif-editor", "social-media-resizer", "sketch-effect", "gradient-map", "split-toning", "liquify", "photo-mosaic", "overlay-blend", "compare-images", "color-picker", "color-palette", "screenshot-beautifier"].includes(id)) {
@@ -753,7 +760,10 @@ export default function Home() {
         <CpsTest onBack={() => setView("landing")} />
       ) : view === "media-studio" ? (
         <MediaStudio onBack={() => setView("landing")} initialToolId={activeMediaTool} />
+      ) : view === "text-box-studio" ? (
+        <TextBoxStudio onBack={() => setView("landing")} />
       ) : view === "text-studio" ? (
+
         <TextStudio onBack={() => setView("landing")} initialToolId={activeTextTool} />
       ) : view === "image-studio" ? (
         <ImageStudio onBack={() => setView("landing")} initialToolId={activeImageTool} />

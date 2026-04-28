@@ -162,10 +162,10 @@ const FileMenu = ({
                                             Belgenizi iş arkadaşlarınızla paylaşın. Salt okunur bir bağlantı oluşturarak erişimi kolaylaştırın.
                                         </p>
                                         <div className="max-w-md mx-auto p-4 bg-zinc-50 dark:bg-slate-800 border border-zinc-200 dark:border-slate-700 rounded-xl flex items-center justify-between mb-8">
-                                            <code className="text-xs text-zinc-600 truncate mr-4">https://wordp.app/doc/822f12ae...</code>
+                                            <code className="text-xs text-zinc-600 truncate mr-4">https://macrotar.app/doc/822f12ae...</code>
                                             <button
                                                 onClick={() => {
-                                                    navigator.clipboard.writeText("https://wordp.app/doc/share-link");
+                                                    navigator.clipboard.writeText("https://macrotar.app/doc/share-link");
                                                     alert("Bağlantı kopyalandı!");
                                                 }}
                                                 className="px-4 py-2 bg-[#2b579a] text-white text-[10px] font-black rounded-lg uppercase tracking-wider whitespace-nowrap"

@@ -3,7 +3,8 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart, LayoutTemplate, ArrowLeft, Code, FileCode, Braces, FileCode2, Zap, Video, Music, MonitorPlay, Mic, Headphones, Film, TerminalSquare, SearchCode, Network, KeyRound, Fingerprint, TextCursorInput, FileDigit, AlignLeft, Table, TableProperties, Tags, MonitorSmartphone, Clock4, Contrast, Unlock, Link, Code2, Archive, Hash, Calculator as CalculatorIcon, Briefcase, Coffee, TrendingUp, LineChart, Wallet, PiggyBank, TrendingDown, Home, Coins, Receipt, CreditCard, BarChart3, Landmark, Scale, Compass, Target, Percent, Car, Bitcoin, Megaphone, Shield, Eye, PenTool, Monitor, Keyboard, LayoutGrid, Activity } from "lucide-react";
+import { FileText, Plus, Search, PieChart, Library, ArrowRightLeft, FileSearch, MousePointer2, Image, FileImage, Clock, Trash2, ExternalLink, FolderOpen, RefreshCw, Type, Combine, Heart, LayoutTemplate, ArrowLeft, Code, FileCode, Braces, FileCode2, Zap, Video, Music, MonitorPlay, Mic, Headphones, Film, TerminalSquare, SearchCode, Network, KeyRound, Fingerprint, TextCursorInput, FileDigit, AlignLeft, Table, TableProperties, Tags, MonitorSmartphone, Clock4, Contrast, Unlock, Link, Code2, Archive, Hash, Calculator as CalculatorIcon, Briefcase, Coffee, TrendingUp, LineChart, Wallet, PiggyBank, TrendingDown, Home, Coins, Receipt, CreditCard, BarChart3, Landmark, Scale, Compass, Target, Percent, Car, Bitcoin, Megaphone, Shield, Eye, PenTool, Monitor, Keyboard, LayoutGrid, Activity, Languages } from "lucide-react";
+
 import { cn } from "./editor/utils";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSelector from "./LanguageSelector";
@@ -209,6 +210,10 @@ const ALL_TOOLS = [
     { id: "text-repeater", title: "Text Repeater", icon: RefreshCw, color: "from-yellow-400 to-orange-500", desc: "Automatically repeat text thousands of times.", badge: "NEW", group: "text-tools" },
     { id: "zalgo-text", title: "Zalgo Text", icon: Type, color: "from-zinc-700 to-black", desc: "Cursed and scary text effects.", badge: "NEW", group: "text-tools" },
     { id: "text-to-speech", title: "Text to Speech", icon: Mic, color: "from-fuchsia-600 to-purple-600", desc: "Read text aloud using browser voices.", badge: "POPULAR", group: "text-tools" },
+    { id: "text-box", title: "Yazı Kutusu", icon: Archive, color: "from-amber-600 to-orange-700", desc: "300+ profesyonel metin işleme aracı tek bir kutuda.", badge: "MEGA", group: "text-tools" },
+    { id: "translator", title: "AI Translator", icon: Languages, color: "from-blue-600 to-indigo-600", desc: "Translate text between 100+ languages.", badge: "NEW", group: "text-tools" },
+
+
 
     // BUSINESS TOOLS (Business & Finance Tools)
     { id: "biz-compound", title: "Compound Interest", icon: CalculatorIcon, color: "from-emerald-500 to-teal-500", desc: "Calculate compound growth of investments", badge: "POPULAR", group: "business" },
@@ -327,7 +332,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                         <FileText className="text-white" size={22} />
                     </div>
                     <div>
-                        <span className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100">Word P.</span>
+                        <span className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100">Macrotar</span>
                         <span className="text-[10px] text-zinc-400 block -mt-1 font-medium">Professional Document Editor</span>
                     </div>
                 </div>
@@ -349,7 +354,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
                 >
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-bold mb-6 border border-blue-100 dark:border-blue-800/50">
                         <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 animate-pulse"></span>
-                        Word P. OS 2.0 Live
+                        Macrotar OS 2.0 Live
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white tracking-tight mb-6" suppressHydrationWarning>
                         Productivity Without
@@ -715,7 +720,7 @@ export default function LandingPage({ onSelectTemplate, onOpenRecentDocument }: 
             </main>
 
             <footer className="p-6 text-center text-zinc-400 dark:text-slate-500 text-sm border-t border-zinc-200/50 dark:border-slate-700/50">
-                &copy; 2026 Word P. All rights reserved.
+                &copy; 2026 Macrotar All rights reserved.
             </footer>
         </div>
     );

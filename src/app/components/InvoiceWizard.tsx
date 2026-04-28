@@ -15,8 +15,8 @@ export default function InvoiceWizard({ onBack }: InvoiceWizardProps) {
     invoiceNumber: "INV-001",
     date: new Date().toISOString().split("T")[0],
     dueDate: new Date(Date.now() + 14 * 86400000).toISOString().split("T")[0], // +14 days
-    companyName: "Word P. Software Inc.",
-    companyEmail: "info@wordp.com",
+    companyName: "Macrotar Software Inc.",
+    companyEmail: "info@macrotar.com",
     companyPhone: "+1 555 123 4567",
     clientName: "Client Full Name",
     clientAddress: "Client Address Info \nNew York, USA",

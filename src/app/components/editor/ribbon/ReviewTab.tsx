@@ -107,13 +107,35 @@ const ReviewTab = ({ editor }: ReviewTabProps) => {
         showToast(`📊 Kelime: ${words.length}  |  Karakter: ${text.length}  |  Boşluksuz: ${text.replace(/\s/g, '').length}`);
     };
 
-    const translateSelection = (targetLang: string) => {
+    const translateSelection = async (targetLang: string) => {
         const { from, to } = editor.state.selection;
         const selectedText = editor.state.doc.textBetween(from, to, ' ');
         if (!selectedText) { showToast("Çevirmek için metin seçin."); return; }
-        window.open(`https://translate.google.com/?sl=auto&tl=${targetLang}&text=${encodeURIComponent(selectedText)}`, '_blank');
+        
+        showToast("⏳ Çeviriliyor...");
+        try {
+            const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(selectedText)}&langpair=auto|${targetLang}`);
+            const data = await res.json();
+            if (data.responseData.translatedText) {
+                const translated = data.responseData.translatedText;
+                // Instead of opening a window, we can insert it or show in a prompt.
+                // For "inside the site" experience, showing in a toast or replacing selection is best.
+                // Let's replace the selection with a "Translated: ..." comment or just show it.
+                showToast(`🌐 Çeviri (${targetLang}):\n${translated}`);
+                
+                // Optionally, we can offer to replace the text
+                if (window.confirm(`Çeviriyi belgeye eklemek ister misiniz?\n\n"${translated}"`)) {
+                    editor.chain().focus().insertContent(translated).run();
+                }
+            } else {
+                showToast("⚠️ Çeviri hatası.");
+            }
+        } catch (err) {
+            showToast("⚠️ Bağlantı hatası.");
+        }
         setShowTranslate(false);
     };
+
 
     // New Tool: Delete all comments
     const deleteAllComments = () => {

@@ -45,8 +45,10 @@ const TOOLS: Record<string, { title: string; desc: string; process?: (t: string)
   },
   'character-counter': { title: "Karakter Sayacı", desc: "Sadece karakter odaklı sayım." },
   'random-string': { title: "Rastgele Dize", desc: "Rastgele şifre veya metin dizeleri üretin." },
-  'text-to-speech': { title: "Metinden Sese", desc: "Yazdıklarınızı sesli okutun." }
+  'text-to-speech': { title: "Metinden Sese", desc: "Yazdıklarınızı sesli okutun." },
+  'translator': { title: "AI Çevirmen", desc: "Metni 100+ dile anında çevirin." }
 };
+
 
 export default function TextStudio({ onBack, initialToolId }: { onBack: () => void; initialToolId: string }) {
   const tool = TOOLS[initialToolId] || TOOLS['word-counter'];
@@ -56,6 +58,10 @@ export default function TextStudio({ onBack, initialToolId }: { onBack: () => vo
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [repeatCount, setRepeatCount] = useState(5);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [sourceLang, setSourceLang] = useState("auto");
+  const [targetLang, setTargetLang] = useState("en");
+
 
   const [conversionType, setConversionType] = useState<"upper" | "lower" | "title" | "sentence" | "alternating">("upper");
 
@@ -116,9 +122,27 @@ export default function TextStudio({ onBack, initialToolId }: { onBack: () => vo
        for(let i=0; i<Math.min(repeatCount * 10, 5000); i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
        setOutput(res);
     } else if (initialToolId === 'invisible-text') {
-       setOutput(input1 + '\\u200B\\u200C\\u200D\\uFEFF');
+       setOutput(input1 + '\u200B\u200C\u200D\uFEFF');
     }
   }, [input1, input2, initialToolId, repeatCount]);
+
+  const handleTranslate = async () => {
+    if (!input1.trim()) return;
+    setIsTranslating(true);
+    try {
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(input1)}&langpair=${sourceLang}|${targetLang}`);
+      const data = await res.json();
+      if (data.responseData.translatedText) {
+        setOutput(data.responseData.translatedText);
+      } else {
+        setOutput("Çeviri hatası oluştu.");
+      }
+    } catch (err) {
+      setOutput("Bağlantı hatası: Çeviri yapılamadı.");
+    } finally {
+      setIsTranslating(false);
+    }
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(output);
@@ -224,6 +248,56 @@ export default function TextStudio({ onBack, initialToolId }: { onBack: () => vo
               {isSpeaking ? "Stop Playing" : "Read Text Aloud"}
             </button>
           )}
+
+          {initialToolId === 'translator' && (
+            <div className="mt-4 flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <select 
+                  value={sourceLang} 
+                  onChange={(e) => setSourceLang(e.target.value)}
+                  className="flex-1 bg-black/40 border border-white/10 rounded-xl p-3 text-xs font-bold text-slate-300 outline-none"
+                >
+                  <option value="auto">Otomatik Algıla</option>
+                  <option value="tr">Türkçe</option>
+                  <option value="en">İngilizce</option>
+                  <option value="de">Almanca</option>
+                  <option value="fr">Fransızca</option>
+                  <option value="es">İspanyolca</option>
+                  <option value="it">İtalyanca</option>
+                  <option value="ru">Rusça</option>
+                  <option value="ar">Arapça</option>
+                  <option value="zh">Çince</option>
+                  <option value="ja">Japonca</option>
+                </select>
+                <div className="text-slate-500">→</div>
+                <select 
+                  value={targetLang} 
+                  onChange={(e) => setTargetLang(e.target.value)}
+                  className="flex-1 bg-black/40 border border-white/10 rounded-xl p-3 text-xs font-bold text-slate-300 outline-none"
+                >
+                  <option value="en">İngilizce</option>
+                  <option value="tr">Türkçe</option>
+                  <option value="de">Almanca</option>
+                  <option value="fr">Fransızca</option>
+                  <option value="es">İspanyolca</option>
+                  <option value="it">İtalyanca</option>
+                  <option value="ru">Rusça</option>
+                  <option value="ar">Arapça</option>
+                  <option value="zh">Çince</option>
+                  <option value="ja">Japonca</option>
+                </select>
+              </div>
+              <button 
+                onClick={handleTranslate}
+                disabled={isTranslating}
+                className={`w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-bold transition-all shadow-lg bg-gradient-to-r from-indigo-600 to-blue-600 text-white hover:opacity-90 shadow-indigo-900/40 ${isTranslating ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {isTranslating ? <RefreshCcw size={18} className="animate-spin" /> : <RefreshCcw size={18} />}
+                {isTranslating ? "Çeviriliyor..." : "Metni Çevir"}
+              </button>
+            </div>
+          )}
+
 
         </div>
 

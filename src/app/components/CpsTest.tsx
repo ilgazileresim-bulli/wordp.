@@ -26,7 +26,7 @@ export default function CpsTest({ onBack }: CpsTestProps) {
 
   useEffect(() => {
     // Load best scores from localStorage
-    const saved = localStorage.getItem("wordp_cps_best");
+    const saved = localStorage.getItem("macrotar_cps_best");
     if (saved) {
       try {
         setBestCps(JSON.parse(saved));
@@ -74,7 +74,7 @@ export default function CpsTest({ onBack }: CpsTestProps) {
       if (currentCps > bestCps[duration]) {
         const newBest = { ...bestCps, [duration]: currentCps };
         setBestCps(newBest);
-        localStorage.setItem("wordp_cps_best", JSON.stringify(newBest));
+        localStorage.setItem("macrotar_cps_best", JSON.stringify(newBest));
       }
     }
   }, [isFinished]);
@@ -274,7 +274,7 @@ export default function CpsTest({ onBack }: CpsTestProps) {
       </main>
 
       <footer className="mt-12 text-center text-zinc-600 text-sm">
-        Word P. CPS Tool &copy; 2026 - Tıklama Hızınızı Geliştirin
+        Macrotar CPS Tool &copy; 2026 - Tıklama Hızınızı Geliştirin
       </footer>
     </div>
   );

@@ -164,7 +164,7 @@ export default function FolderCodeEditor({ onBack }: { onBack: () => void }) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isFullPreview, setIsFullPreview] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-  const [terminalLines, setTerminalLines] = useState<string[]>(["Word P. Code Terminal v1.0", "Klasör yüklendi. Hazır."]);
+  const [terminalLines, setTerminalLines] = useState<string[]>(["Macrotar Code Terminal v1.0", "Klasör yüklendi. Hazır."]);
   const [previewKey, setPreviewKey] = useState(0);
   const [snippetHint, setSnippetHint] = useState<{key:string}|null>(null);
   const [explorerOpen, setExplorerOpen] = useState(true);
@@ -522,7 +522,7 @@ export default function FolderCodeEditor({ onBack }: { onBack: () => void }) {
               <Code size={40} className="text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-light text-white mb-2">Word P. Code</h1>
+          <h1 className="text-3xl font-light text-white mb-2">Macrotar Code</h1>
           <p className="text-[#858585] mb-10 text-sm">Gerçek dosyalar üzerinde çalışın. Kaydedin. Geliştirin.</p>
 
           {/* Pick folder button */}
@@ -581,7 +581,7 @@ export default function FolderCodeEditor({ onBack }: { onBack: () => void }) {
           <span key={m} className="px-1.5 py-0.5 hover:bg-white/10 rounded cursor-pointer transition-all">{m}</span>
         ))}
         <div className="flex-1 text-center text-[#cccccc]/60 text-[11px] pointer-events-none truncate">
-          {activeTab ? `${activeTab} — ${dirName} — Word P. Code` : `${dirName} — Word P. Code`}
+          {activeTab ? `${activeTab} — ${dirName} — Macrotar Code` : `${dirName} — Macrotar Code`}
         </div>
         <div className="flex items-center gap-1">
           {saveStatus === "saving"  && <span className="text-yellow-400 text-[10px]">● Kaydediliyor…</span>}
@@ -629,7 +629,7 @@ export default function FolderCodeEditor({ onBack }: { onBack: () => void }) {
           {activePanel === "explorer" && (
             <>
               <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#1e1e1e] shrink-0">
-                <span className="text-[11px] font-bold text-[#bbbbbb] uppercase tracking-widest">WORD P. CODE</span>
+                <span className="text-[11px] font-bold text-[#bbbbbb] uppercase tracking-widest">MACROTAR CODE</span>
                 <div className="flex items-center gap-1">
                   <button onClick={()=>setShowNewFileDialog(true)} title="Yeni Dosya" className="p-1 hover:bg-white/10 rounded text-[#cccccc]"><Plus size={13}/></button>
                   <button onClick={()=>setPhase("pick")} title="Farklı Klasör Aç" className="p-1 hover:bg-white/10 rounded text-[#cccccc]"><FolderOpen size={13}/></button>

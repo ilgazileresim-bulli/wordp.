@@ -465,7 +465,7 @@ export default function PdfEditor({
       // Add watermark to all pages or just first
       pages.forEach((page) => {
         const { height } = page.getSize();
-        page.drawText("Edited with Word P.", {
+        page.drawText("Edited with Macrotar", {
           x: 50,
           y: height - 30,
           size: 10,
@@ -1099,7 +1099,7 @@ export default function PdfEditor({
               <FileText size={16} className="!text-white" strokeWidth={2.5} />
               <span>{fileName || "Belge1"}</span>
               <span className="text-white/80 font-bold">
-                - Microsoft Word P.
+                - Microsoft Macrotar
               </span>
             </div>
           </div>
