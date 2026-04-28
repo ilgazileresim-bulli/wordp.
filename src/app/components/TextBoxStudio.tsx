@@ -138,7 +138,12 @@ const ALL_MEGA_TOOLS: TextTool[] = [
   { id: "url-dec", name: "URL Decode", category: "Encoder", icon: Lock, desc: "Decode text from URL format.", process: t => decodeURIComponent(t) },
   { id: "hex-enc", name: "Hex Encode", category: "Encoder", icon: Binary, desc: "Convert text to Hexadecimal.", process: t => t.split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ') },
   { id: "bin-enc", name: "Binary Encode", category: "Encoder", icon: Binary, desc: "Convert text to Binary.", process: t => t.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join(' ') },
-  { id: "rot13", name: "ROT13", category: "Encoder", icon: Lock, desc: "Apply ROT13 cipher.", process: t => t.replace(/[a-zA-Z]/g, c => String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26)) },
+  { id: "rot13", name: "ROT13", category: "Encoder", icon: Lock, desc: "Apply ROT13 cipher.", process: t => t.replace(/[a-zA-Z]/g, c => {
+    const code = c.charCodeAt(0);
+    const limit = c <= 'Z' ? 90 : 122;
+    const shifted = code + 13;
+    return String.fromCharCode(shifted <= limit ? shifted : shifted - 26);
+  }) },
 
   // --- ANALYSIS ---
   { id: "word-count", name: "Word Count", category: "Analysis", icon: Info, desc: "Count total words.", process: t => t.trim().split(/\s+/).filter(x => x).length.toString() },
