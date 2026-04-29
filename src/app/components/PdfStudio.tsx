@@ -110,7 +110,7 @@ export default function PdfStudio({ onBack, initialTool }: PdfStudioProps) {
         
         pdfImages.forEach((imgData, i) => {
             const base64Data = imgData.split(',')[1];
-            zip.file(`sayfa_${i+1}.png`, base64Data, { base64: true });
+            zip.file(`page_${i+1}.png`, base64Data, { base64: true });
         });
         
         const content = await zip.generateAsync({ type: "blob" });

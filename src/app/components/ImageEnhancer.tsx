@@ -64,7 +64,7 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
         
         // Skip convolution for very large images to prevent freezing (fallback to just contrast/brightness if image is huge)
         if (w * h > 3000 * 3000) {
-            console.warn("Resim konvolüsyon için fazla büyük, sadece hafif filtre uygulandı.");
+            console.warn("Image too large for convolution, only basic filters applied.");
             return; 
         }
 
@@ -140,7 +140,7 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "netlestirilmis-fotograf.png";
+            a.download = "enhanced-image.png";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -164,8 +164,8 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
                             <Sparkles size={20} />
                         </div>
                         <div>
-                            <h1 className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 leading-tight">Bulanıklık Giderici</h1>
-                            <p className="text-[11px] font-medium text-zinc-400">Yapay Zeka Destekli Netleştirme</p>
+                            <h1 className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 leading-tight">Image Enhancer</h1>
+                            <p className="text-[11px] font-medium text-zinc-400">AI-Powered Clarification</p>
                         </div>
                     </div>
                 </div>
@@ -173,12 +173,12 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
                 <div className="flex gap-3">
                     {sourceImage && (
                         <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-zinc-200 dark:border-slate-700 rounded-xl text-sm font-bold text-zinc-600 dark:text-zinc-300 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-all shadow-sm">
-                            <Trash2 size={16} /> Temizle
+                            <Trash2 size={16} /> Clear
                         </button>
                     )}
                     {sourceImage && (
                         <button onClick={handleDownload} className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105">
-                            <Download size={16} /> İndir
+                            <Download size={16} /> Download
                         </button>
                     )}
                 </div>
@@ -192,12 +192,12 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
                                 <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
                                     <Sparkles size={40} />
                                 </div>
-                                <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-2">Bulanık Fotoğraf Yükleyin</h2>
-                                <p className="text-zinc-500 dark:text-zinc-400 text-center mb-8 max-w-md">Eski veya bulanık çıkan fotoğraflarınızı yükleyin, algoritmaların pikselleri nasıl netleştirdiğine şahit olun.</p>
+                                <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-2">Upload Blurry Photo</h2>
+                                <p className="text-zinc-500 dark:text-zinc-400 text-center mb-8 max-w-md">Upload your old or blurry photos and witness how algorithms clarify pixels.</p>
                                 
                                 <label className="flex items-center gap-2 px-8 py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-bold hover:scale-105 transition-all cursor-pointer shadow-lg">
                                     <Upload size={20} />
-                                    Fotoğraf Seç
+                                    Select Photo
                                     <input type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleUpload} />
                                 </label>
                             </div>
@@ -211,7 +211,7 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
                                     {isProcessing && (
                                         <div className="absolute inset-0 flex flex-col items-center justify-center text-white drop-shadow-md">
                                             <Wand2 className="animate-spin mb-2" size={32} />
-                                            <span className="font-bold">Netleştiriliyor...</span>
+                                            <span className="font-bold">Enhancing...</span>
                                         </div>
                                     )}
                                 </div>
@@ -226,13 +226,13 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
                             <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center">
                                 <Wand2 size={20} />
                             </div>
-                            <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">Netleştirme Ayarları</h3>
+                            <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">Enhancement Settings</h3>
                         </div>
 
                         <div className="space-y-6">
                             <div className={cn("transition-opacity", !sourceImage && "opacity-50 pointer-events-none")}>
                                 <div className="flex justify-between mb-2">
-                                    <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Netlik Seviyesi</h4>
+                                    <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Sharpness Level</h4>
                                     <span className="text-xs font-bold text-blue-600 w-10 text-right">% {intensity}</span>
                                 </div>
                                 <input 
@@ -244,15 +244,15 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
                                     className="w-full h-2 bg-zinc-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600 shadow-inner"
                                 />
                                 <div className="flex justify-between mt-2 text-[10px] text-zinc-400 font-medium">
-                                    <span>Orijinal</span>
-                                    <span>Maksimum</span>
+                                    <span>Original</span>
+                                    <span>Maximum</span>
                                 </div>
                             </div>
 
                             <div className="pt-4 border-t border-zinc-100 dark:border-slate-700 mt-6">
                                 <label className="flex flex-col items-center justify-center gap-2 py-4 border-2 border-dashed border-zinc-200 dark:border-slate-700 rounded-xl font-bold transition-all text-sm cursor-pointer hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 text-zinc-600 dark:text-zinc-300">
                                     <RefreshCw size={20} className="mb-1" />
-                                    Yeni Fotoğraf Yükle
+                                    Upload New Photo
                                     <input type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleUpload} />
                                 </label>
                             </div>

@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { motion } from "framer-motion";
-import { Calculator as CalculatorIcon, Delete, Equal, Minus, Plus, X, Divide, Percent, RotateCcw } from "lucide-react";
+import { ArrowLeft, Calculator as CalculatorIcon, Delete, Equal, Minus, Plus, X, Divide, Percent, RotateCcw } from "lucide-react";
 import { cn } from "./editor/utils";
 
-export default function Calculator() {
+export default function Calculator({ onBack }: { onBack: () => void }) {
     const [display, setDisplay] = useState("0");
     const [equation, setEquation] = useState("");
     const [isFinished, setIsFinished] = useState(false);
@@ -49,7 +48,6 @@ export default function Calculator() {
     const calculate = useCallback(() => {
         try {
             const finalEquation = equation + display;
-            // Basic cleanup to avoid eval issues, though safe for this use case
             const sanitized = finalEquation.replace(/[^-()\d/*+.]/g, '');
             // eslint-disable-next-line no-eval
             const result = eval(sanitized);
@@ -96,68 +94,56 @@ export default function Calculator() {
     ];
 
     return (
-        <section className="py-20 relative overflow-hidden" id="calculator">
-            <div className="max-w-4xl mx-auto px-6">
-                <div className="flex items-center gap-3 mb-10 justify-center">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-                        <CalculatorIcon size={20} />
+        <div className="min-h-screen bg-zinc-50 dark:bg-[#080810] flex flex-col font-[family-name:var(--font-inter)]">
+            <header className="h-20 border-b border-zinc-200 dark:border-white/5 bg-white/80 dark:bg-[#0a0a1a]/80 backdrop-blur-2xl flex items-center px-8 sticky top-0 z-50">
+                <div className="flex items-center gap-6">
+                    <button onClick={onBack} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/10 rounded-xl transition-colors text-zinc-500">
+                        <ArrowLeft size={24} />
+                    </button>
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-xl shadow-indigo-500/20">
+                        <CalculatorIcon size={24} />
                     </div>
                     <div>
-                        <h2 className="text-3xl font-black text-zinc-800 dark:text-zinc-100 uppercase tracking-wider">Quick Math</h2>
-                        <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium -mt-1">Perform calculations here while preparing your documents.</p>
+                        <h1 className="font-black text-zinc-900 dark:text-white text-xl tracking-tight uppercase">Quick Math</h1>
+                        <p className="text-[10px] text-indigo-500 dark:text-indigo-400 font-black tracking-widest uppercase">Precision Calculation Tool</p>
                     </div>
                 </div>
+            </header>
 
-                <div className="relative group max-w-sm mx-auto">
-                    {/* Background Glow */}
-                    <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-[40px] blur-2xl opacity-0 group-hover:opacity-100 transition duration-700"></div>
-                    
-                    {/* Calculator Body */}
-                    <motion.div 
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="relative bg-white/70 dark:bg-[#12122b]/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700/50 rounded-[32px] p-6 shadow-2xl overflow-hidden"
-                    >
-                        {/* Display Surface */}
-                        <div className="mb-6 p-6 bg-slate-50/50 dark:bg-black/20 rounded-2xl border border-zinc-200/50 dark:border-slate-800/50 text-right min-h-[120px] flex flex-col justify-end">
-                            <div className="text-zinc-400 dark:text-slate-500 text-sm font-medium mb-1 h-6 overflow-hidden">
-                                {equation}
+            <main className="flex-1 flex flex-col items-center justify-center p-8">
+                <div className="w-full max-w-sm">
+                    <div className="bg-white dark:bg-[#12122b]/80 backdrop-blur-3xl border border-zinc-200 dark:border-white/5 rounded-[2.5rem] p-8 shadow-2xl overflow-hidden">
+                        <div className="mb-8 p-8 bg-zinc-50 dark:bg-black/40 rounded-3xl border border-zinc-100 dark:border-white/5 text-right min-h-[140px] flex flex-col justify-end shadow-inner">
+                            <div className="text-zinc-400 dark:text-zinc-500 text-sm font-black tracking-widest mb-2 h-6 overflow-hidden uppercase">
+                                {equation || <span className="opacity-0">.</span>}
                             </div>
-                            <div className="text-4xl font-black text-zinc-800 dark:text-white truncate">
+                            <div className="text-5xl font-black text-zinc-900 dark:text-white truncate tracking-tighter">
                                 {display}
                             </div>
                         </div>
 
-                        {/* Buttons Grid */}
-                        <div className="grid grid-cols-4 gap-3">
+                        <div className="grid grid-cols-4 gap-4">
                             {buttons.map((btn, i) => (
-                                <motion.button
+                                <button
                                     key={i}
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
                                     onClick={btn.action}
                                     className={cn(
-                                        "h-14 rounded-2xl flex items-center justify-center text-lg font-bold transition-all shadow-sm",
+                                        "h-16 rounded-2xl flex items-center justify-center text-lg font-black transition-all active:scale-95 shadow-sm",
                                         btn.span === 2 ? "col-span-2" : "col-span-1",
-                                        btn.type === "number" && "bg-white/50 dark:bg-slate-800/40 text-zinc-700 dark:text-zinc-200 border border-zinc-200/50 dark:border-slate-700/50 hover:bg-white dark:hover:bg-slate-700",
-                                        btn.type === "operator" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/30 hover:bg-blue-100",
-                                        btn.type === "secondary" && "bg-zinc-100 dark:bg-slate-800/60 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200",
-                                        btn.type === "danger" && "bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 border border-red-100 dark:border-red-900/30 hover:bg-red-100",
-                                        btn.type === "equal" && "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
+                                        btn.type === "number" && "bg-white dark:bg-white/5 text-zinc-700 dark:text-zinc-200 border border-zinc-200 dark:border-white/5 hover:bg-zinc-50 dark:hover:bg-white/10",
+                                        btn.type === "operator" && "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20",
+                                        btn.type === "secondary" && "bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200",
+                                        btn.type === "danger" && "bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500/20",
+                                        btn.type === "equal" && "bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-xl shadow-indigo-600/30"
                                     )}
                                 >
-                                    {btn.icon ? <btn.icon size={20} /> : btn.label}
-                                </motion.button>
+                                    {btn.icon ? <btn.icon size={24} /> : btn.label}
+                                </button>
                             ))}
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
-            </div>
-            
-            {/* Decorative elements */}
-            <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-            <div className="absolute -top-20 -left-20 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-        </section>
+            </main>
+        </div>
     );
 }

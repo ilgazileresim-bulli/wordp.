@@ -37,7 +37,7 @@ export default function ExcelEditor({ onBack, initialFile }: ExcelEditorProps) {
   const [data, setData] = useState<string[][]>(Array(20).fill("").map(() => Array(10).fill("")));
   const [cols, setCols] = useState<string[]>(Array(10).fill("").map((_, i) => XLSX.utils.encode_col(i)));
   const [isCloudSaved, setIsCloudSaved] = useState(false);
-  const [fileName, setFileName] = useState("Calisma-Kitabi.xlsx");
+  const [fileName, setFileName] = useState("Workbook.xlsx");
 
   useEffect(() => {
     if (initialFile) {
@@ -118,7 +118,7 @@ export default function ExcelEditor({ onBack, initialFile }: ExcelEditorProps) {
   const mockSaveToCloud = () => {
     setIsCloudSaved(true);
     setTimeout(() => {
-      alert("Excel dosyası başarıyla Bulut'a kaydedildi!");
+      alert("Excel file successfully saved to Cloud!");
       setIsCloudSaved(false);
     }, 1500);
   };
@@ -146,12 +146,12 @@ export default function ExcelEditor({ onBack, initialFile }: ExcelEditorProps) {
                   value={fileName}
                   onChange={(e) => setFileName(e.target.value)}
                   className="px-2 py-1 text-base md:text-lg font-bold bg-transparent border-b-2 border-transparent hover:border-emerald-200 focus:border-emerald-500 transition-colors focus:outline-none text-zinc-900 dark:text-white placeholder:text-zinc-400 w-44 md:w-64"
-                  placeholder="Çalışma Kitabı Adı"
+                  placeholder="Workbook Name"
                 />
                 <Pencil size={14} className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity absolute right-2 pointer-events-none" />
               </div>
               <span className="text-xs text-zinc-500 dark:text-zinc-400 px-2 flex items-center gap-1">
-                {isCloudSaved ? <span className="text-emerald-500 font-medium">Buluta Kaydedildi</span> : "Düzenleniyor..."}
+                {isCloudSaved ? <span className="text-emerald-500 font-medium">Saved to Cloud</span> : "Editing..."}
               </span>
             </div>
           </div>
@@ -162,13 +162,13 @@ export default function ExcelEditor({ onBack, initialFile }: ExcelEditorProps) {
             onClick={addRow}
             className="px-2 md:px-3 py-2 text-zinc-600 hover:bg-zinc-50 hover:text-emerald-600 dark:text-zinc-300 dark:hover:bg-slate-800 rounded-lg flex items-center gap-1 md:gap-2 text-xs md:text-sm font-semibold transition-colors"
           >
-            <Plus size={16} className="flex-shrink-0" /> <span className="hidden md:inline">Satır Ekle</span>
+            <Plus size={16} className="flex-shrink-0" /> <span className="hidden md:inline">Add Row</span>
           </button>
           <button 
             onClick={addCol}
             className="px-2 md:px-3 py-2 text-zinc-600 hover:bg-zinc-50 hover:text-emerald-600 dark:text-zinc-300 dark:hover:bg-slate-800 rounded-lg flex items-center gap-1 md:gap-2 text-xs md:text-sm font-semibold transition-colors"
           >
-            <Plus size={16} className="flex-shrink-0" /> <span className="hidden md:inline">Sütun Ekle</span>
+            <Plus size={16} className="flex-shrink-0" /> <span className="hidden md:inline">Add Column</span>
           </button>
           
           <div className="w-px h-6 bg-zinc-200 dark:bg-slate-800 mx-1 hidden md:block"></div>
@@ -179,14 +179,14 @@ export default function ExcelEditor({ onBack, initialFile }: ExcelEditorProps) {
             className="px-3 md:px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-bold rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors flex items-center gap-1 md:gap-2 text-xs md:text-sm"
           >
             {isCloudSaved ? <Loader2 size={16} className="animate-spin flex-shrink-0" /> : <Cloud size={16} className="flex-shrink-0" />}
-            <span className="hidden md:inline">Buluta Kaydet</span>
+            <span className="hidden md:inline">Save to Cloud</span>
           </button>
           <button
             onClick={downloadFile}
             className="px-3 md:px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold rounded-lg flex items-center gap-1 md:gap-2 text-xs md:text-sm shadow-md shadow-emerald-500/20 transition-all hover:shadow-lg hover:shadow-emerald-500/30 active:scale-95 whitespace-nowrap"
           >
             <Download size={16} className="flex-shrink-0" />
-            Dışa Aktar
+            Export
           </button>
         </div>
       </header>
@@ -208,7 +208,7 @@ export default function ExcelEditor({ onBack, initialFile }: ExcelEditorProps) {
                         value={col}
                         onChange={(e) => updateColName(i, e.target.value)}
                         className="w-full bg-transparent text-center font-bold text-slate-600 dark:text-slate-300 text-xs md:text-sm focus:outline-none focus:text-emerald-600 dark:focus:text-emerald-400 group-hover:bg-slate-200/50 dark:group-hover:bg-slate-800 rounded px-1 transition-colors"
-                        title="Sütun Adını Değiştir"
+                        title="Change Column Name"
                       />
                     </th>
                   ))}

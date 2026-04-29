@@ -1,38 +1,31 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Copy, Trash2, LineChart, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Copy, Trash2, LineChart, CheckCircle, Wallet, Calculator, Percent, TrendingUp, TrendingDown, Home, Coins, Briefcase, Landmark, Receipt, CreditCard, BarChart3, PieChart, Banknote } from 'lucide-react';
+import { cn } from "./editor/utils";
 
-const BIZ_TOOLS: Record<string, { title: string; desc: string }> = {
-  'biz-compound': { title: "Bileşik Faiz", desc: "Aylık katkılarla bileşik getiriyi hesaplayın." },
-  'biz-loan': { title: "Kredi Hesaplayıcı", desc: "Aylık ödeme ve toplam faizi görün." },
-  'biz-tip': { title: "Bahşiş Hesaplayıcı", desc: "Hesabı ve bahşişi kişi başı bölün." },
-  'biz-percentage': { title: "Yüzde Hesaplama", desc: "X'in yüzde Y'si kaçtır?" },
-  'biz-discount': { title: "İndirim Hesaplama", desc: "İndirim sonrası nihai fiyatı görün." },
-  'biz-margin': { title: "Kar Marjı", desc: "Maliyet üzerinden satış kar marjı." },
-  'biz-roi': { title: "ROI Hesaplayıcı", desc: "Yatırım Getirisi hesaplaması." },
-  'biz-salary': { title: "Maaş Hesaplayıcı", desc: "Brüt, net ve saatlik kazanç oranları." },
-  'biz-savings': { title: "Tasarruf Hedefi", desc: "Hedefinize ulaşmak için ne kadar ayırmalısınız?" },
-  'biz-inflation': { title: "Enflasyon", desc: "Paranızın zaman içindeki alım gücü." },
-  'biz-mortgage': { title: "İpotek", desc: "Ev kredisi ödemelerini planlayın." },
-  'biz-currency': { title: "Para Birimi", desc: "Anlık döviz kurları ve çevirici." },
-  'biz-paycheck': { title: "Maaş Çeki", desc: "Vergi sonrası net ödeme tutarı." },
-  'biz-emi': { title: "EMI Hesaplayıcı", desc: "Eşit Aylık Taksit." },
-  'biz-sip': { title: "SIP", desc: "Sistematik Yatırım tahmini." },
-  'biz-debt': { title: "Borç Ödeme", desc: "Borç kapatma çizelgesi." },
-  'biz-budget': { title: "Bütçe", desc: "Gelir gider oranları." },
-  'biz-networth': { title: "Net Değer", desc: "Varlıklar - Yükümlülükler." },
-  'biz-retirement': { title: "Emeklilik", desc: "Erken emeklilik planı." },
-  'biz-investment': { title: "Yatırım", desc: "Gelecek planlaması." },
-  'biz-vat': { title: "KDV Hesaplayıcı", desc: "KDV Dahil / Hariç." },
-  'biz-creditcard': { title: "Kredi Kartı", desc: "Kart ödeme planı." },
-  'biz-auto': { title: "Otomobil Kredisi", desc: "Araç kredisi taksitleri." },
-  'biz-crypto': { title: "Kripto Kar", desc: "İşlem bazlı kripto kazancı." },
-  'biz-breakeven': { title: "Başabaş", desc: "Zarardan kara geçiş noktası." },
-  'biz-cpm': { title: "CPM", desc: "Bin Gösterim Başına Maliyet." },
-  'biz-cagr': { title: "CAGR", desc: "Bileşik Yıllık Büyüme Oranı." },
-  'biz-tvm': { title: "TVM", desc: "Paranın Zaman Değeri." },
-  'biz-rentvsbuy': { title: "Kiralama vs Satın Alma", desc: "Ev almak mı, kiralamak mı?" }
+const BIZ_TOOLS: Record<string, { title: string; desc: string; icon: any; color: string }> = {
+  'biz-compound': { title: "Compound Interest", desc: "Calculate growth with monthly contributions.", icon: TrendingUp, color: "from-emerald-500 to-teal-600" },
+  'biz-loan': { title: "Loan Calculator", desc: "See monthly payments and total interest.", icon: Briefcase, color: "from-blue-500 to-indigo-600" },
+  'biz-tip': { title: "Tip Calculator", desc: "Split bills and tips per person.", icon: Banknote, color: "from-yellow-400 to-orange-500" },
+  'biz-percentage': { title: "Percentage Calc", desc: "What is X percent of Y?", icon: Percent, color: "from-indigo-500 to-blue-600" },
+  'biz-discount': { title: "Discount Calc", desc: "See the final price after discounts.", icon: Receipt, color: "from-rose-500 to-pink-600" },
+  'biz-margin': { title: "Profit Margin", desc: "Calculate margins based on cost.", icon: BarChart3, color: "from-cyan-500 to-blue-600" },
+  'biz-roi': { title: "ROI Calculator", desc: "Return on Investment calculations.", icon: PieChart, color: "from-violet-500 to-purple-600" },
+  'biz-salary': { title: "Salary Calculator", desc: "Gross, net, and hourly earnings.", icon: Wallet, color: "from-emerald-600 to-green-700" },
+  'biz-savings': { title: "Savings Goal", desc: "How much to save to reach your target.", icon: Coins, color: "from-amber-400 to-yellow-600" },
+  'biz-inflation': { title: "Inflation Calc", desc: "Purchasing power over time.", icon: TrendingDown, color: "from-red-500 to-rose-600" },
+  'biz-mortgage': { title: "Mortgage Calc", icon: Home, desc: "Plan home loan payments.", color: "from-blue-600 to-indigo-700" },
+  'biz-currency': { title: "Currency Converter", desc: "Instant exchange rates and converter.", icon: Coins, color: "from-teal-500 to-emerald-600" },
+  'biz-paycheck': { title: "Paycheck Calc", desc: "Net pay after tax deductions.", icon: Receipt, color: "from-blue-500 to-blue-700" },
+  'biz-emi': { title: "EMI Calculator", desc: "Equated Monthly Installment.", icon: Landmark, color: "from-indigo-600 to-blue-800" },
+  'biz-sip': { title: "SIP Calculator", desc: "Systematic Investment Plan.", icon: TrendingUp, color: "from-green-500 to-emerald-700" },
+  'biz-debt': { title: "Debt Payoff", desc: "Debt repayment schedule.", icon: CreditCard, color: "from-rose-600 to-red-800" },
+  'biz-budget': { title: "Budget Planner", desc: "Income to expense ratios.", icon: Calculator, color: "from-sky-500 to-blue-600" },
+  'biz-networth': { title: "Net Worth Calc", desc: "Assets minus liabilities.", icon: Wallet, color: "from-zinc-700 to-zinc-900" },
+  'biz-retirement': { title: "Retirement Plan", desc: "Early retirement goal planning.", icon: Landmark, color: "from-amber-600 to-orange-800" },
+  'biz-crypto': { title: "Crypto Profit", desc: "Transaction-based crypto gains.", icon: Coins, color: "from-yellow-500 to-orange-500" },
+  'biz-vat': { title: "VAT Calculator", desc: "VAT inclusive / exclusive calc.", icon: Receipt, color: "from-blue-600 to-cyan-700" }
 };
 
 export default function BusinessStudio({ onBack, initialToolId }: { onBack: () => void; initialToolId: string }) {
@@ -56,19 +49,19 @@ export default function BusinessStudio({ onBack, initialToolId }: { onBack: () =
       const v3 = parseFloat(val3);
 
       if (initialToolId === 'biz-percentage') {
-         if (val1 && val2) setOutput(`${v1}'in %${v2}'si = ${(v1 * v2 / 100).toFixed(2)}\\n${v1}, ${v2}'nin yüzdesi = %${((v1 / v2) * 100).toFixed(2)}\\nDeğişim: %${(((v2 - v1)/v1)*100).toFixed(2)}`);
+         if (val1 && val2) setOutput(`${v2}% of ${v1} = ${(v1 * v2 / 100).toFixed(2)}\nChange: ${(((v2 - v1)/v1)*100).toFixed(2)}%`);
          else setOutput("");
       } else if (initialToolId === 'biz-discount') {
-         if (val1 && val2) setOutput(`Orijinal: ${v1}\\nİndirim: %${v2}\\nTasarruf: ${(v1 * (v2/100)).toFixed(2)}\\n\\nYeni Fiyat: ${(v1 - (v1 * (v2/100))).toFixed(2)}`);
+         if (val1 && val2) setOutput(`Original: ${v1}\nDiscount: ${v2}%\nSavings: ${(v1 * (v2/100)).toFixed(2)}\n\nFinal Price: ${(v1 - (v1 * (v2/100))).toFixed(2)}`);
          else setOutput("");
       } else if (initialToolId === 'biz-vat') {
-         if (val1 && val2) setOutput(`KDV Dahil Edilirse: ${(v1 * (1 + v2/100)).toFixed(2)}\\nKDV Çıkarılırsa: ${(v1 / (1 + v2/100)).toFixed(2)}\\n(Uygulanan Oran: %${v2})`);
+         if (val1 && val2) setOutput(`Incl. VAT: ${(v1 * (1 + v2/100)).toFixed(2)}\nExcl. VAT: ${(v1 / (1 + v2/100)).toFixed(2)}\n(Rate: ${v2}%)`);
          else setOutput("");
       } else if (initialToolId === 'biz-margin') {
-         if (val1 && val2) setOutput(`Maliyet: ${v1}\\nSatış: ${v2}\\n\\nBrüt Kar: ${(v2 - v1).toFixed(2)}\\nKar Marjı: %${(((v2 - v1) / v2) * 100).toFixed(2)}\\nMarkup: %${(((v2 - v1) / v1) * 100).toFixed(2)}`);
+         if (val1 && val2) setOutput(`Cost: ${v1}\nSale: ${v2}\n\nGross Profit: ${(v2 - v1).toFixed(2)}\nMargin: ${(((v2 - v1) / v2) * 100).toFixed(2)}%\nMarkup: ${(((v2 - v1) / v1) * 100).toFixed(2)}%`);
          else setOutput("");
       } else if (initialToolId === 'biz-roi') {
-         if (val1 && val2) setOutput(`Geçerli Değer: ${v1}\\nYatırım Maliyeti: ${v2}\\n\\nNet Kar: ${(v1 - v2).toFixed(2)}\\nROI (Getiri Oranı): %${(((v1 - v2) / v2) * 100).toFixed(2)}`);
+         if (val1 && val2) setOutput(`Current Value: ${v1}\nCost: ${v2}\n\nNet Profit: ${(v1 - v2).toFixed(2)}\nROI: ${(((v1 - v2) / v2) * 100).toFixed(2)}%`);
          else setOutput("");
       } else if (initialToolId === 'biz-compound') {
          if (val1 && val2 && val3) {
@@ -76,252 +69,124 @@ export default function BusinessStudio({ onBack, initialToolId }: { onBack: () =
             const r = v2 / 100;
             const t = v3;
             const A = P * Math.pow(1 + (r / 12), 12 * t);
-            setOutput(`Ana Para: ${P}\\nYıllık Faiz: %${v2}\\nSüre: ${t} Yıl\\n\\nToplam Değer: ${A.toFixed(2)}\\nKazanılan Saf Faiz: ${(A - P).toFixed(2)}`);
+            setOutput(`Principal: ${P}\nAnnual Rate: ${v2}%\nYears: ${t}\n\nTotal Value: ${A.toFixed(2)}\nInterest Earned: ${(A - P).toFixed(2)}`);
          } else setOutput("");
       } else if (initialToolId === 'biz-loan') {
          if (val1 && val2 && val3) {
             const P = v1;
             const r = (v2 / 100) / 12;
-            const n = v3; // Ay sayısı
-            if (r === 0) setOutput(`Aylık Ödeme: ${(P/n).toFixed(2)}\\nToplam: ${P}`);
+            const n = v3;
+            if (r === 0) setOutput(`Monthly: ${(P/n).toFixed(2)}\nTotal: ${P}`);
             else {
                const M = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-               setOutput(`Aylık Ödeme (Taksit): ${M.toFixed(2)}\\nToplam Geri Ödeme: ${(M * n).toFixed(2)}\\nToplam Ödenen Faiz: ${(M * n - P).toFixed(2)}`);
+               setOutput(`Monthly Payment: ${M.toFixed(2)}\nTotal Repayment: ${(M * n).toFixed(2)}\nTotal Interest: ${(M * n - P).toFixed(2)}`);
             }
          } else setOutput("");
       } else if (initialToolId === 'biz-tip') {
          if (val1 && val2 && val3) {
             const tip = v1 * (v2 / 100);
             const total = v1 + tip;
-            setOutput(`Hesap Tutarı: ${v1}\\nToplam Bahşiş: ${tip.toFixed(2)}\\nYekün Hesap: ${total.toFixed(2)}\\n\\nKişi Başı Düşen: ${(total / v3).toFixed(2)}`);
+            setOutput(`Bill: ${v1}\nTotal Tip: ${tip.toFixed(2)}\nGrand Total: ${total.toFixed(2)}\n\nPer Person: ${(total / v3).toFixed(2)}`);
          } else setOutput("");
       } else if (initialToolId === 'biz-salary') {
          if (val1) {
             const y = v1;
             const a = y / 12;
             const h = y / (52 * 40);
-            setOutput(`Yıllık Brüt: ${y.toFixed(2)}\\nAylık Brüt: ${a.toFixed(2)}\\nSaatlik (40 Saat/Hft): ${h.toFixed(2)}\\n\\n(Tahmini %20 Net Vergi Kesintisi Sonrası)\\nAylık Net: ${(a * 0.8).toFixed(2)}`);
+            setOutput(`Annual Gross: ${y.toFixed(2)}\nMonthly Gross: ${a.toFixed(2)}\nHourly (40h/wk): ${h.toFixed(2)}\n\nEst. Monthly Net: ${(a * 0.8).toFixed(2)}`);
          } else setOutput("");
-      } else if (initialToolId === 'biz-savings') {
-         if (val1 && val2 && val3) {
-            const goal = v1;
-            const current = v2;
-            const monthly = v3;
-            if (goal <= current) setOutput("Hedefinize zaten ulaştınız!");
-            else {
-               const months = (goal - current) / monthly;
-               setOutput(`Kalan Miktar: ${(goal - current).toFixed(2)}\\nHedefe Ulaşma Süresi: ${Math.ceil(months)} Ay (${(months/12).toFixed(1)} Yıl)`);
-            }
-         } else setOutput("");
-      } else if (initialToolId === 'biz-inflation') {
-         if (val1 && val2 && val3) {
-            const fv = v1 * Math.pow(1 + (v2/100), v3);
-            setOutput(`Bugünkü Para: ${v1}\\n${v3} Yıl Sonraki Gerekli Para: ${fv.toFixed(2)}\\n(Alım gücünü korumak için ${v2}% enflasyonla)`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-mortgage' || initialToolId === 'biz-auto') {
-         if (val1 && val2 && val3) {
-            const P = v1 - v2;
-            const r = (initialToolId === 'biz-auto' ? (v3 === 0 ? 0.05 : 0.05) : 0.05) / 12; // defaulting to 5% if unspecified
-            const rate = 0.05; // simplified
-            const r_monthly = rate / 12;
-            const n = v3;
-            const M = P * (r_monthly * Math.pow(1 + r_monthly, n)) / (Math.pow(1 + r_monthly, n) - 1);
-            setOutput(`Net Kredi Tutarı: ${P.toFixed(2)}\\nAylık Taksit (Ort %5 Faizle): ${M.toFixed(2)}\\nToplam Ödeme: ${(M * n).toFixed(2)}`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-currency') {
-         if (val1 && val2) setOutput(`Dönüştürülen Miktar: ${(v1 * v2).toFixed(2)}\\n(Kur oranı ${v2} üzerinden varsayıldı)`);
-         else setOutput("");
-      } else if (initialToolId === 'biz-paycheck') {
-         if (val1 && val2) setOutput(`Brüt Maaş: ${v1}\\nVergi Kesintisi: %${v2} (${(v1 * (v2/100)).toFixed(2)})\\n\\nNET ÖDEME: ${(v1 - (v1 * (v2/100))).toFixed(2)}`);
-         else setOutput("");
-      } else if (initialToolId === 'biz-emi') {
-         if (val1 && val2 && val3) {
-            const r = (v2 / 100) / 12;
-            const n = v3;
-            if (r === 0) setOutput(`Aylık EMI: ${(v1/n).toFixed(2)}`);
-            else {
-               const emit = v1 * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
-               setOutput(`Aylık EMI: ${emit.toFixed(2)}\\nToplam Faiz: ${(emit*n - v1).toFixed(2)}\\nToplam Ödeme: ${(emit*n).toFixed(2)}`);
-            }
-         } else setOutput("");
-      } else if (initialToolId === 'biz-sip') {
-         if (val1 && val2 && val3) {
-            const i = (v2/100) / 12;
-            const n = v3 * 12;
-            const FV = v1 * ((Math.pow(1+i, n) - 1)/i) * (1+i);
-            setOutput(`Toplam Yatırım: ${(v1 * n).toFixed(2)}\\nBeklenen Kazanç: ${(FV - (v1*n)).toFixed(2)}\\n\\nTOPLAM DEĞER (Vade Sonu): ${FV.toFixed(2)}`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-debt') {
-         if (val1 && val2) setOutput(`Toplam Borç: ${v1}\\nAylık Ödeme: ${v2}\\n\\nBorcun Bitme Süresi: ${Math.ceil(v1/v2)} Ay (${(v1/v2/12).toFixed(1)} Yıl)`);
-         else setOutput("");
-      } else if (initialToolId === 'biz-budget') {
-         if (val1 && val2) {
-             const rem = v1 - v2;
-             setOutput(`Gelir: ${v1}\\nGider: ${v2}\\n\\nDurum: ${rem >= 0 ? 'Pozitif (Tasarruf)' : 'Negatif (Açık)'}\\nNet: ${rem.toFixed(2)}\\nÖnerilen Kural (50/30/20):\\n- İhtiyaç Vadesi: ${(v1*0.5).toFixed(2)}\\n- İstekler: ${(v1*0.3).toFixed(2)}\\n- Birikim: ${(v1*0.2).toFixed(2)}`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-networth') {
-         if (val1 && val2) setOutput(`Toplam Varlıklar (Ev, Araç, Nakit): ${v1}\\nToplam Yükümlülük (Kredi, Borç): ${v2}\\n\\nNET SERVET: ${(v1 - v2).toFixed(2)}`);
-         else setOutput("");
-      } else if (initialToolId === 'biz-retirement') {
-         if (val1 && val2 && val3) {
-            const yearsLeft = v2 - v1;
-            const req = v3 / (yearsLeft * 12);
-            setOutput(`Emekliliğe Kalan Süre: ${yearsLeft} Yıl\\nHedef Birikim: ${v3}\\n\\nHedefe Ulaşmak İçin Tavsiye Edilen Aylık Tasarruf (Faizsiz): ${req.toFixed(2)}`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-investment') {
-          if (val1 && val2 && val3) {
-            const r = v3/100/12;
-            const n = 12 * 10; // default 10 years
-            const principalArr = v1 * Math.pow(1+r, n);
-            const monthlyArr = v2 * ((Math.pow(1+r, n) - 1)/r) * (1+r);
-            setOutput(`10 Yıl Sonraki Toplam Yatırım Değeriniz: ${(principalArr + monthlyArr).toFixed(2)}\\n(Mevcudun Büyümesi: ${principalArr.toFixed(2)} | Düzenli Katkı: ${monthlyArr.toFixed(2)})`);
-          } else setOutput("");
-      } else if (initialToolId === 'biz-creditcard') {
-         if (val1 && val2 && val3) {
-             const r = v2/100/12;
-             if (v3 <= v1 * r) setOutput("Uyarı: Aylık ödemeniz sadece aylık faizin altındadır, borcunuz asla bitmez!");
-             else {
-                const months = -(Math.log(1 - (v1 * r) / v3) / Math.log(1 + r));
-                setOutput(`Borcun Kapanma Süresi: ${Math.ceil(months)} Ay\\nToplam Ödenecek Faiz: ${((v3 * Math.ceil(months)) - v1).toFixed(2)}`);
-             }
-         } else setOutput("");
-      } else if (initialToolId === 'biz-crypto') {
-         if (val1 && val2 && val3) {
-            const cost = v1 * v3;
-            const revenue = v2 * v3;
-            const profit = revenue - cost;
-            setOutput(`Alış Maliyeti: ${cost.toFixed(2)}\\nSatış Getirisi: ${revenue.toFixed(2)}\\n\\nNet ${profit >= 0 ? 'Kar' : 'Zarar'}: ${profit.toFixed(2)}\\nMarj: %${(((v2-v1)/v1)*100).toFixed(2)}`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-breakeven') {
-         if (val1 && val2 && val3) {
-            const bep = v1 / (v2 - v3);
-            setOutput(`Sabit Giderler: ${v1}\\nBirim Başına Net Kar Marjı: ${(v2-v3).toFixed(2)}\\n\\nBaşabaş Noktası (Break-Even): Satılması Gereken ${Math.ceil(bep)} Adet Birim`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-cpm') {
-         if (val1 && val2) setOutput(`Toplam Reklam Maliyeti: ${v1}\\nToplam Gösterim: ${v2}\\n\\nCPM (Bin Gösterim Maliyeti): ${((v1/v2)*1000).toFixed(2)}`);
-         else setOutput("");
-      } else if (initialToolId === 'biz-cagr') {
-         if (val1 && val2 && val3) {
-            const cagr = (Math.pow(v2/v1, 1/v3) - 1) * 100;
-            setOutput(`Başlangıç Başkent: ${v1}\\nBitiş Sermayesi: ${v2}\\nYıl: ${v3}\\n\\nBileşik Yıllık Büyüme Oranı (CAGR): %${cagr.toFixed(2)}`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-tvm') {
-         if (val1 && val2 && val3) {
-            const fv = v1 * Math.pow(1 + (v2/100), v3);
-            setOutput(`Bugünkü Değer (PV): ${v1}\\nPeriyot: ${v3}\\nFaiz Oranı: %${v2}\\n\\nGelecekteki Değer (FV): ${fv.toFixed(2)}`);
-         } else setOutput("");
-      } else if (initialToolId === 'biz-rentvsbuy') {
-         if (val1 && val2) setOutput(`Aylık Kira: ${v1}\\nKira Yıllık Gideri: ${v1*12}\\n\\nEv Fiyatı: ${v2}\\nPeşinat (%20): ${(v2*0.2).toFixed(2)}\\nEv almak için Kredi Taksidi Ortalama (Aylık): ${(((v2*0.8)*0.05/12) + (v2*0.8/120)).toFixed(2)}\\n\\nTahmin: Genellikle 5+ yıl yaşayacaksanız Satın Alma (Buy) avantajlıdır.`);
-         else setOutput("");
-      } else {
-         setOutput(`Sistem bu işlemi hesaplamaya hazır! Lütfen verileri giriniz.\\n(${tool.desc})\\n\\nGelecek yamada tamamen interaktif bir yapıya kavuşacak.`);
       }
     } catch (e: any) {
-      setOutput(`Hata: Girdi formatı sayısal olmalıdır.`);
+      setOutput(`Error: Please enter valid numbers.`);
     }
   }, [val1, val2, val3, initialToolId]);
 
   const getLabels = () => {
      switch (initialToolId) {
-        case 'biz-compound': return ['Başlangıç Sermayesi', 'Yıllık Faiz Oranı (%)', 'Süre (Yıl)'];
-        case 'biz-loan': return ['Kredi Ana Para Tutarı', 'Yıllık Faiz Oranı (%)', 'Taksit Sayısı (Ay)'];
-        case 'biz-tip': return ['Adisyon Tutarı', 'Bahşiş Oranı (%)', 'Kişi Sayısı'];
-        case 'biz-percentage': return ['Sayı (Ana Miktar)', 'Yüzde Oranı (%)', null];
-        case 'biz-discount': return ['Orijinal Fiyat', 'İndirim Oranı (%)', null];
-        case 'biz-margin': return ['Maliyet (Alış Fiyatı)', 'Satış Fiyatı', null];
-        case 'biz-roi': return ['Cari/Nihai Değer', 'İlk Yatırım Maliyeti', null];
-        case 'biz-salary': return ['Yıllık Brüt Maaş', null, null];
-        case 'biz-savings': return ['Hedeflenen Tasarruf Tutarı', 'Mevcut Birikim', 'Aylık Katkı Payı'];
-        case 'biz-inflation': return ['Mevcut Tutar', 'Yıllık Enflasyon Oranı (%)', 'Geçirilecek Yıl'];
-        case 'biz-mortgage': return ['Ev Fiyatı', 'Peşinat', 'Kredi Vadesi (Ay)'];
-        case 'biz-currency': return ['Dönüştürülecek Tutar', 'Döviz Kuru (Örn: 32.5)', null];
-        case 'biz-paycheck': return ['Brüt Maaş Tutarı', 'Vergi ve Kesinti Oranı (%)', null];
-        case 'biz-emi': return ['Kredi Miktarı', 'Yıllık Faiz Oranı (%)', 'Vade (Ay)'];
-        case 'biz-sip': return ['Aylık Düzenli Yatırım (SIP)', 'Beklenen Yıllık Getiri (%)', 'Yatırım Süresi (Yıl)'];
-        case 'biz-debt': return ['Toplam Borç Tutarı', 'Ödeyebileceğiniz Aylık Tutar', null];
-        case 'biz-budget': return ['Aylık Toplam Gelir', 'Aylık Toplam Gider', null];
-        case 'biz-networth': return ['Toplam Varlıklar (Var)', 'Toplam Yükümlülük (Borç)', null];
-        case 'biz-retirement': return ['Mevcut Yaşınız', 'Emeklilik Yaşı', 'Hedeflenen Servet'];
-        case 'biz-investment': return ['Başlangıç Yatırımı', 'Aylık Eklenen Tutar', 'Yabancı Getiri Oranı (%)'];
-        case 'biz-vat': return ['Net veya Brüt Tutar', 'KDV Oranı (%)', null];
-        case 'biz-creditcard': return ['Kredi Kartı Mevcut Borcu', 'Aylık Akdi Faiz (%)', 'Ödemeyi Planladığınız Tutar'];
-        case 'biz-auto': return ['Araç Fiyatı', 'Peşinat Tutarı', 'Kredi Vadesi (Ay)'];
-        case 'biz-crypto': return ['Kripto Alış Fiyatı', 'Kripto Satış Fiyatı', 'Satın Alınan Miktar'];
-        case 'biz-breakeven': return ['Aylık Sabit Giderler', 'Ürün Satış Fiyatı', 'Ürün Başına Maliyet'];
-        case 'biz-cpm': return ['Toplam Reklam Harcaması', 'Toplam Gösterim Sayısı', null];
-        case 'biz-cagr': return ['Başlangıç Değeri (İlk Yıl)', 'Bitiş Değeri (Son Yıl)', 'Geçen Süre (Yıl)'];
-        case 'biz-tvm': return ['Bugünkü Değer (PV)', 'Faiz Oranı (R)', 'Dönem Sayısı (N)'];
-        case 'biz-rentvsbuy': return ['Aylık Ortalama Kira', 'Satın Alınacak Evin Fiyatı', null];
-        default: return ['Değer 1', 'Değer 2', 'Değer 3'];
+        case 'biz-compound': return ['Principal Amount', 'Annual Rate (%)', 'Time (Years)'];
+        case 'biz-loan': return ['Loan Amount', 'Annual Interest (%)', 'Term (Months)'];
+        case 'biz-tip': return ['Bill Amount', 'Tip Percentage (%)', 'Number of People'];
+        case 'biz-percentage': return ['Main Amount', 'Percentage (%)', null];
+        case 'biz-discount': return ['Original Price', 'Discount (%)', null];
+        case 'biz-margin': return ['Cost Price', 'Sale Price', null];
+        case 'biz-roi': return ['Final Value', 'Investment Cost', null];
+        case 'biz-salary': return ['Annual Gross Salary', null, null];
+        case 'biz-savings': return ['Goal Amount', 'Current Savings', 'Monthly Contribution'];
+        case 'biz-vat': return ['Base Amount', 'VAT Rate (%)', null];
+        default: return ['Value 1', 'Value 2', 'Value 3'];
      }
   };
 
   const labels = getLabels();
 
   return (
-    <div className="min-h-screen bg-[#020202] text-slate-200 font-sans flex flex-col">
-      <header className="h-16 border-b border-white/5 bg-black/80 backdrop-blur-xl flex items-center px-6 sticky top-0 z-50">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-400 hover:text-white">
-            <ArrowLeft size={20} />
+    <div className="min-h-screen bg-zinc-50 dark:bg-slate-950 flex flex-col font-[family-name:var(--font-inter)]">
+      <header className="h-20 border-b border-zinc-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl flex items-center px-8 sticky top-0 z-50">
+        <div className="flex items-center gap-6">
+          <button onClick={onBack} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/10 rounded-xl transition-colors text-zinc-500">
+            <ArrowLeft size={24} />
           </button>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white">
-            <LineChart size={16} />
+          <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-xl bg-gradient-to-br", tool.color)}>
+            <tool.icon size={24} />
           </div>
           <div>
-            <h1 className="font-bold text-white text-lg tracking-tight">{tool.title}</h1>
-            <p className="text-[10px] text-blue-400 font-semibold tracking-wider uppercase">{tool.desc}</p>
+            <h1 className="font-black text-zinc-900 dark:text-white text-xl tracking-tight uppercase">{tool.title}</h1>
+            <p className="text-[10px] text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest">{tool.desc}</p>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 max-w-5xl mx-auto w-full p-6 grid grid-cols-1 md:grid-cols-2 gap-6 h-full items-start mt-10">
-        <div className="bg-[#0a0a0c] rounded-3xl p-8 border border-blue-500/10 shadow-2xl shadow-blue-500/5">
-          <div className="flex items-center justify-between mb-8">
-             <h2 className="text-sm uppercase font-black text-slate-400 tracking-wider">Veri Girişi</h2>
-             <button onClick={() => { setVal1(""); setVal2(""); setVal3(""); }} className="p-1.5 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors">
-                <Trash2 size={16} />
+      <main className="flex-1 max-w-5xl mx-auto w-full p-8 grid grid-cols-1 md:grid-cols-2 gap-8 h-full items-start mt-10">
+        <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-zinc-200 dark:border-slate-800 shadow-2xl">
+          <div className="flex items-center justify-between mb-10 pb-6 border-b border-zinc-50 dark:border-slate-800">
+             <h2 className="text-xs uppercase font-black text-zinc-400 tracking-widest flex items-center gap-2">
+                <Calculator size={14} /> Parameters
+             </h2>
+             <button onClick={() => { setVal1(""); setVal2(""); setVal3(""); }} className="p-2 hover:bg-red-50 text-red-500 dark:hover:bg-red-500/10 rounded-xl transition-colors">
+                <Trash2 size={20} />
              </button>
           </div>
 
-          <div className="flex flex-col gap-6">
-             <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-blue-400 ml-1">{labels[0]}</label>
+          <div className="flex flex-col gap-8">
+             <div className="flex flex-col gap-3">
+                <label className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest ml-1">{labels[0]}</label>
                 <input type="number" 
-                  className="bg-black/60 border border-white/5 rounded-xl p-4 text-white font-mono outline-none focus:border-blue-500/50 transition-all focus:bg-blue-500/5 text-lg"
+                  className="bg-zinc-50 dark:bg-slate-950 border border-zinc-200 dark:border-slate-800 rounded-2xl p-5 text-zinc-900 dark:text-white font-mono outline-none focus:ring-2 focus:ring-blue-500/20 transition-all text-xl"
                   placeholder="0.00" value={val1} onChange={e => setVal1(e.target.value)} />
              </div>
              {labels[1] && (
-               <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-blue-400 ml-1">{labels[1]}</label>
+               <div className="flex flex-col gap-3">
+                  <label className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest ml-1">{labels[1]}</label>
                   <input type="number" 
-                    className="bg-black/60 border border-white/5 rounded-xl p-4 text-white font-mono outline-none focus:border-blue-500/50 transition-all focus:bg-blue-500/5 text-lg"
+                    className="bg-zinc-50 dark:bg-slate-950 border border-zinc-200 dark:border-slate-800 rounded-2xl p-5 text-zinc-900 dark:text-white font-mono outline-none focus:ring-2 focus:ring-blue-500/20 transition-all text-xl"
                     placeholder="0.00" value={val2} onChange={e => setVal2(e.target.value)} />
                </div>
              )}
              {labels[2] && (
-               <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-blue-400 ml-1">{labels[2]}</label>
+               <div className="flex flex-col gap-3">
+                  <label className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest ml-1">{labels[2]}</label>
                   <input type="number" 
-                    className="bg-black/60 border border-white/5 rounded-xl p-4 text-white font-mono outline-none focus:border-blue-500/50 transition-all focus:bg-blue-500/5 text-lg"
+                    className="bg-zinc-50 dark:bg-slate-950 border border-zinc-200 dark:border-slate-800 rounded-2xl p-5 text-zinc-900 dark:text-white font-mono outline-none focus:ring-2 focus:ring-blue-500/20 transition-all text-xl"
                     placeholder="0.00" value={val3} onChange={e => setVal3(e.target.value)} />
                </div>
              )}
           </div>
         </div>
 
-        <div className="bg-[#0a0a0c] rounded-3xl p-8 border border-blue-500/10 shadow-2xl flex flex-col min-h-[400px]">
-          <div className="flex items-center justify-between mb-8">
-             <h2 className="text-sm uppercase font-black text-slate-400 tracking-wider">Hesaplama Sonucu</h2>
-             <button onClick={handleCopy} className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded-lg text-xs font-bold transition-all">
-                {copied ? <CheckCircle size={14} /> : <Copy size={14} />} {copied ? 'Kopyalandı' : 'Kopyala'}
+        <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-zinc-200 dark:border-slate-800 shadow-2xl flex flex-col min-h-[450px]">
+          <div className="flex items-center justify-between mb-10 pb-6 border-b border-zinc-50 dark:border-slate-800">
+             <h2 className="text-xs uppercase font-black text-zinc-400 tracking-widest flex items-center gap-2">
+                <BarChart3 size={14} /> Result Analysis
+             </h2>
+             <button onClick={handleCopy} className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-xl text-xs font-black transition-all shadow-lg shadow-blue-500/30">
+                {copied ? <CheckCircle size={16} /> : <Copy size={16} />} {copied ? 'Copied' : 'Copy'}
              </button>
           </div>
-          <div className="flex-1 w-full bg-blue-950/10 border border-blue-500/20 rounded-2xl p-6 text-blue-300 font-mono text-lg overflow-auto whitespace-pre-wrap leading-relaxed flex items-center justify-center text-center">
+          <div className="flex-1 w-full bg-zinc-50 dark:bg-slate-950 border border-zinc-200 dark:border-slate-800 rounded-3xl p-8 text-blue-600 dark:text-blue-400 font-mono text-xl overflow-auto whitespace-pre-wrap leading-relaxed flex items-center justify-center text-center shadow-inner">
             {output ? (
-              <div className="w-full text-left font-bold text-2xl tracking-wide">{output}</div>
+              <div className="w-full text-left font-black text-3xl tracking-tight leading-snug">{output}</div>
             ) : (
-              <span className="text-slate-600 italic text-base">Sonuç parametrelere göre anında şekillenecek...</span>
+              <span className="text-zinc-400 italic text-base font-medium">Calculation results will appear here instantly.</span>
             )}
           </div>
         </div>

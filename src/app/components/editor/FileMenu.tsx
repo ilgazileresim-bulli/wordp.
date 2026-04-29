@@ -72,21 +72,21 @@ const FileMenu = ({
                             <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors">
                                 <ArrowLeft size={18} />
                             </div>
-                            <span className="text-xs font-black uppercase tracking-widest">Geri</span>
+                            <span className="text-xs font-black uppercase tracking-widest">Back</span>
                         </button>
 
                         <div className="flex flex-row md:flex-col items-center md:items-stretch">
-                            <MenuButton icon={Info} label="Bilgi" active={activeTab === 'info'} onClick={() => setActiveTab('info')} />
-                            <MenuButton icon={Save} label="Kaydet" onClick={handleQuickSave} />
-                            <MenuButton icon={Download} label="Kaydet (Farklı)" active={activeTab === 'save-as'} onClick={() => setActiveTab('save-as')} />
-                            <MenuButton icon={Printer} label="Yazdır" onClick={onPrint} />
-                            <MenuButton icon={Share2} label="Paylaş" active={activeTab === 'share'} onClick={() => setActiveTab('share')} />
-                            <MenuButton icon={FileDown} label="Dışarı Aktar" active={activeTab === 'export'} onClick={() => setActiveTab('export')} />
-                            <MenuButton icon={X} label="Kapat" onClick={onClose} />
+                            <MenuButton icon={Info} label="Info" active={activeTab === 'info'} onClick={() => setActiveTab('info')} />
+                            <MenuButton icon={Save} label="Save" onClick={handleQuickSave} />
+                            <MenuButton icon={Download} label="Save As" active={activeTab === 'save-as'} onClick={() => setActiveTab('save-as')} />
+                            <MenuButton icon={Printer} label="Print" onClick={onPrint} />
+                            <MenuButton icon={Share2} label="Share" active={activeTab === 'share'} onClick={() => setActiveTab('share')} />
+                            <MenuButton icon={FileDown} label="Export" active={activeTab === 'export'} onClick={() => setActiveTab('export')} />
+                            <MenuButton icon={X} label="Close" onClick={onClose} />
                         </div>
 
                         <div className="md:mt-auto md:pb-8 flex items-center pr-4 md:pr-0">
-                            <MenuButton icon={Settings} label="Seçenekler" />
+                            <MenuButton icon={Settings} label="Options" />
                         </div>
                     </div>
 
@@ -104,22 +104,22 @@ const FileMenu = ({
                                 {activeTab === 'info' && (
                                     <div className="animate-in fade-in duration-500">
                                         <header className="mb-12">
-                                            <h1 className="text-4xl font-light text-[#2b579a] dark:text-blue-400 mb-2 font-serif">Belge Bilgileri</h1>
-                                            <p className="text-zinc-500 dark:text-zinc-400 text-sm">Belgenizin özellikleri ve ayrıntıları.</p>
+                                            <h1 className="text-4xl font-light text-[#2b579a] dark:text-blue-400 mb-2 font-serif">Document Info</h1>
+                                            <p className="text-zinc-500 dark:text-zinc-400 text-sm">Properties and details of your document.</p>
                                         </header>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                                            <StatCard label="Sözcük" value={stats.words.toLocaleString('tr-TR')} />
-                                            <StatCard label="Karakter" value={stats.chars.toLocaleString('tr-TR')} />
-                                            <StatCard label="Paragraf" value={stats.paragraphs.toLocaleString('tr-TR')} />
-                                            <StatCard label="Düzenleme Süresi" value={`${stats.readingTime} dk`} />
+                                            <StatCard label="Words" value={stats.words.toLocaleString('en-US')} />
+                                            <StatCard label="Characters" value={stats.chars.toLocaleString('en-US')} />
+                                            <StatCard label="Paragraphs" value={stats.paragraphs.toLocaleString('en-US')} />
+                                            <StatCard label="Editing Time" value={`${stats.readingTime} min`} />
                                         </div>
 
                                         <div className="space-y-6">
-                                            <InfoRow label="Oluşturulma" value={new Date().toLocaleDateString('tr-TR')} />
-                                            <InfoRow label="Son Değişiklik" value="Şimdi" />
-                                            <InfoRow label="Yazar" value="Kullanıcı" />
-                                            <InfoRow label="Dosya Boyutu" value={`${(stats.chars * 1.5 / 1024).toFixed(1)} KB`} />
+                                            <InfoRow label="Created" value={new Date().toLocaleDateString('en-US')} />
+                                            <InfoRow label="Last Modified" value="Now" />
+                                            <InfoRow label="Author" value="User" />
+                                            <InfoRow label="File Size" value={`${(stats.chars * 1.5 / 1024).toFixed(1)} KB`} />
                                         </div>
                                     </div>
                                 )}
@@ -127,24 +127,24 @@ const FileMenu = ({
                                 {activeTab === 'save-as' && (
                                     <div className="animate-in fade-in duration-500">
                                         <header className="mb-12">
-                                            <h1 className="text-4xl font-light text-[#2b579a] dark:text-blue-400 mb-2 font-serif">Kopyasını Kaydet</h1>
-                                            <p className="text-zinc-500 dark:text-zinc-400 text-sm">Belgenizi farklı bir konuma veya biçime kaydedin.</p>
+                                            <h1 className="text-4xl font-light text-[#2b579a] dark:text-blue-400 mb-2 font-serif">Save a Copy</h1>
+                                            <p className="text-zinc-500 dark:text-zinc-400 text-sm">Save your document to a different location or format.</p>
                                         </header>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <ExportCard
                                                 icon={Download}
-                                                title="Word Belgesi (.docx)"
-                                                description="Microsoft Word formatında kaydet. En yaygın kullanılan düzenlenebilir format."
-                                                buttonLabel="DOCX Olarak Kaydet"
+                                                title="Word Document (.docx)"
+                                                description="Save in Microsoft Word format. The most common editable format."
+                                                buttonLabel="Save as DOCX"
                                                 onClick={onExportDocx}
                                                 accentColor="#2b579a"
                                             />
                                             <ExportCard
                                                 icon={FileCode}
-                                                title="JSON Verisi (.json)"
-                                                description="Ham belge verisini JSON formatında yedekleyin. Teknik analiz için uygundur."
-                                                buttonLabel="JSON Olarak Kaydet"
+                                                title="JSON Data (.json)"
+                                                description="Backup raw document data in JSON format. Suitable for technical analysis."
+                                                buttonLabel="Save as JSON"
                                                 onClick={onExportJson}
                                                 accentColor="#10b981"
                                             />
@@ -157,20 +157,20 @@ const FileMenu = ({
                                         <div className="w-20 h-20 bg-blue-50 text-[#2b579a] rounded-full flex items-center justify-center mx-auto mb-6">
                                             <Share2 size={40} />
                                         </div>
-                                        <h1 className="text-3xl font-black text-zinc-900 dark:text-zinc-100 mb-4">Başkalarıyla Paylaş</h1>
+                                        <h1 className="text-3xl font-black text-zinc-900 dark:text-zinc-100 mb-4">Share with Others</h1>
                                         <p className="text-zinc-500 max-w-md mx-auto mb-8">
-                                            Belgenizi iş arkadaşlarınızla paylaşın. Salt okunur bir bağlantı oluşturarak erişimi kolaylaştırın.
+                                            Share your document with colleagues. Create a read-only link for easy access.
                                         </p>
                                         <div className="max-w-md mx-auto p-4 bg-zinc-50 dark:bg-slate-800 border border-zinc-200 dark:border-slate-700 rounded-xl flex items-center justify-between mb-8">
                                             <code className="text-xs text-zinc-600 truncate mr-4">https://macrotar.app/doc/822f12ae...</code>
                                             <button
                                                 onClick={() => {
                                                     navigator.clipboard.writeText("https://macrotar.app/doc/share-link");
-                                                    alert("Bağlantı kopyalandı!");
+                                                    alert("Link copied!");
                                                 }}
                                                 className="px-4 py-2 bg-[#2b579a] text-white text-[10px] font-black rounded-lg uppercase tracking-wider whitespace-nowrap"
                                             >
-                                                Kopyala
+                                                Copy
                                             </button>
                                         </div>
                                     </div>
@@ -179,24 +179,24 @@ const FileMenu = ({
                                 {activeTab === 'export' && (
                                     <div className="animate-in fade-in duration-500">
                                         <header className="mb-12">
-                                            <h1 className="text-4xl font-light text-[#2b579a] dark:text-blue-400 mb-2 font-serif">Dışarı Aktar</h1>
-                                            <p className="text-zinc-500 dark:text-zinc-400 text-sm">Belgenizi paylaşılabilir formatlara dönüştürün.</p>
+                                            <h1 className="text-4xl font-light text-[#2b579a] dark:text-blue-400 mb-2 font-serif">Export</h1>
+                                            <p className="text-zinc-500 dark:text-zinc-400 text-sm">Convert your document to shareable formats.</p>
                                         </header>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <ExportCard
                                                 icon={FileText}
-                                                title="PDF Belgesi"
-                                                description="Belgeyi bir PDF dosyasına dönüştürün. Yazı tiplerini ve içeriği her ortamda korur."
-                                                buttonLabel="PDF İndir"
+                                                title="PDF Document"
+                                                description="Convert the document into a PDF file. Preserves fonts and content in any environment."
+                                                buttonLabel="Download PDF"
                                                 onClick={onExportPdf}
                                                 accentColor="#e11d48"
                                             />
                                             <ExportCard
                                                 icon={Download}
-                                                title="Word Belgesi (.docx)"
-                                                description="Belgeyi düzenlenebilir bir Word dosyası olarak aktarın."
-                                                buttonLabel="Word Belgesi İndir"
+                                                title="Word Document (.docx)"
+                                                description="Export the document as an editable Word file."
+                                                buttonLabel="Download Word Document"
                                                 onClick={onExportDocx}
                                                 accentColor="#2b579a"
                                             />
@@ -216,7 +216,7 @@ const FileMenu = ({
                                 <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
                                     <X size={12} className="rotate-45" />
                                 </div>
-                                <span className="text-sm font-bold">Belge başarıyla kaydedildi!</span>
+                                <span className="text-sm font-bold">Document successfully saved!</span>
                             </motion.div>
                         )}
                     </div>

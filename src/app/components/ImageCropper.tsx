@@ -31,7 +31,7 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = "kiesilmis-fotograf.png";
+                a.download = "cropped-image.png";
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -61,8 +61,8 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
                             <Crop size={20} />
                         </div>
                         <div>
-                            <h1 className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 leading-tight">Fotoğraf Kesici</h1>
-                            <p className="text-[11px] font-medium text-zinc-400">Özgürce Kesin ve Boyutlandırın</p>
+                            <h1 className="text-xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 leading-tight">Image Cropper</h1>
+                            <p className="text-[11px] font-medium text-zinc-400">Crop and Resize Freely</p>
                         </div>
                     </div>
                 </div>
@@ -70,12 +70,12 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
                 <div className="flex gap-3">
                     {sourceImage && (
                         <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-zinc-200 dark:border-slate-700 rounded-xl text-sm font-bold text-zinc-600 dark:text-zinc-300 hover:text-red-500 hover:border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all shadow-sm">
-                            <Trash2 size={16} /> Temizle
+                            <Trash2 size={16} /> Clear
                         </button>
                     )}
                     {sourceImage && (
                         <button onClick={handleDownload} className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105">
-                            <Download size={16} /> Kes & İndir
+                            <Download size={16} /> Crop & Download
                         </button>
                     )}
                 </div>
@@ -89,12 +89,12 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
                                 <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
                                     <Crop size={40} />
                                 </div>
-                                <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-2">Fotoğraf Yükleyin</h2>
-                                <p className="text-zinc-500 dark:text-zinc-400 text-center mb-8 max-w-md">Kesmek istediğiniz fotoğrafı seçin. İstediğiniz oranlarda kırpabilirsiniz.</p>
+                                <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-2">Upload Photo</h2>
+                                <p className="text-zinc-500 dark:text-zinc-400 text-center mb-8 max-w-md">Select the photo you want to crop. You can crop in any ratio you like.</p>
                                 
                                 <label className="flex items-center gap-2 px-8 py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-bold hover:scale-105 transition-all cursor-pointer shadow-lg">
                                     <Upload size={20} />
-                                    Fotoğraf Seç
+                                    Select Photo
                                     <input type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleUpload} />
                                 </label>
                             </div>
@@ -125,26 +125,26 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
                             <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center">
                                 <Scissors size={20} />
                             </div>
-                            <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">Kesme Ayarları</h3>
+                            <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">Cropping Settings</h3>
                         </div>
 
                         <div className="space-y-6">
                             <div>
-                                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3">En / Boy Oranı</h4>
+                                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3">Aspect Ratio</h4>
                                 <div className="grid grid-cols-2 gap-2">
-                                    <button onClick={() => setAspectRatio(NaN)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">Serbest</button>
-                                    <button onClick={() => setAspectRatio(1)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">1:1 (Kare)</button>
+                                    <button onClick={() => setAspectRatio(NaN)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">Free</button>
+                                    <button onClick={() => setAspectRatio(1)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">1:1 (Square)</button>
                                     <button onClick={() => setAspectRatio(4 / 3)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">4:3</button>
-                                    <button onClick={() => setAspectRatio(16 / 9)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">16:9 (Geniş)</button>
+                                    <button onClick={() => setAspectRatio(16 / 9)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">16:9 (Wide)</button>
                                     <button onClick={() => setAspectRatio(3 / 4)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">3:4</button>
-                                    <button onClick={() => setAspectRatio(9 / 16)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">9:16 (Hikaye)</button>
+                                    <button onClick={() => setAspectRatio(9 / 16)} className="py-2 border border-zinc-200 dark:border-slate-700 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-slate-700">9:16 (Story)</button>
                                 </div>
                             </div>
 
                             <div className="pt-4 border-t border-zinc-100 dark:border-slate-700">
                                 <label className="flex flex-col items-center justify-center gap-2 py-4 border-2 border-dashed border-zinc-200 dark:border-slate-700 rounded-xl font-bold transition-all text-sm cursor-pointer hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 text-zinc-600 dark:text-zinc-300">
                                     <RefreshCw size={20} className="mb-1" />
-                                    Yeni Fotoğraf Yükle
+                                    Upload New Photo
                                     <input type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleUpload} />
                                 </label>
                             </div>

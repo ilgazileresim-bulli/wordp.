@@ -64,30 +64,30 @@ const BG_COLORS = [
 ];
 
 const LAYOUTS: { id: Slide["layout"]; label: string; elements: Omit<SlideElement, "id">[] }[] = [
-    { id: "blank", label: "Boş Slayt", elements: [] },
+    { id: "blank", label: "Blank Slide", elements: [] },
     {
-        id: "title", label: "Başlık Slaytı", elements: [
-            { type: "text", x: 60, y: 120, width: 840, height: 120, content: "Başlık eklemek için tıklayın", fontSize: 44, fontWeight: "bold", fontFamily: "Calibri", textAlign: "center", color: "#333333", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
-            { type: "text", x: 180, y: 280, width: 600, height: 80, content: "Alt başlık eklemek için tıklayın", fontSize: 22, fontFamily: "Calibri", textAlign: "center", color: "#666666", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+        id: "title", label: "Title Slide", elements: [
+            { type: "text", x: 60, y: 120, width: 840, height: 120, content: "Click to add title", fontSize: 44, fontWeight: "bold", fontFamily: "Calibri", textAlign: "center", color: "#333333", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+            { type: "text", x: 180, y: 280, width: 600, height: 80, content: "Click to add subtitle", fontSize: 22, fontFamily: "Calibri", textAlign: "center", color: "#666666", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
         ]
     },
     {
-        id: "titleContent", label: "Başlık ve İçerik", elements: [
-            { type: "text", x: 50, y: 20, width: 860, height: 60, content: "Başlık eklemek için tıklayın", fontSize: 32, fontWeight: "bold", fontFamily: "Calibri", color: "#333333", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
-            { type: "text", x: 50, y: 100, width: 860, height: 400, content: "• Metin eklemek için tıklayın\n• İkinci düzey\n• Üçüncü düzey", fontSize: 20, fontFamily: "Calibri", color: "#444444", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+        id: "titleContent", label: "Title and Content", elements: [
+            { type: "text", x: 50, y: 20, width: 860, height: 60, content: "Click to add title", fontSize: 32, fontWeight: "bold", fontFamily: "Calibri", color: "#333333", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+            { type: "text", x: 50, y: 100, width: 860, height: 400, content: "• Click to add text\n• Second level\n• Third level", fontSize: 20, fontFamily: "Calibri", color: "#444444", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
         ]
     },
     {
-        id: "sectionHeader", label: "Bölüm Başlığı", elements: [
-            { type: "text", x: 60, y: 180, width: 840, height: 80, content: "Bölüm başlığı", fontSize: 40, fontWeight: "bold", fontFamily: "Calibri", textAlign: "left", color: "#333333", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
-            { type: "text", x: 60, y: 280, width: 840, height: 50, content: "Açıklama", fontSize: 18, fontFamily: "Calibri", textAlign: "left", color: "#888888", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+        id: "sectionHeader", label: "Section Header", elements: [
+            { type: "text", x: 60, y: 180, width: 840, height: 80, content: "Section header", fontSize: 40, fontWeight: "bold", fontFamily: "Calibri", textAlign: "left", color: "#333333", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+            { type: "text", x: 60, y: 280, width: 840, height: 50, content: "Description", fontSize: 18, fontFamily: "Calibri", textAlign: "left", color: "#888888", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
         ]
     },
     {
-        id: "twoColumn", label: "İki İçerik", elements: [
-            { type: "text", x: 50, y: 20, width: 860, height: 50, content: "Başlık", fontSize: 30, fontWeight: "bold", fontFamily: "Calibri", color: "#333333", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
-            { type: "text", x: 50, y: 90, width: 420, height: 400, content: "• Sol içerik", fontSize: 18, fontFamily: "Calibri", color: "#444444", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
-            { type: "text", x: 490, y: 90, width: 420, height: 400, content: "• Sağ içerik", fontSize: 18, fontFamily: "Calibri", color: "#444444", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+        id: "twoColumn", label: "Two Content", elements: [
+            { type: "text", x: 50, y: 20, width: 860, height: 50, content: "Title", fontSize: 30, fontWeight: "bold", fontFamily: "Calibri", color: "#333333", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+            { type: "text", x: 50, y: 90, width: 420, height: 400, content: "• Left content", fontSize: 18, fontFamily: "Calibri", color: "#444444", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
+            { type: "text", x: 490, y: 90, width: 420, height: 400, content: "• Right content", fontSize: 18, fontFamily: "Calibri", color: "#444444", backgroundColor: "transparent", isPlaceholder: true, borderColor: "#a0a0a0", borderWidth: 1 },
         ]
     },
 ];
@@ -100,7 +100,7 @@ function createSlide(layout: Slide["layout"] = "blank", bg = "#ffffff"): Slide {
 }
 
 // ─── Ribbon Tab Types ────────────────────────────────────────────────
-type RibbonTab = "dosya" | "giris" | "ekle" | "tasarim" | "gecisler" | "animasyonlar" | "slaytgosterisi" | "gozdengeçir" | "gorunum" | "kayit" | "yardim";
+type RibbonTab = "file" | "home" | "insert" | "design" | "transitions" | "animations" | "slideshow" | "review" | "view" | "record" | "help";
 
 // ─── Component ───────────────────────────────────────────────────────
 export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
@@ -109,18 +109,18 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
     const [selectedElId, setSelectedElId] = useState<string | null>(null);
     const [activeTool, setActiveTool] = useState<string>("select");
     const [zoom, setZoom] = useState(100);
-    const [fileName, setFileName] = useState("Sunu1");
+    const [fileName, setFileName] = useState("Presentation1");
     const [history, setHistory] = useState<Slide[][]>([]);
     const [redoStack, setRedoStack] = useState<Slide[][]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const [editingTextId, setEditingTextId] = useState<string | null>(null);
-    const [activeRibbonTab, setActiveRibbonTab] = useState<RibbonTab>("giris");
+    const [activeRibbonTab, setActiveRibbonTab] = useState<RibbonTab>("home");
     const [showLayoutDropdown, setShowLayoutDropdown] = useState(false);
     const [showShapeDropdown, setShowShapeDropdown] = useState(false);
     const [showBgDropdown, setShowBgDropdown] = useState(false);
-    const [showDosya, setShowDosya] = useState(false);
+    const [showFileMenu, setShowFileMenu] = useState(false);
     const [clipboardElement, setClipboardElement] = useState<SlideElement | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -377,23 +377,23 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
 
     // ─── Ribbon Content ──────────────────────────────────────────────
     const renderRibbon = () => {
-        if (activeRibbonTab === "giris") return (
+        if (activeRibbonTab === "home") return (
             <div className="flex items-end px-2 py-1 gap-0">
-                {/* ── Pano ── */}
-                <RibbonGroup label="Pano">
-                    <BigBtn icon={Clipboard} label="Yapıştır" sub onClick={handlePaste} />
+                {/* ── Clipboard ── */}
+                <RibbonGroup label="Clipboard">
+                    <BigBtn icon={Clipboard} label="Paste" sub onClick={handlePaste} />
                     <div className="flex flex-col gap-px">
-                        <button onClick={handleCut} className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Scissors size={12} /> Kes</button>
-                        <button onClick={handleCopy} className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Copy size={12} /> Kopyala</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Paintbrush size={12} /> Biçim Boyacısı</button>
+                        <button onClick={handleCut} className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Scissors size={12} /> Cut</button>
+                        <button onClick={handleCopy} className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Copy size={12} /> Copy</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Paintbrush size={12} /> Format Painter</button>
                     </div>
                 </RibbonGroup>
-                {/* ── Slaytlar ── */}
-                <RibbonGroup label="Slaytlar">
+                {/* ── Slides ── */}
+                <RibbonGroup label="Slides">
                     <div className="flex flex-col gap-px">
                         <div className="relative z-50">
                             <button onClick={() => setShowLayoutDropdown(!showLayoutDropdown)} className="flex items-center gap-1 px-2 py-1 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444] border border-[#bbb] bg-white">
-                                <Plus size={11} /> Düzen <ChevronDown size={9} />
+                                <Plus size={11} /> Layout <ChevronDown size={9} />
                             </button>
                             {showLayoutDropdown && (
                                 <div className="absolute top-full left-0 mt-1 bg-white border border-[#ccc] shadow-xl rounded-sm w-44">
@@ -403,12 +403,12 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                                 </div>
                             )}
                         </div>
-                        <button onClick={duplicateSlide} className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Copy size={11} /> Çoğalt</button>
-                        <button onClick={deleteSlide} className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Trash2 size={11} /> Sil</button>
+                        <button onClick={duplicateSlide} className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Copy size={11} /> Duplicate</button>
+                        <button onClick={deleteSlide} className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Trash2 size={11} /> Delete</button>
                     </div>
                 </RibbonGroup>
-                {/* ── Yazı Tipi ── */}
-                <RibbonGroup label="Yazı Tipi">
+                {/* ── Font ── */}
+                <RibbonGroup label="Font">
                     <div className="flex flex-col gap-0.5">
                         <div className="flex items-center gap-0.5">
                             <select value={selectedEl?.fontFamily || "Calibri"} onChange={e => selectedEl && updateElement(selectedEl.id, { fontFamily: e.target.value })}
@@ -420,32 +420,32 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                                 {[8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 44, 54, 60, 72, 96].map(s => <option key={s} value={s}>{s}</option>)}
                             </select>
                             <button onClick={() => selectedEl && updateElement(selectedEl.id, { fontSize: Math.min(96, (selectedEl.fontSize || 24) + 2) })}
-                                className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[11px] text-[#444] font-medium" title="Yazı Tipi Boyutunu Büyüt">A↑</button>
+                                className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[11px] text-[#444] font-medium" title="Increase Font Size">A↑</button>
                             <button onClick={() => selectedEl && updateElement(selectedEl.id, { fontSize: Math.max(8, (selectedEl.fontSize || 24) - 2) })}
-                                className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[10px] text-[#444]" title="Yazı Tipi Boyutunu Küçült">A↓</button>
+                                className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[10px] text-[#444]" title="Decrease Font Size">A↓</button>
                         </div>
                         <div className="flex items-center gap-0">
                             <button onClick={() => selectedEl && updateElement(selectedEl.id, { fontWeight: selectedEl.fontWeight === "bold" ? "normal" : "bold" })}
-                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] font-bold text-[#444]", selectedEl?.fontWeight === "bold" && "bg-[#b8cce4]")} title="Kalın">K</button>
+                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] font-bold text-[#444]", selectedEl?.fontWeight === "bold" && "bg-[#b8cce4]")} title="Bold">B</button>
                             <button onClick={() => selectedEl && updateElement(selectedEl.id, { fontStyle: selectedEl.fontStyle === "italic" ? "normal" : "italic" })}
-                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] italic text-[#444]", selectedEl?.fontStyle === "italic" && "bg-[#b8cce4]")} title="Eğik">T</button>
+                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] italic text-[#444]", selectedEl?.fontStyle === "italic" && "bg-[#b8cce4]")} title="Italic">I</button>
                             <button onClick={() => selectedEl && updateElement(selectedEl.id, { textDecoration: selectedEl.textDecoration === "underline" ? "none" : "underline" })}
-                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] underline text-[#444]", selectedEl?.textDecoration === "underline" && "bg-[#b8cce4]")} title="Altı Çizili">A</button>
+                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] underline text-[#444]", selectedEl?.textDecoration === "underline" && "bg-[#b8cce4]")} title="Underline">U</button>
                             <button onClick={() => selectedEl && updateElement(selectedEl.id, { textDecoration: selectedEl.textDecoration === "line-through" ? "none" : "line-through" })}
-                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] line-through text-[#444]", selectedEl?.textDecoration === "line-through" && "bg-[#b8cce4]")} title="Üstü Çizili">S</button>
+                                className={cn("w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] line-through text-[#444]", selectedEl?.textDecoration === "line-through" && "bg-[#b8cce4]")} title="Strikethrough">S</button>
                             <div className="w-px h-4 bg-[#ccc] mx-0.5" />
-                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[10px] text-[#444]" title="Büyük/Küçük Harf">Aa<ChevronDown size={7} className="ml-px" /></button>
+                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[10px] text-[#444]" title="Change Case">Aa<ChevronDown size={7} className="ml-px" /></button>
                             <div className="w-px h-4 bg-[#ccc] mx-0.5" />
                             {/* Font Color */}
                             <div className="relative group/fc">
-                                <label className="w-[22px] h-[20px] flex flex-col items-center justify-center rounded-sm hover:bg-[#c8dcf0] cursor-pointer" title="Yazı Tipi Rengi">
+                                <label className="w-[22px] h-[20px] flex flex-col items-center justify-center rounded-sm hover:bg-[#c8dcf0] cursor-pointer" title="Font Color">
                                     <span className="text-[12px] font-bold text-[#444] leading-none">A</span>
                                     <div className="w-4 h-[3px] rounded-sm" style={{ backgroundColor: selectedEl?.color || "#c00000" }} />
                                     <input type="color" value={selectedEl?.color || "#000000"} onChange={e => selectedEl && updateElement(selectedEl.id, { color: e.target.value })} className="absolute opacity-0 w-0 h-0" />
                                 </label>
                             </div>
                             {/* Highlight */}
-                            <label className="w-[22px] h-[20px] flex flex-col items-center justify-center rounded-sm hover:bg-[#c8dcf0] cursor-pointer" title="Vurgulama Rengi">
+                            <label className="w-[22px] h-[20px] flex flex-col items-center justify-center rounded-sm hover:bg-[#c8dcf0] cursor-pointer" title="Highlight Color">
                                 <span className="text-[10px] text-[#444] leading-none">ab</span>
                                 <div className="w-4 h-[3px] rounded-sm" style={{ backgroundColor: selectedEl?.backgroundColor === "transparent" ? "#ffff00" : (selectedEl?.backgroundColor || "#ffff00") }} />
                                 <input type="color" value={selectedEl?.backgroundColor === "transparent" ? "#ffffff" : (selectedEl?.backgroundColor || "#ffffff")} onChange={e => selectedEl && updateElement(selectedEl.id, { backgroundColor: e.target.value })} className="absolute opacity-0 w-0 h-0" />
@@ -453,19 +453,19 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                         </div>
                     </div>
                 </RibbonGroup>
-                {/* ── Paragraf ── */}
-                <RibbonGroup label="Paragraf">
+                {/* ── Paragraph ── */}
+                <RibbonGroup label="Paragraph">
                     <div className="flex flex-col gap-0.5">
                         <div className="flex items-center gap-0">
-                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0]" title="Madde İşaretleri">
+                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0]" title="Bullets">
                                 <svg width="13" height="13" viewBox="0 0 16 16" fill="#444"><circle cx="3" cy="4" r="1.5" /><rect x="6" y="3" width="8" height="2" rx="0.5" /><circle cx="3" cy="8" r="1.5" /><rect x="6" y="7" width="8" height="2" rx="0.5" /><circle cx="3" cy="12" r="1.5" /><rect x="6" y="11" width="8" height="2" rx="0.5" /></svg>
                             </button>
-                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0]" title="Numaralandırma">
+                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0]" title="Numbering">
                                 <svg width="13" height="13" viewBox="0 0 16 16" fill="#444"><text x="1" y="5" fontSize="4" fontWeight="bold">1.</text><rect x="6" y="3" width="8" height="2" rx="0.5" /><text x="1" y="9" fontSize="4" fontWeight="bold">2.</text><rect x="6" y="7" width="8" height="2" rx="0.5" /><text x="1" y="13" fontSize="4" fontWeight="bold">3.</text><rect x="6" y="11" width="8" height="2" rx="0.5" /></svg>
                             </button>
                             <div className="w-px h-4 bg-[#ccc] mx-0.5" />
-                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] text-[#444]" title="Girintiyi Azalt">←</button>
-                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] text-[#444]" title="Girintiyi Artır">→</button>
+                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] text-[#444]" title="Decrease Indent">←</button>
+                            <button className="w-[20px] h-[20px] flex items-center justify-center rounded-sm hover:bg-[#c8dcf0] text-[12px] text-[#444]" title="Increase Indent">→</button>
                         </div>
                         <div className="flex items-center gap-0">
                             {(["left", "center", "right", "justify"] as const).map(a => (
@@ -475,17 +475,17 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                                 </button>
                             ))}
                             <div className="w-px h-4 bg-[#ccc] mx-0.5" />
-                            <RBtn icon={Columns} label="Sütunlar" size={12} />
+                            <RBtn icon={Columns} label="Columns" size={12} />
                         </div>
                     </div>
                     <div className="flex flex-col gap-px ml-1">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Wand2 size={11} /> Metin Yönü <ChevronDown size={8} /></button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Grid3X3 size={11} /> Hizala <ChevronDown size={8} /></button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Sparkles size={11} /> SmartArt{"'"}a Dönüştür <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Wand2 size={11} /> Text Direction <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Grid3X3 size={11} /> Align <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Sparkles size={11} /> Convert to SmartArt <ChevronDown size={8} /></button>
                     </div>
                 </RibbonGroup>
-                {/* ── Çizim ── */}
-                <RibbonGroup label="Çizim">
+                {/* ── Drawing ── */}
+                <RibbonGroup label="Drawing">
                     <div className="flex flex-col gap-0.5">
                         <div className="flex items-center gap-0.5">
                             <div className="flex border border-[#bbb] rounded-sm overflow-hidden">
@@ -498,96 +498,96 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                         </div>
                         <div className="flex items-center gap-0.5">
                             <div className="relative group z-50">
-                                <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Shapes size={11} /> Yerleştir <ChevronDown size={8} /></button>
+                                <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Shapes size={11} /> Arrange <ChevronDown size={8} /></button>
                                 <div className="absolute top-full left-0 hidden group-hover:block mt-1 bg-white border border-[#ccc] shadow-xl rounded-sm w-32 py-1">
-                                    <button onClick={bringForward} className="w-full text-left px-3 py-1.5 text-[11px] hover:bg-[#d6e4f0] text-[#333]">Bir Öne Getir</button>
-                                    <button onClick={sendBackward} className="w-full text-left px-3 py-1.5 text-[11px] hover:bg-[#d6e4f0] text-[#333]">Bir Arkaya Gönder</button>
+                                    <button onClick={bringForward} className="w-full text-left px-3 py-1.5 text-[11px] hover:bg-[#d6e4f0] text-[#333]">Bring Forward</button>
+                                    <button onClick={sendBackward} className="w-full text-left px-3 py-1.5 text-[11px] hover:bg-[#d6e4f0] text-[#333]">Send Backward</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="flex flex-col gap-px ml-1">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Eye size={11} /> Şekil Dolgusu <ChevronDown size={8} /></button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><PenTool size={11} /> Veri Alanı Hızlı <ChevronDown size={8} /></button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Sparkles size={11} /> Şekil Efektleri <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Eye size={11} /> Shape Fill <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><PenTool size={11} /> Quick Styles <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Sparkles size={11} /> Shape Effects <ChevronDown size={8} /></button>
                     </div>
                 </RibbonGroup>
-                {/* ── Düzenleme ── */}
-                <RibbonGroup label="Düzenleme">
+                {/* ── Editing ── */}
+                <RibbonGroup label="Editing">
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Search size={12} /> Bul</button>
-                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Replace size={12} /> Değiştir</button>
-                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><MousePointer2 size={12} /> Seç <ChevronDown size={9} /></button>
+                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Search size={12} /> Find</button>
+                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Replace size={12} /> Replace</button>
+                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><MousePointer2 size={12} /> Select <ChevronDown size={9} /></button>
                     </div>
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "ekle") return (
+        if (activeRibbonTab === "insert") return (
             <div className="flex items-end px-3 py-1 gap-0">
-                <RibbonGroup label="Slaytlar">
-                    <BigBtn icon={Plus} label="Yeni Slayt" onClick={() => addSlide("titleContent")} sub />
+                <RibbonGroup label="Slides">
+                    <BigBtn icon={Plus} label="New Slide" onClick={() => addSlide("titleContent")} sub />
                 </RibbonGroup>
-                <RibbonGroup label="Tablolar">
-                    <BigBtn icon={Table} label="Tablo" />
+                <RibbonGroup label="Tables">
+                    <BigBtn icon={Table} label="Table" />
                 </RibbonGroup>
-                <RibbonGroup label="Resimler">
-                    <BigBtn icon={Image} label="Resimler" onClick={addImage} />
-                    <BigBtn icon={Image} label={"Çevrimiçi\nGörüntüler"} />
-                    <BigBtn icon={Image} label={"Fotoğraf\nAlbümü"} sub />
+                <RibbonGroup label="Images">
+                    <BigBtn icon={Image} label="Pictures" onClick={addImage} />
+                    <BigBtn icon={Image} label={"Online\nPictures"} />
+                    <BigBtn icon={Image} label={"Photo\nAlbum"} sub />
                 </RibbonGroup>
-                <RibbonGroup label="Çizimler">
+                <RibbonGroup label="Illustrations">
                     <div className="relative">
-                        <BigBtn icon={Shapes} label="Şekiller" onClick={() => setShowShapeDropdown(!showShapeDropdown)} sub />
+                        <BigBtn icon={Shapes} label="Shapes" onClick={() => setShowShapeDropdown(!showShapeDropdown)} sub />
                         {showShapeDropdown && (
                             <div className="absolute top-full left-0 mt-1 bg-white border border-[#ccc] shadow-xl z-50 rounded-sm p-2 flex gap-1">
-                                {([["rect", Square, "Dikdörtgen"], ["circle", Circle, "Daire"], ["triangle", Triangle, "Üçgen"], ["star", Star, "Yıldız"]] as [string, any, string][]).map(([t, I, l]) => (
+                                {([["rect", Square, "Rectangle"], ["circle", Circle, "Oval"], ["triangle", Triangle, "Triangle"], ["star", Star, "Star"]] as [string, any, string][]).map(([t, I, l]) => (
                                     <button key={t} onClick={() => addShape(t as any)} className="p-2 hover:bg-[#d6e4f0] rounded" title={l}><I size={18} className="text-[#444]" /></button>
                                 ))}
                             </div>
                         )}
                     </div>
-                    <BigBtn icon={Sparkles} label="Simgeler" />
+                    <BigBtn icon={Sparkles} label="Icons" />
                     <BigBtn icon={Grid3X3} label="SmartArt" />
-                    <BigBtn icon={SlidersHorizontal} label="Grafik" />
+                    <BigBtn icon={SlidersHorizontal} label="Chart" />
                 </RibbonGroup>
-                <RibbonGroup label="Eklentiler">
+                <RibbonGroup label="Add-ins">
                     <div className="flex flex-col gap-0.5">
-                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Sparkles size={12} /> Eklentileri Edinin</button>
-                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><FileText size={12} /> Eklentilerim</button>
+                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><Sparkles size={12} /> Get Add-ins</button>
+                        <button className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]"><FileText size={12} /> My Add-ins</button>
                     </div>
                 </RibbonGroup>
-                <RibbonGroup label="Bağlantılar">
-                    <BigBtn icon={Eye} label="Önizleme" />
-                    <BigBtn icon={Link} label="Bağlantı" />
-                    <BigBtn icon={Play} label="Eylem" />
+                <RibbonGroup label="Links">
+                    <BigBtn icon={Eye} label="Preview" />
+                    <BigBtn icon={Link} label="Link" />
+                    <BigBtn icon={Play} label="Action" />
                 </RibbonGroup>
-                <RibbonGroup label="Açıklamalar">
-                    <BigBtn icon={MessageSquare} label="Yorum" />
+                <RibbonGroup label="Comments">
+                    <BigBtn icon={MessageSquare} label="Comment" />
                 </RibbonGroup>
-                <RibbonGroup label="Metin">
-                    <BigBtn icon={Type} label={"Metin\nKutusu"} onClick={addTextElement} />
-                    <BigBtn icon={FileText} label={"Üst Bilgi\nve Alt Bilgi"} />
+                <RibbonGroup label="Text">
+                    <BigBtn icon={Type} label={"Text\nBox"} onClick={addTextElement} />
+                    <BigBtn icon={FileText} label={"Header\n& Footer"} />
                     <BigBtn icon={Wand2} label="WordArt" />
                     <div className="flex flex-col gap-0.5">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]">Tarih ve Saat</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]">Slayt Numarası</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]">Nesne</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]">Date & Time</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]">Slide Number</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[10px] text-[#444]">Object</button>
                     </div>
                 </RibbonGroup>
-                <RibbonGroup label="Simgeler">
-                    <BigBtn icon={FileText} label="Denklem" />
-                    <BigBtn icon={Star} label="Simge" />
+                <RibbonGroup label="Symbols">
+                    <BigBtn icon={FileText} label="Equation" />
+                    <BigBtn icon={Star} label="Symbol" />
                 </RibbonGroup>
-                <RibbonGroup label="Medya">
+                <RibbonGroup label="Media">
                     <BigBtn icon={Film} label="Video" sub />
-                    <BigBtn icon={Music} label="Ses" sub />
-                    <BigBtn icon={Monitor} label={"Ekran\nKaydı"} />
+                    <BigBtn icon={Music} label="Audio" sub />
+                    <BigBtn icon={Monitor} label={"Screen\nRecording"} />
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "tasarim") return (
+        if (activeRibbonTab === "design") return (
             <div className="flex items-end px-3 py-1 gap-0">
-                <RibbonGroup label="Temalar">
+                <RibbonGroup label="Themes">
                     <div className="flex gap-[3px] items-center overflow-x-auto max-w-[680px]">
                         {[
                             { bg: "#ffffff", fg: "#333", border: "#ccc", style: "normal" },
@@ -631,7 +631,7 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                         </div>
                     </div>
                 </RibbonGroup>
-                <RibbonGroup label="Çeşitlemeler">
+                <RibbonGroup label="Variants">
                     <div className="flex gap-[3px] items-center">
                         {[
                             { top: "#ffffff", mid: "#4472c4", bot: "#2b579a", accent: "#ed7d31" },
@@ -656,22 +656,22 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                         </div>
                     </div>
                 </RibbonGroup>
-                <RibbonGroup label="Özelleştir">
+                <RibbonGroup label="Customize">
                     <div className="flex flex-col gap-0.5">
                         <button className="flex flex-col items-center px-3 py-0.5 rounded hover:bg-[#c8dcf0] transition-colors">
                             <Maximize size={20} className="text-[#444] mb-0.5" />
-                            <span className="text-[9px] text-[#444] leading-tight whitespace-nowrap">Slayt<br />Boyutu</span>
+                            <span className="text-[9px] text-[#444] leading-tight whitespace-nowrap">Slide<br />Size</span>
                         </button>
                     </div>
                     <div className="flex flex-col gap-0.5">
                         <div className="relative">
                             <button onClick={() => setShowBgDropdown(!showBgDropdown)} className="flex flex-col items-center px-2 py-0.5 rounded hover:bg-[#c8dcf0] transition-colors">
                                 <PaintBucket size={20} className="text-[#444] mb-0.5" />
-                                <span className="text-[9px] text-[#444] leading-tight whitespace-nowrap text-center">Arka Planı<br />Biçimlendir</span>
+                                <span className="text-[9px] text-[#444] leading-tight whitespace-nowrap text-center">Format<br />Background</span>
                             </button>
                             {showBgDropdown && (
                                 <div className="absolute top-full right-0 mt-1 bg-white border border-[#ccc] shadow-xl z-50 rounded-sm p-3 w-52">
-                                    <p className="text-[10px] font-bold text-[#666] mb-2">Arka Plan Renkleri</p>
+                                    <p className="text-[10px] font-bold text-[#666] mb-2">Background Colors</p>
                                     <div className="grid grid-cols-6 gap-1">
                                         {BG_COLORS.map((bg, i) => (
                                             <button key={i} onClick={() => { updateSlide(currentSlideIdx, { background: bg }); setShowBgDropdown(false); }}
@@ -685,19 +685,19 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "gecisler") return (
+        if (activeRibbonTab === "transitions") return (
             <div className="flex items-end px-2 py-1 gap-0">
-                {/* Önizleme */}
-                <RibbonGroup label="Önizleme">
-                    <BigBtn icon={Eye} label="Önizleme" />
+                {/* Preview */}
+                <RibbonGroup label="Preview">
+                    <BigBtn icon={Eye} label="Preview" />
                 </RibbonGroup>
-                {/* Bu Slayda Geçiş */}
-                <RibbonGroup label="Bu Slayda Geçiş">
+                {/* Transition to This Slide */}
+                <RibbonGroup label="Transition to This Slide">
                     <div className="flex gap-[3px] items-center overflow-x-auto max-w-[580px]">
                         {[
-                            "Yok", "Dönüşüm", "Soluklaşarak", "İtmek", "Süpürerek", "Böl",
-                            "Göster", "Kesme", "Rastgele Çiz.", "Şerit", "Açarak", "Kapatarak",
-                            "Parlama", "Devirme", "Pano Perde", "Perdeler"
+                            "None", "Morph", "Fade", "Push", "Wipe", "Split",
+                            "Reveal", "Cut", "Random Bars", "Shape", "Uncover", "Cover",
+                            "Flash", "Fall Over", "Curtains", "Wind"
                         ].map((name, i) => (
                             <button key={i} className={cn(
                                 "w-[50px] h-[42px] rounded-[2px] border-[1.5px] transition-all flex flex-col items-center justify-center shrink-0 bg-white hover:border-[#888] hover:shadow-sm",
@@ -731,60 +731,60 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                         </div>
                     </div>
                 </RibbonGroup>
-                {/* Efekt Seçenekleri */}
+                {/* Effect Options */}
                 <div className="flex flex-col items-center border-r border-[#d5d5d5] pr-2 mr-2">
                     <button className="flex flex-col items-center px-3 py-0.5 rounded hover:bg-[#c8dcf0] transition-colors">
                         <Sparkles size={20} className="text-[#444] mb-0.5" />
-                        <span className="text-[9px] text-[#444] leading-tight text-center">Efekt<br />Seçenekleri</span>
+                        <span className="text-[9px] text-[#444] leading-tight text-center">Effect<br />Options</span>
                     </button>
                 </div>
-                {/* Zamanlama */}
-                <RibbonGroup label="Zamanlama">
+                {/* Timing */}
+                <RibbonGroup label="Timing">
                     <div className="flex flex-col gap-[3px]">
                         <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-[#555] w-7">Ses:</span>
+                            <span className="text-[9px] text-[#555] w-7">Sound:</span>
                             <select className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[80px] bg-white px-0.5">
-                                <option>[Ses Yok]</option>
-                                <option>Alkış</option>
-                                <option>Kamera</option>
-                                <option>Rüzgar</option>
+                                <option>[No Sound]</option>
+                                <option>Applause</option>
+                                <option>Camera</option>
+                                <option>Wind</option>
                             </select>
                         </div>
                         <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-[#555] w-7">Süre:</span>
-                            <input type="text" defaultValue="02,00" className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[50px] bg-white px-1" />
+                            <span className="text-[9px] text-[#555] w-7">Duration:</span>
+                            <input type="text" defaultValue="02.00" className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[50px] bg-white px-1" />
                         </div>
                         <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444] border border-[#bbb] bg-white">
-                            <Star size={10} /> Tümüne Uygula
+                            <Star size={10} /> Apply to All
                         </button>
                     </div>
                     <div className="flex flex-col gap-[3px] ml-2">
-                        <span className="text-[9px] text-[#555] font-medium">Slaydı İlerlet:</span>
+                        <span className="text-[9px] text-[#555] font-medium">Advance Slide:</span>
                         <label className="flex items-center gap-1 text-[9px] text-[#555]">
                             <input type="checkbox" defaultChecked className="w-3 h-3 rounded-sm accent-[#4472c4]" />
-                            Tıklandığında
+                            On Mouse Click
                         </label>
                         <label className="flex items-center gap-1 text-[9px] text-[#555]">
                             <input type="checkbox" className="w-3 h-3 rounded-sm accent-[#4472c4]" />
-                            Bu kadar saniye sonra:
-                            <input type="text" defaultValue="00:00,00" className="h-[16px] border border-[#bbb] rounded-sm text-[8px] text-[#333] w-[52px] bg-white px-0.5" />
+                            After:
+                            <input type="text" defaultValue="00:00.00" className="h-[16px] border border-[#bbb] rounded-sm text-[8px] text-[#333] w-[52px] bg-white px-0.5" />
                         </label>
                     </div>
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "animasyonlar") return (
+        if (activeRibbonTab === "animations") return (
             <div className="flex items-end px-2 py-1 gap-0">
-                {/* Önizleme */}
-                <RibbonGroup label="Önizleme">
-                    <BigBtn icon={Eye} label="Önizleme" />
+                {/* Preview */}
+                <RibbonGroup label="Preview">
+                    <BigBtn icon={Eye} label="Preview" />
                 </RibbonGroup>
-                {/* Animasyon */}
-                <RibbonGroup label="Animasyon">
+                {/* Animation */}
+                <RibbonGroup label="Animation">
                     <div className="flex gap-[3px] items-center overflow-x-auto max-w-[480px]">
                         {[
-                            "Yok", "Yeniden Oy.", "Geri Sar", "Lütrüncü", "Sıvama", "Uçarak Giriş",
-                            "İçin Kayar", "Böl", "Süpür", "Sesli", "İstedikle", "Rastgele Çiz.", "Uzat ve Çevir"
+                            "None", "Appear", "Fade", "Fly In", "Float In", "Split",
+                            "Wipe", "Shape", "Wheel", "Random Bars", "Grow & Turn", "Zoom", "Swivel"
                         ].map((name, i) => (
                             <button key={i} className={cn(
                                 "w-[50px] h-[42px] rounded-[2px] border-[1.5px] transition-all flex flex-col items-center justify-center shrink-0 bg-white hover:border-[#888] hover:shadow-sm",
@@ -803,219 +803,219 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                         </div>
                     </div>
                 </RibbonGroup>
-                {/* Efekt Seçenekleri */}
+                {/* Effect Options */}
                 <div className="flex flex-col items-center border-r border-[#d5d5d5] pr-2 mr-2">
                     <button className="flex flex-col items-center px-3 py-0.5 rounded hover:bg-[#c8dcf0] transition-colors">
                         <Sparkles size={20} className="text-[#444] mb-0.5" />
-                        <span className="text-[9px] text-[#444] leading-tight text-center">Efekt<br />Seçenekleri</span>
+                        <span className="text-[9px] text-[#444] leading-tight text-center">Effect<br />Options</span>
                     </button>
                 </div>
-                {/* Gelişmiş Animasyon */}
-                <RibbonGroup label="Gelişmiş Animasyon">
-                    <BigBtn icon={Sparkles} label={"Animasyon\nBelirteci"} />
+                {/* Advanced Animation */}
+                <RibbonGroup label="Advanced Animation">
+                    <BigBtn icon={Sparkles} label={"Animation\nPainter"} />
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Play size={10} /> Tetikleyici <ChevronDown size={8} /></button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Paintbrush size={10} /> Animasyon Boyacısı</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><SlidersHorizontal size={10} /> Geciktirme</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Play size={10} /> Trigger <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Paintbrush size={10} /> Animation Painter</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><SlidersHorizontal size={10} /> Delay</button>
                     </div>
                 </RibbonGroup>
-                {/* Zamanlama */}
-                <RibbonGroup label="Zamanlama">
+                {/* Timing */}
+                <RibbonGroup label="Timing">
                     <div className="flex flex-col gap-[3px]">
                         <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-[#555]">Başlangıç:</span>
+                            <span className="text-[9px] text-[#555]">Start:</span>
                             <select className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[80px] bg-white px-0.5">
-                                <option>Tıklandığında</option>
-                                <option>Öncekiyle</option>
-                                <option>Öncekinden Sonra</option>
+                                <option>On Click</option>
+                                <option>With Previous</option>
+                                <option>After Previous</option>
                             </select>
                         </div>
                         <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-[#555]">Süre:</span>
-                            <input type="text" defaultValue="00,50" className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[50px] bg-white px-1 ml-[18px]" />
+                            <span className="text-[9px] text-[#555]">Duration:</span>
+                            <input type="text" defaultValue="00.50" className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[50px] bg-white px-1 ml-[18px]" />
                         </div>
                         <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-[#555]">Geciktirme:</span>
-                            <input type="text" defaultValue="00,00" className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[50px] bg-white px-1" />
+                            <span className="text-[9px] text-[#555]">Delay:</span>
+                            <input type="text" defaultValue="00.00" className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[50px] bg-white px-1" />
                         </div>
                     </div>
                     <div className="flex flex-col gap-[3px] ml-2">
-                        <span className="text-[9px] text-[#555] font-medium">Animasyonu Yeniden Sırala</span>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444] border border-[#bbb] bg-white">↑ Daha Erken Taşı</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444] border border-[#bbb] bg-white">↓ Daha Sonraya Taşı</button>
+                        <span className="text-[9px] text-[#555] font-medium">Reorder Animation</span>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444] border border-[#bbb] bg-white">↑ Move Earlier</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444] border border-[#bbb] bg-white">↓ Move Later</button>
                     </div>
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "slaytgosterisi") return (
+        if (activeRibbonTab === "slideshow") return (
             <div className="flex items-end px-2 py-1 gap-0">
-                {/* Slayt Gösterisini Başlat */}
-                <RibbonGroup label="Slayt Gösterisini Başlat">
-                    <BigBtn icon={Play} label="Baştan" onClick={() => { setCurrentSlideIdx(0); toggleFullscreen(); }} />
-                    <BigBtn icon={Monitor} label={"Geçerli\nSlayttan"} onClick={toggleFullscreen} />
-                    <BigBtn icon={Presentation} label={"Özel Slayt\nGösterisi"} sub />
+                {/* Start Slide Show */}
+                <RibbonGroup label="Start Slide Show">
+                    <BigBtn icon={Play} label="From Beginning" onClick={() => { setCurrentSlideIdx(0); toggleFullscreen(); }} />
+                    <BigBtn icon={Monitor} label={"From Current\nSlide"} onClick={toggleFullscreen} />
+                    <BigBtn icon={Presentation} label={"Custom Slide\nShow"} sub />
                 </RibbonGroup>
-                {/* Ayarla */}
-                <RibbonGroup label="Ayarla">
-                    <BigBtn icon={SlidersHorizontal} label={"Slayt Gösterisini\nAyarla"} />
-                    <BigBtn icon={Eye} label={"Slaydı\nGizle"} />
-                    <BigBtn icon={Play} label={"Zamanlama\nProvası"} />
+                {/* Set Up */}
+                <RibbonGroup label="Set Up">
+                    <BigBtn icon={SlidersHorizontal} label={"Set Up\nSlide Show"} />
+                    <BigBtn icon={Eye} label={"Hide\nSlide"} />
+                    <BigBtn icon={Play} label={"Rehearse\nTimings"} />
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Sparkles size={10} /> Açıklamaları Çal</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><SlidersHorizontal size={10} /> Zamanlamaları Kullan</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Film size={10} /> Medya Denetimlerini Göster</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Sparkles size={10} /> Play Narrations</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><SlidersHorizontal size={10} /> Use Timings</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Film size={10} /> Show Media Controls</button>
                     </div>
                 </RibbonGroup>
-                {/* Monitörler */}
-                <RibbonGroup label="Monitörler">
+                {/* Monitors */}
+                <RibbonGroup label="Monitors">
                     <div className="flex flex-col gap-[3px]">
                         <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-[#555]">Monitör:</span>
+                            <span className="text-[9px] text-[#555]">Monitor:</span>
                             <select className="h-[18px] border border-[#bbb] rounded-sm text-[9px] text-[#333] w-[90px] bg-white px-0.5">
-                                <option>Otomatik</option>
-                                <option>Birincil Monitör</option>
+                                <option>Automatic</option>
+                                <option>Primary Monitor</option>
                             </select>
                         </div>
                         <label className="flex items-center gap-1 text-[9px] text-[#555]">
                             <input type="checkbox" defaultChecked className="w-3 h-3 rounded-sm accent-[#4472c4]" />
-                            Sunucu Görünümünü Göster
+                            Use Presenter View
                         </label>
                     </div>
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "gozdengeçir") return (
+        if (activeRibbonTab === "review") return (
             <div className="flex items-end px-2 py-1 gap-0">
-                {/* Yazım Denetleme */}
-                <RibbonGroup label="Yazım Denetleme">
-                    <BigBtn icon={CheckCircle} label={"Yazım\nDenetimi"} />
-                    <BigBtn icon={Eye} label={"Erişilebilirlik\nDenetçisi"} />
+                {/* Proofing */}
+                <RibbonGroup label="Proofing">
+                    <BigBtn icon={CheckCircle} label={"Spelling"} />
+                    <BigBtn icon={Eye} label={"Accessibility\nChecker"} />
                 </RibbonGroup>
-                {/* Görseller */}
-                <RibbonGroup label="Görseller">
-                    <BigBtn icon={Search} label="Ara" />
+                {/* Insights */}
+                <RibbonGroup label="Insights">
+                    <BigBtn icon={Search} label="Search" />
                 </RibbonGroup>
-                {/* Dil */}
-                <RibbonGroup label="Dil">
-                    <BigBtn icon={FileText} label="Çevir" sub />
-                    <BigBtn icon={FileText} label="Dil" sub />
+                {/* Language */}
+                <RibbonGroup label="Language">
+                    <BigBtn icon={FileText} label="Translate" sub />
+                    <BigBtn icon={FileText} label="Language" sub />
                 </RibbonGroup>
-                {/* Açıklamalar */}
-                <RibbonGroup label="Açıklamalar">
-                    <BigBtn icon={MessageSquare} label={"Yeni\nAçıklama"} />
+                {/* Comments */}
+                <RibbonGroup label="Comments">
+                    <BigBtn icon={MessageSquare} label={"New\nComment"} />
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Trash2 size={10} /> Sil <ChevronDown size={8} /></button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]">← Önceki</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]">→ Sonraki</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Trash2 size={10} /> Delete <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]">← Previous</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]">→ Next</button>
                     </div>
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Eye size={10} /> Yorumları Göster <ChevronDown size={8} /></button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Eye size={10} /> Show Comments <ChevronDown size={8} /></button>
                     </div>
                 </RibbonGroup>
-                {/* Karşılaştır */}
-                <RibbonGroup label="Karşılaştır">
-                    <BigBtn icon={Copy} label="Karşılaştır" />
+                {/* Compare */}
+                <RibbonGroup label="Compare">
+                    <BigBtn icon={Copy} label="Compare" />
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><CheckCircle size={10} /> Kabul</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><X size={10} /> Reddet</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><FileText size={10} /> Gözden Geçirme Bölmesi</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><CheckCircle size={10} /> Accept</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><X size={10} /> Reject</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><FileText size={10} /> Reviewing Pane</button>
                     </div>
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]">← Önceki</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]">→ Sonraki</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]">← Previous</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]">→ Next</button>
                     </div>
                 </RibbonGroup>
-                {/* Mürekkep */}
-                <RibbonGroup label="Mürekkep">
-                    <BigBtn icon={PenTool} label={"Mürekkep\nGizle"} />
+                {/* Ink */}
+                <RibbonGroup label="Ink">
+                    <BigBtn icon={PenTool} label={"Hide\nInk"} />
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "kayit") return (
+        if (activeRibbonTab === "record") return (
             <div className="flex items-end px-2 py-1 gap-0">
-                {/* Kaydet */}
-                <RibbonGroup label="Kaydet">
-                    <BigBtn icon={Play} label={"Slayt Gösterisini\nKaydet"} sub />
-                    <BigBtn icon={Monitor} label={"Ekran\nGörüntüsü"} sub />
+                {/* Record */}
+                <RibbonGroup label="Record">
+                    <BigBtn icon={Play} label={"Record Slide\nShow"} sub />
+                    <BigBtn icon={Monitor} label={"Screen\nShot"} sub />
                 </RibbonGroup>
-                {/* Medya Otomatik Yönet */}
-                <RibbonGroup label="Medya Otomatik Yönet">
-                    <BigBtn icon={Monitor} label={"Ekran\nKaydı"} />
+                {/* Media Auto Manage */}
+                <RibbonGroup label="Media Auto Manage">
+                    <BigBtn icon={Monitor} label={"Screen\nRecording"} />
                     <BigBtn icon={Film} label="Video" sub />
-                    <BigBtn icon={Music} label="Ses" sub />
+                    <BigBtn icon={Music} label="Audio" sub />
                 </RibbonGroup>
-                {/* Kaydet */}
-                <RibbonGroup label="Kaydet">
-                    <BigBtn icon={Download} label={"Güvenli\nOlarak Kaydet"} />
-                    <BigBtn icon={Film} label={"Videoya\nAktar"} />
+                {/* Save */}
+                <RibbonGroup label="Save">
+                    <BigBtn icon={Download} label={"Save as\nShow"} />
+                    <BigBtn icon={Film} label={"Export to\nVideo"} />
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "yardim") return (
+        if (activeRibbonTab === "help") return (
             <div className="flex items-center px-3 py-3 gap-4">
-                <RibbonGroup label="Yardım">
-                    <BigBtn icon={HelpCircle} label="Yardım" />
-                    <BigBtn icon={MessageSquare} label="Geri Bildirim" />
+                <RibbonGroup label="Help">
+                    <BigBtn icon={HelpCircle} label="Help" />
+                    <BigBtn icon={MessageSquare} label="Feedback" />
                 </RibbonGroup>
             </div>
         );
-        if (activeRibbonTab === "gorunum") return (
+        if (activeRibbonTab === "view") return (
             <div className="flex items-end px-2 py-1 gap-0">
-                {/* Sunum Görünümleri */}
-                <RibbonGroup label="Sunum Görünümleri">
+                {/* Presentation Views */}
+                <RibbonGroup label="Presentation Views">
                     <BigBtn icon={Monitor} label="Normal" />
-                    <BigBtn icon={FileText} label={"Ana Hat\nGörünümü"} />
-                    <BigBtn icon={Grid3X3} label={"Slayt\nSıralayıcısı"} />
-                    <BigBtn icon={StickyNote} label={"Sayfa\nNotları"} />
-                    <BigBtn icon={Eye} label={"Okuma\nGörünümü"} />
+                    <BigBtn icon={FileText} label={"Outline\nView"} />
+                    <BigBtn icon={Grid3X3} label={"Slide\nSorter"} />
+                    <BigBtn icon={StickyNote} label={"Notes\nPage"} />
+                    <BigBtn icon={Eye} label={"Reading\nView"} />
                 </RibbonGroup>
-                {/* Asıl Dığe Görünümleri */}
-                <RibbonGroup label="Asıl Dığe Görünümleri">
+                {/* Master Views */}
+                <RibbonGroup label="Master Views">
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Monitor size={10} /> Asıl Slayt</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><FileText size={10} /> Asıl Dağıtım Sayfası</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><StickyNote size={10} /> Asıl Notlar</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Monitor size={10} /> Slide Master</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><FileText size={10} /> Handout Master</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><StickyNote size={10} /> Notes Master</button>
                     </div>
                 </RibbonGroup>
-                {/* Göster */}
-                <RibbonGroup label="Göster">
+                {/* Show */}
+                <RibbonGroup label="Show">
                     <div className="flex flex-col gap-[3px]">
-                        <label className="flex items-center gap-1 text-[9px] text-[#555]"><input type="checkbox" className="w-3 h-3 accent-[#4472c4]" /> Cetvel</label>
-                        <label className="flex items-center gap-1 text-[9px] text-[#555]"><input type="checkbox" className="w-3 h-3 accent-[#4472c4]" /> Kılavuz Çizgileri</label>
-                        <label className="flex items-center gap-1 text-[9px] text-[#555]"><input type="checkbox" className="w-3 h-3 accent-[#4472c4]" /> Kılavuzlar</label>
+                        <label className="flex items-center gap-1 text-[9px] text-[#555]"><input type="checkbox" className="w-3 h-3 accent-[#4472c4]" /> Ruler</label>
+                        <label className="flex items-center gap-1 text-[9px] text-[#555]"><input type="checkbox" className="w-3 h-3 accent-[#4472c4]" /> Gridlines</label>
+                        <label className="flex items-center gap-1 text-[9px] text-[#555]"><input type="checkbox" className="w-3 h-3 accent-[#4472c4]" /> Guides</label>
                     </div>
                 </RibbonGroup>
-                {/* Notlar */}
+                {/* Notes */}
                 <div className="flex flex-col items-center border-r border-[#d5d5d5] pr-2 mr-2">
-                    <BigBtn icon={StickyNote} label="Notlar" />
+                    <BigBtn icon={StickyNote} label="Notes" />
                 </div>
-                {/* Yakınlaştır */}
-                <RibbonGroup label="Yakınlaştır">
-                    <BigBtn icon={Search} label="Yakınlaştır" />
-                    <BigBtn icon={Maximize} label={"Pencereye\nSığdır"} />
+                {/* Zoom */}
+                <RibbonGroup label="Zoom">
+                    <BigBtn icon={Search} label="Zoom" />
+                    <BigBtn icon={Maximize} label={"Fit to\nWindow"} />
                 </RibbonGroup>
-                {/* Renk/Gri Tonlamalı */}
-                <RibbonGroup label="Renk/Gri Tonlamalı">
+                {/* Color/Grayscale */}
+                <RibbonGroup label="Color/Grayscale">
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#c43e1c]/10 text-[9px] text-[#444] font-medium"><Palette size={10} className="text-[#c43e1c]" /> Renkli</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Palette size={10} /> Ön Tonlamalı</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Palette size={10} /> Siyah ve Beyaz</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#c43e1c]/10 text-[9px] text-[#444] font-medium"><Palette size={10} className="text-[#c43e1c]" /> Color</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Palette size={10} /> Grayscale</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Palette size={10} /> Black and White</button>
                     </div>
                 </RibbonGroup>
-                {/* Pencere */}
-                <RibbonGroup label="Pencere">
+                {/* Window */}
+                <RibbonGroup label="Window">
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Columns size={10} /> Tümünü Yerleştir</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Monitor size={10} /> Yeni Pencere</button>
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Columns size={10} /> Basamaklı</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Columns size={10} /> Arrange All</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Monitor size={10} /> New Window</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Columns size={10} /> Cascade</button>
                     </div>
                     <div className="flex flex-col gap-px">
-                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Maximize size={10} /> Bölme Sunum Taşı</button>
+                        <button className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#c8dcf0] text-[9px] text-[#444]"><Maximize size={10} /> Move Split</button>
                     </div>
                 </RibbonGroup>
-                {/* Makrolar */}
-                <RibbonGroup label="Makrolar">
-                    <BigBtn icon={FileText} label="Makrolar" />
+                {/* Macros */}
+                <RibbonGroup label="Macros">
+                    <BigBtn icon={FileText} label="Macros" />
                 </RibbonGroup>
             </div>
         );
@@ -1024,57 +1024,57 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
 
     // ─── TAB DEFINITIONS ─────────────────────────────────────────────
     const RIBBON_TABS: { id: RibbonTab; label: string }[] = [
-        { id: "dosya", label: "Dosya" },
-        { id: "giris", label: "Giriş" },
-        { id: "ekle", label: "Ekle" },
-        { id: "tasarim", label: "Tasarım" },
-        { id: "gecisler", label: "Geçişler" },
-        { id: "animasyonlar", label: "Animasyonlar" },
-        { id: "slaytgosterisi", label: "Slayt Gösterisi" },
-        { id: "gozdengeçir", label: "Gözden Geçir" },
-        { id: "gorunum", label: "Görünüm" },
-        { id: "kayit", label: "Kayıt" },
-        { id: "yardim", label: "Yardım" },
+        { id: "file", label: "File" },
+        { id: "home", label: "Home" },
+        { id: "insert", label: "Insert" },
+        { id: "design", label: "Design" },
+        { id: "transitions", label: "Transitions" },
+        { id: "animations", label: "Animations" },
+        { id: "slideshow", label: "Slide Show" },
+        { id: "review", label: "Review" },
+        { id: "view", label: "View" },
+        { id: "record", label: "Record" },
+        { id: "help", label: "Help" },
     ];
 
     // ─── BACKSTAGE VIEW ─────────────────────────────────────────────
     const TEMPLATES_PPT = [
-        { name: "Boş Sunu", bg: "#ffffff", fg: "#333" },
-        { name: "PowerPoint'e Hoş Geldiniz", bg: "#d35400", fg: "#fff" },
+        { name: "Blank Presentation", bg: "#ffffff", fg: "#333" },
+        { name: "Welcome to PowerPoint", bg: "#d35400", fg: "#fff" },
         { name: "Madison", bg: "#2c3e50", fg: "#ecf0f1" },
         { name: "Atlas", bg: "#c0392b", fg: "#fff" },
-        { name: "Galeri", bg: "#f5f5f5", fg: "#333" },
-        { name: "Paket", bg: "#ecf0f1", fg: "#333" },
-        { name: "Tahta Yazı", bg: "#2ecc71", fg: "#fff" },
-        { name: "Geometrik Renk Bloku", bg: "#e74c3c", fg: "#fff" },
-        { name: "Çiçekli Süs", bg: "#8e44ad", fg: "#fff" },
+        { name: "Gallery", bg: "#f5f5f5", fg: "#333" },
+        { name: "Parcel", bg: "#ecf0f1", fg: "#333" },
+        { name: "Wood Type", bg: "#2ecc71", fg: "#fff" },
+        { name: "Geometric Color Block", bg: "#e74c3c", fg: "#fff" },
+        { name: "Floral Ornament", bg: "#8e44ad", fg: "#fff" },
     ];
 
-    if (showDosya) {
+    if (showFileMenu) {
         return (
             <div className="flex h-screen font-['Segoe_UI',sans-serif] bg-[#f3f3f3]">
                 {/* ── Left Sidebar ── */}
                 <div className="w-[220px] bg-[#b33519] flex flex-col shrink-0 select-none">
                     {/* Back arrow */}
-                    <button onClick={() => setShowDosya(false)} className="flex items-center gap-2 px-4 py-3 hover:bg-[#9e2f16] text-white">
+                    <button onClick={() => setShowFileMenu(false)} className="flex items-center gap-2 px-4 py-3 hover:bg-[#9e2f16] text-white">
                         <ArrowLeft size={20} />
                     </button>
                     {/* Menu Items */}
                     {[
-                        { label: "Giriş", active: true },
-                        { label: "Yeni" },
-                        { label: "Aç" },
+                        { label: "Home", active: true },
+                        { label: "New" },
+                        { label: "Open" },
                         { sep: true },
-                        { label: "Bilgi" },
-                        { label: "Kaydet", action: () => { exportPptx(); setShowDosya(false); } },
-                        { label: "Farklı Kaydet" },
-                        { label: "Adobe PDF olarak Kaydet" },
+                        { label: "Info" },
+                        { label: "Save", action: () => { exportPptx(); setShowFileMenu(false); } },
+                        { label: "Save As" },
+                        { label: "Save as Adobe PDF" },
                         { sep: true },
-                        { label: "Yazdır" },
-                        { label: "Paylaş" },
-                        { label: "Adobe PDF bağlantısı olarak paylaşma" },
-                        { label: "Dışarı Aktar", action: () => { exportPptx(); setShowDosya(false); } },
-                        { label: "Kapat", action: () => { onBack(); } },
+                        { label: "Print" },
+                        { label: "Share" },
+                        { label: "Share as Adobe PDF link" },
+                        { label: "Export", action: () => { exportPptx(); setShowFileMenu(false); } },
+                        { label: "Close", action: () => { onBack(); } },
                     ].map((item, i) => {
                         if ('sep' in item) return <div key={i} className="h-px bg-white/20 mx-3 my-1" />;
                         return (
@@ -1090,9 +1090,9 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                     <div className="flex-1" />
                     {/* Bottom items */}
                     {[
-                        { label: "Hesap", color: "text-[#ffda6b]" },
-                        { label: "Geri Bildirim", color: "text-[#ffda6b]" },
-                        { label: "Seçenekler", color: "text-[#ffda6b]" },
+                        { label: "Account", color: "text-[#ffda6b]" },
+                        { label: "Feedback", color: "text-[#ffda6b]" },
+                        { label: "Options", color: "text-[#ffda6b]" },
                     ].map((item, i) => (
                         <button key={i} className={cn("text-left px-5 py-2 text-[12px] hover:bg-[#9e2f16]", item.color)}>
                             {item.label}
@@ -1101,13 +1101,13 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                 </div>
                 {/* ── Main Content ── */}
                 <div className="flex-1 overflow-y-auto px-10 py-6">
-                    <h1 className="text-[28px] font-light text-[#b33519] mb-6">Günaydın</h1>
+                    <h1 className="text-[28px] font-light text-[#b33519] mb-6">Good morning</h1>
                     {/* Templates */}
                     <div className="mb-6">
-                        <button className="text-[12px] text-[#444] mb-3 flex items-center gap-1"><ChevronDown size={12} /> Yeni</button>
+                        <button className="text-[12px] text-[#444] mb-3 flex items-center gap-1"><ChevronDown size={12} /> New</button>
                         <div className="flex gap-4 overflow-x-auto pb-2">
                             {TEMPLATES_PPT.map((t, i) => (
-                                <button key={i} onClick={() => setShowDosya(false)}
+                                <button key={i} onClick={() => setShowFileMenu(false)}
                                     className="flex flex-col items-center shrink-0 group">
                                     <div className="w-[120px] h-[68px] rounded-[3px] border-2 border-[#ddd] hover:border-[#c43e1c] transition-all flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-md"
                                         style={{ backgroundColor: t.bg }}>
@@ -1118,27 +1118,27 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                                 </button>
                             ))}
                         </div>
-                        <button className="text-[11px] text-[#c43e1c] mt-2 flex items-center gap-1 hover:underline">Diğer temalar →</button>
+                        <button className="text-[11px] text-[#c43e1c] mt-2 flex items-center gap-1 hover:underline">More themes →</button>
                     </div>
                     {/* Recent Files */}
                     <div>
                         <div className="flex gap-4 mb-3 border-b border-[#ddd]">
-                            <button className="text-[12px] text-[#333] font-semibold pb-2 border-b-2 border-[#c43e1c]">Son kullanılanlar</button>
-                            <button className="text-[12px] text-[#888] pb-2 hover:text-[#555]">Sabitlenmiş</button>
+                            <button className="text-[12px] text-[#333] font-semibold pb-2 border-b-2 border-[#c43e1c]">Recent</button>
+                            <button className="text-[12px] text-[#888] pb-2 hover:text-[#555]">Pinned</button>
                         </div>
                         <div className="flex flex-col">
                             <div className="flex items-center px-2 py-1 text-[10px] text-[#999] border-b border-[#eee]">
-                                <span className="flex-1">Ad</span>
-                                <span className="w-[100px] text-right">Değiştirme tarihi</span>
+                                <span className="flex-1">Name</span>
+                                <span className="w-[100px] text-right">Date modified</span>
                             </div>
                             {[
-                                { name: "sunum.pptx", loc: "Masaüstü", date: "Bugün" },
-                                { name: "proje_sunumu.pptx", loc: "Belgeler", date: "Dün" },
-                                { name: "ders_notları.pptx", loc: "İndirilenler", date: "2 gün önce" },
-                                { name: "toplantı_sunum.pptx", loc: "OneDrive", date: "1 hafta önce" },
-                                { name: "rapor.pptx", loc: "Masaüstü", date: "15.02.2025" },
+                                { name: "presentation.pptx", loc: "Desktop", date: "Today" },
+                                { name: "project_pitch.pptx", loc: "Documents", date: "Yesterday" },
+                                { name: "lecture_notes.pptx", loc: "Downloads", date: "2 days ago" },
+                                { name: "meeting_summary.pptx", loc: "OneDrive", date: "1 week ago" },
+                                { name: "report.pptx", loc: "Desktop", date: "15.02.2025" },
                             ].map((f, i) => (
-                                <button key={i} onClick={() => setShowDosya(false)}
+                                <button key={i} onClick={() => setShowFileMenu(false)}
                                     className="flex items-center gap-3 px-2 py-2.5 hover:bg-[#e8e8e8] rounded transition-colors group">
                                     <Presentation size={18} className="text-[#c43e1c] shrink-0" />
                                     <div className="flex-1 text-left">
@@ -1161,10 +1161,10 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
             <div className="h-[30px] bg-[#c43e1c] flex items-center px-2 z-[100] shrink-0 select-none">
                 {/* Quick Access Toolbar */}
                 <div className="flex items-center gap-0.5">
-                    <button onClick={onBack} className="p-1 hover:bg-white/20 rounded text-white" title="Geri"><ArrowLeft size={14} /></button>
-                    <button onClick={exportPptx} className="p-1 hover:bg-white/20 rounded text-white" title="Kaydet"><Download size={14} /></button>
-                    <button onClick={undo} disabled={!history.length} className="p-1 hover:bg-white/20 rounded text-white disabled:opacity-30" title="Geri Al"><Undo size={14} /></button>
-                    <button onClick={redo} disabled={!redoStack.length} className="p-1 hover:bg-white/20 rounded text-white disabled:opacity-30" title="Yinele"><Redo size={14} /></button>
+                    <button onClick={onBack} className="p-1 hover:bg-white/20 rounded text-white" title="Back"><ArrowLeft size={14} /></button>
+                    <button onClick={exportPptx} className="p-1 hover:bg-white/20 rounded text-white" title="Save"><Download size={14} /></button>
+                    <button onClick={undo} disabled={!history.length} className="p-1 hover:bg-white/20 rounded text-white disabled:opacity-30" title="Undo"><Undo size={14} /></button>
+                    <button onClick={redo} disabled={!redoStack.length} className="p-1 hover:bg-white/20 rounded text-white disabled:opacity-30" title="Redo"><Redo size={14} /></button>
                 </div>
                 {/* Title */}
                 <div className="flex-1 flex justify-center">
@@ -1173,7 +1173,7 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                 {/* Search */}
                 <div className="flex items-center bg-[#d95a3a] rounded-sm px-2 py-0.5 mr-2">
                     <Search size={12} className="text-white/70 mr-1" />
-                    <span className="text-[10px] text-white/70">Ara</span>
+                    <span className="text-[10px] text-white/70">Search</span>
                 </div>
             </div>
 
@@ -1182,10 +1182,10 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
                 <div className="flex items-center h-[28px] px-1 gap-0">
                     {RIBBON_TABS.map(tab => (
                         <button key={tab.id}
-                            onClick={() => { if (tab.id === "dosya") { setShowDosya(true); return; } setActiveRibbonTab(tab.id); }}
+                            onClick={() => { if (tab.id === "file") { setShowFileMenu(true); return; } setActiveRibbonTab(tab.id); }}
                             className={cn(
                                 "px-3 py-1 text-[11px] font-medium transition-colors rounded-t-sm relative",
-                                tab.id === "dosya" ? "bg-[#c43e1c] text-white hover:bg-[#b33516]" :
+                                tab.id === "file" ? "bg-[#c43e1c] text-white hover:bg-[#b33516]" :
                                     activeRibbonTab === tab.id ? "bg-white text-[#333] border-t-2 border-x border-[#d5d5d5] border-t-[#c43e1c] -mb-px z-10" :
                                         "text-[#555] hover:bg-[#e0e0e0]"
                             )}>
@@ -1302,11 +1302,11 @@ export default function PptxEditor({ onBack, initialFile }: PptxEditorProps) {
             {/* ═══ Status Bar ═══ */}
             <div className="h-[24px] bg-[#f0f0f0] border-t border-[#d5d5d5] px-3 flex items-center justify-between text-[10px] text-[#666] shrink-0 select-none">
                 <div className="flex items-center gap-4">
-                    <span>Slayt {currentSlideIdx + 1} / {slides.length}</span>
+                    <span>Slide {currentSlideIdx + 1} of {slides.length}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="hover:bg-[#ddd] p-0.5 rounded text-[10px]">📝 Notlar</button>
-                    <button className="hover:bg-[#ddd] p-0.5 rounded text-[10px]">💬 Açıklamalar</button>
+                    <button className="hover:bg-[#ddd] p-0.5 rounded text-[10px]">📝 Notes</button>
+                    <button className="hover:bg-[#ddd] p-0.5 rounded text-[10px]">💬 Comments</button>
                     <div className="flex items-center gap-1 border-l border-[#ccc] pl-3 ml-1">
                         <button className={cn("p-0.5 rounded", "bg-[#ddd]")}><Monitor size={12} /></button>
                         <button className="p-0.5 rounded hover:bg-[#ddd]"><Grid3X3 size={12} /></button>

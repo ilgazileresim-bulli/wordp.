@@ -166,7 +166,7 @@ export default function InvoiceWizard({ onBack }: InvoiceWizardProps) {
         <div className="p-4 border-t border-zinc-200 bg-zinc-50/80">
           <div className="flex justify-between items-center mb-4 text-sm font-bold text-zinc-800 dark:text-zinc-100 px-2">
              <span>Grand Total:</span>
-             <span className="text-lg text-indigo-600 dark:text-indigo-400">{total.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} ₺</span>
+             <span className="text-lg text-indigo-600 dark:text-indigo-400">{total.toLocaleString("en-US", { minimumFractionDigits: 2, style: 'currency', currency: 'USD' })}</span>
           </div>
           <button onClick={generatePDF} disabled={isGenerating} className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl flex items-center justify-center gap-2">
             <Download size={18} />
@@ -222,10 +222,10 @@ export default function InvoiceWizard({ onBack }: InvoiceWizardProps) {
           <table className="w-full mb-8 border-collapse">
             <thead>
               <tr className="bg-indigo-50 border-y-2 border-indigo-200">
-                 <th className="py-3 px-4 text-left font-bold text-xs uppercase text-indigo-800 tracking-wider">Açıklama</th>
-                 <th className="py-3 px-4 text-right font-bold text-xs uppercase text-indigo-800 tracking-wider w-24">Miktar</th>
-                 <th className="py-3 px-4 text-right font-bold text-xs uppercase text-indigo-800 tracking-wider w-32">Birim Fiyat</th>
-                 <th className="py-3 px-4 text-right font-bold text-xs uppercase text-indigo-800 tracking-wider w-32">Toplam</th>
+                 <th className="py-3 px-4 text-left font-bold text-xs uppercase text-indigo-800 tracking-wider">Description</th>
+                 <th className="py-3 px-4 text-right font-bold text-xs uppercase text-indigo-800 tracking-wider w-24">Quantity</th>
+                 <th className="py-3 px-4 text-right font-bold text-xs uppercase text-indigo-800 tracking-wider w-32">Unit Price</th>
+                 <th className="py-3 px-4 text-right font-bold text-xs uppercase text-indigo-800 tracking-wider w-32">Total</th>
               </tr>
             </thead>
             <tbody>
@@ -233,8 +233,8 @@ export default function InvoiceWizard({ onBack }: InvoiceWizardProps) {
                 <tr key={i} className="border-b border-zinc-100">
                    <td className="py-4 px-4 font-semibold text-zinc-800">{item.desc}</td>
                    <td className="py-4 px-4 text-right text-zinc-600">{item.qty}</td>
-                   <td className="py-4 px-4 text-right text-zinc-600">{item.price.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} ₺</td>
-                   <td className="py-4 px-4 text-right font-bold text-zinc-800">{(item.qty * item.price).toLocaleString("tr-TR", { minimumFractionDigits: 2 })} ₺</td>
+                   <td className="py-4 px-4 text-right text-zinc-600">{item.price.toLocaleString("en-US", { minimumFractionDigits: 2, style: 'currency', currency: 'USD' })}</td>
+                   <td className="py-4 px-4 text-right font-bold text-zinc-800">{(item.qty * item.price).toLocaleString("en-US", { minimumFractionDigits: 2, style: 'currency', currency: 'USD' })}</td>
                 </tr>
               ))}
             </tbody>

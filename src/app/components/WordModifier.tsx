@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { ArrowLeft, Upload, FileText, Type, Check, Download, Wand2, RefreshCw } from "lucide-react";
+import { ArrowLeft, Upload, FileText, Type, Check, Download, Wand2, RefreshCw, X, Palette, Bold, Italic, Underline } from "lucide-react";
 import { cn } from "./editor/utils";
 
 export default function WordModifier({ onBack }: { onBack: () => void }) {
@@ -25,16 +25,17 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
     const removeWord = (wordToRemove: string) => {
         setTargetWords(targetWords.filter(w => w !== wordToRemove));
     };
-    const [isBold, setIsBold] = useState(false);
+
+    const [isBold, setIsBold] = useState(true);
     const [isItalic, setIsItalic] = useState(false);
-    const [color, setColor] = useState("#ff0000"); // Default Red
+    const [color, setColor] = useState("#4F46E5"); 
     const [isUnderline, setIsUnderline] = useState(false);
     
     const [isProcessing, setIsProcessing] = useState(false);
     const [status, setStatus] = useState("");
 
     const highlightedHtml = useMemo(() => {
-        if (!previewHtml || targetWords.length === 0) return previewHtml || "<p>Content is empty or no readable text found.</p>";
+        if (!previewHtml || targetWords.length === 0) return previewHtml || "<p class='opacity-50 italic'>No readable text found.</p>";
         let styleStr = "";
         if (isBold) styleStr += "font-weight: bold; ";
         if (isItalic) styleStr += "font-style: italic; ";
@@ -43,7 +44,7 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
         if (!styleStr) styleStr = "background-color: rgba(99, 102, 241, 0.2); color: inherit;";
         const escapedWords = targetWords.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
         const regex = new RegExp(`(?![^<]*>)(${escapedWords})`, 'gi');
-        return previewHtml.replace(regex, `<span style="${styleStr} border-radius: 2px;">$1</span>`);
+        return previewHtml.replace(regex, `<span style="${styleStr} border-radius: 2px; padding: 0 2px;">$1</span>`);
     }, [previewHtml, targetWords, isBold, isItalic, color, isUnderline]);
 
     const handleFileSelect = async (selectedFile: File | null) => {
@@ -60,7 +61,7 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                 setPreviewHtml(result.value);
             } catch (err) {
                 console.error("Preview error:", err);
-                setPreviewHtml("<p class='text-red-500'>Preview could not be loaded.</p>");
+                setPreviewHtml("<p class='text-red-500'>Preview failed to load.</p>");
             } finally {
                 setIsLoadingPreview(false);
             }
@@ -70,53 +71,41 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
     const processWordFile = async () => {
         if (!file || targetWords.length === 0) return;
         setIsProcessing(true);
-        setStatus("Reading document...");
+        setStatus("Mounting Document...");
 
         try {
             const JSZip = (await import("jszip")).default;
             const { saveAs } = await import("file-saver");
-            
             const zip = new JSZip();
             const docArchive = await zip.loadAsync(file);
-            
-            setStatus("Searching and replacing words...");
-            
+            setStatus("Injecting Styles...");
             const parser = new DOMParser();
             const serializer = new XMLSerializer();
             let totalReplacements = 0;
 
-            // Hem ana belge hem de üstbilgi/altbilgi gibi yerlerde arama yapalım
             for (const [filename, fileObj] of Object.entries(docArchive.files)) {
                 if (filename.startsWith("word/") && filename.endsWith(".xml")) {
                     const xmlText = await fileObj.async("text");
                     const xmlDoc = parser.parseFromString(xmlText, "application/xml");
                     const wtNodes = Array.from(xmlDoc.getElementsByTagName("w:t"));
-
                     let modified = false;
-
                     const escapedRegexStr = targetWords.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
                     const splitRegex = new RegExp(`(${escapedRegexStr})`, 'gi');
 
                     for (const wt of wtNodes) {
                         const text = wt.textContent || "";
                         const hasMatch = targetWords.some(w => text.toLowerCase().includes(w.toLowerCase()));
-                        
                         if (hasMatch) {
                             const parts = text.split(splitRegex);
-                            const parentR = wt.parentNode; // <w:r>
+                            const parentR = wt.parentNode;
                             if (!parentR || parentR.nodeName !== "w:r") continue;
-
-                            const parentP = parentR.parentNode; // <w:p>
+                            const parentP = parentR.parentNode;
                             if (!parentP) continue;
-
                             const fragment = xmlDoc.createDocumentFragment();
                             const rPr = Array.from(parentR.childNodes).find(n => n.nodeName === "w:rPr");
-
                             for (let j = 0; j < parts.length; j++) {
                                 if (!parts[j]) continue;
-
                                 if (j % 2 === 0) {
-                                    // Orijinal metin
                                     const newRun = xmlDoc.createElement("w:r");
                                     if (rPr) newRun.appendChild(rPr.cloneNode(true));
                                     const newWt = xmlDoc.createElement("w:t");
@@ -125,15 +114,9 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                                     newRun.appendChild(newWt);
                                     fragment.appendChild(newRun);
                                 } else {
-                                    // Stil uygulanacak hedef kelime
                                     const highlightRun = xmlDoc.createElement("w:r");
                                     const newRPr = xmlDoc.createElement("w:rPr");
-                                    
-                                    if (rPr) {
-                                        Array.from(rPr.childNodes).forEach(child => newRPr.appendChild(child.cloneNode(true)));
-                                    }
-
-                                    // Uygulanacak Formatlar
+                                    if (rPr) Array.from(rPr.childNodes).forEach(child => newRPr.appendChild(child.cloneNode(true)));
                                     if (isBold) newRPr.appendChild(xmlDoc.createElement("w:b"));
                                     if (isItalic) newRPr.appendChild(xmlDoc.createElement("w:i"));
                                     if (isUnderline) {
@@ -146,222 +129,152 @@ export default function WordModifier({ onBack }: { onBack: () => void }) {
                                         c.setAttribute("w:val", color.replace("#", ""));
                                         newRPr.appendChild(c);
                                     }
-                                    
                                     highlightRun.appendChild(newRPr);
                                     const highlightWt = xmlDoc.createElement("w:t");
                                     highlightWt.setAttribute("xml:space", "preserve");
                                     highlightWt.textContent = parts[j];
                                     highlightRun.appendChild(highlightWt);
                                     fragment.appendChild(highlightRun);
-                                    
                                     totalReplacements++;
                                 }
                             }
-                            
                             parentP.insertBefore(fragment, parentR);
                             parentP.removeChild(parentR);
                             modified = true;
                         }
                     }
-
                     if (modified) {
                         const newXml = serializer.serializeToString(xmlDoc);
                         docArchive.file(filename, newXml);
                     }
                 }
             }
-
-            setStatus("Saving document...");
+            setStatus("Exporting Result...");
             const modifiedBlob = await docArchive.generateAsync({ type: "blob" });
-            saveAs(modifiedBlob, "Modified_" + file.name);
-            
-            setStatus(`Success! A total of ${totalReplacements} changes were made.`);
+            saveAs(modifiedBlob, "Styled_" + file.name);
+            setStatus(`Success! Optimized ${totalReplacements} instances.`);
             setTimeout(() => {
                 setIsProcessing(false);
                 setFile(null);
                 setStatus("");
                 setTargetWords([]);
-                setWordInput("");
             }, 3000);
-
         } catch (err) {
             console.error("Word edit error:", err);
-            setStatus("An error occurred! Please upload a valid Word document.");
+            setStatus("Process Failed.");
             setIsProcessing(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-slate-50 to-purple-50 dark:from-[#0f0c29] dark:via-[#302b63] dark:to-[#24243e] font-sans flex flex-col">
-            <header className="px-6 py-4 flex items-center justify-between bg-white/50 dark:bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 border-b border-indigo-100 dark:border-slate-800">
-                <div className="flex items-center gap-4">
-                    <button onClick={onBack} className="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm">
-                        <ArrowLeft size={20} />
+        <div className="min-h-screen bg-zinc-50 dark:bg-[#080810] text-zinc-900 dark:text-zinc-100 flex flex-col font-[family-name:var(--font-inter)]">
+            <header className="h-20 border-b border-zinc-200 dark:border-white/5 bg-white/80 dark:bg-[#0a0a1a]/80 backdrop-blur-2xl flex items-center justify-between px-8 sticky top-0 z-50">
+                <div className="flex items-center gap-6">
+                    <button onClick={onBack} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/10 rounded-xl transition-colors text-zinc-500">
+                        <ArrowLeft size={24} />
                     </button>
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md text-white">
-                            <Type size={20} />
-                        </div>
-                        <div>
-                            <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Word Text Style Modifier</h1>
-                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Automatically style specific words in your Word document</p>
-                        </div>
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-xl shadow-indigo-500/20">
+                        <Type size={24} />
+                    </div>
+                    <div>
+                        <h1 className="font-black text-zinc-900 dark:text-white text-xl tracking-tight uppercase">Word Stylist</h1>
+                        <p className="text-[10px] text-indigo-500 dark:text-indigo-400 font-black tracking-widest uppercase">Intelligent Batch Styling Engine</p>
                     </div>
                 </div>
             </header>
 
-            <main className="flex-1 w-full max-w-4xl mx-auto p-6 md:p-8 flex flex-col justify-center items-center">
-                <div className="w-full bg-white dark:bg-slate-800/90 rounded-3xl shadow-xl shadow-indigo-100 dark:shadow-none border border-indigo-50 dark:border-slate-700 p-8 md:p-10 relative overflow-hidden backdrop-blur-xl">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
-                    <div className="relative z-10 w-full flex flex-col gap-10">
-
-                        {/* File Upload Section */}
-                        {!file ? (
-                            <label className="flex flex-col items-center justify-center border-2 border-dashed border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl p-16 cursor-pointer hover:bg-indigo-100/50 dark:hover:bg-indigo-500/20 transition-all group">
-                                <div className="w-20 h-20 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform text-indigo-500">
-                                    <Upload size={36} />
+            <main className="flex-1 max-w-6xl mx-auto w-full p-8 flex flex-col items-center">
+                <div className="w-full bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl border border-zinc-200 dark:border-white/5 overflow-hidden">
+                    {!file ? (
+                        <label className="group p-24 flex flex-col items-center justify-center cursor-pointer text-center">
+                            <div className="w-24 h-24 bg-indigo-500/10 text-indigo-500 rounded-full flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-inner">
+                                <Upload size={48} />
+                            </div>
+                            <h3 className="text-3xl font-black text-zinc-900 dark:text-white mb-3 uppercase tracking-tight">Import DOCX</h3>
+                            <p className="text-zinc-500 dark:text-zinc-400 font-medium">Select a document to begin batch processing.</p>
+                            <input type="file" accept=".docx" onChange={(e) => handleFileSelect(e.target.files?.[0] || null)} className="hidden" />
+                        </label>
+                    ) : (
+                        <div className="grid grid-cols-1 lg:grid-cols-2">
+                            {/* Left Side: Preview */}
+                            <div className="p-10 border-r border-zinc-100 dark:border-white/5 bg-zinc-50/50 dark:bg-black/20">
+                                <div className="flex items-center justify-between mb-8">
+                                    <h2 className="text-xs font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                                        <FileText size={14} /> Living Preview
+                                    </h2>
+                                    <button onClick={() => handleFileSelect(null)} className="text-[10px] font-black text-rose-500 uppercase hover:underline">Replace File</button>
                                 </div>
-                                <span className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">Upload Your Word (DOCX) Document</span>
-                                <span className="text-sm text-slate-500 dark:text-slate-400">Select the file to be modified</span>
-                                <input 
-                                    type="file" 
-                                    accept=".docx" 
-                                    onChange={(e) => handleFileSelect(e.target.files?.[0] || null)} 
-                                    className="hidden" 
-                                />
-                            </label>
-                        ) : (
-                            <div className="flex flex-col gap-8 w-full">
-                                {/* Selected File View */}
-                                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-200 dark:border-slate-600">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
-                                            <FileText size={24} />
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate max-w-[200px] md:max-w-xs">{file.name}</p>
-                                            <p className="text-xs text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                                        </div>
-                                    </div>
-                                    <button 
-                                        onClick={() => handleFileSelect(null)}
-                                        className="text-xs font-bold text-red-500 hover:text-red-600 dark:hover:text-red-400 px-3 py-1.5 bg-red-50 dark:bg-red-900/20 rounded-lg transition-colors"
-                                    >
-                                        Change
-                                    </button>
-                                </div>
-
-                                {/* Document Preview */}
-                                <div className="w-full h-48 md:h-64 overflow-y-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-inner relative">
-                                    <div className="sticky top-0 float-right bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-300 text-[10px] font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl z-20 shadow-sm border border-indigo-200 dark:border-indigo-800">
-                                        DOCUMENT PREVIEW
-                                    </div>
+                                <div className="bg-white dark:bg-black/40 rounded-3xl border border-zinc-200 dark:border-white/5 p-8 h-[500px] overflow-auto shadow-inner relative custom-scrollbar">
                                     {isLoadingPreview ? (
-                                        <div className="flex flex-col items-center justify-center h-full gap-3 text-slate-400">
-                                            <RefreshCw size={24} className="animate-spin text-indigo-500" />
-                                            <span className="text-sm font-medium">Preparing preview...</span>
+                                        <div className="flex flex-col items-center justify-center h-full gap-4 text-zinc-400">
+                                            <Loader2 size={32} className="animate-spin text-indigo-500" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Rendering DOM...</span>
                                         </div>
                                     ) : (
-                                        <div 
-                                            className="prose prose-sm dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 opacity-80"
-                                            dangerouslySetInnerHTML={{ __html: highlightedHtml }}
-                                        />
+                                        <div className="prose prose-sm dark:prose-invert max-w-none prose-p:leading-relaxed" dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
                                     )}
                                 </div>
+                            </div>
 
-                                {/* Form Settings */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="flex flex-col gap-3">
-                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Target Words (Add with Enter key)</label>
-                                        <div className="w-full flex flex-wrap gap-2 p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl transition-all focus-within:ring-2 focus-within:ring-indigo-500 min-h-[56px] items-center">
+                            {/* Right Side: Controls */}
+                            <div className="p-10 flex flex-col justify-between">
+                                <div className="space-y-10">
+                                    <div className="space-y-4">
+                                        <label className="text-xs font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2 ml-1">
+                                            <Wand2 size={14} /> Target Entities
+                                        </label>
+                                        <div className="bg-zinc-100 dark:bg-black/40 border border-zinc-200 dark:border-white/5 rounded-2xl p-4 flex flex-wrap gap-2 transition-all focus-within:ring-2 focus-within:ring-indigo-500/20">
                                             {targetWords.map((word, idx) => (
-                                                <span key={idx} className="flex items-center gap-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm">
+                                                <span key={idx} className="bg-indigo-600 text-white px-3 py-1.5 rounded-xl text-xs font-black flex items-center gap-2 shadow-lg shadow-indigo-600/20">
                                                     {word}
-                                                    <button onClick={() => removeWord(word)} className="text-indigo-400 hover:text-red-500 ml-1 transition-colors">
-                                                        &times;
-                                                    </button>
+                                                    <X size={14} className="cursor-pointer hover:scale-110" onClick={() => removeWord(word)} />
                                                 </span>
                                             ))}
                                             <input 
-                                                type="text" 
+                                                className="bg-transparent outline-none flex-1 min-w-[120px] text-sm font-bold placeholder:text-zinc-400"
+                                                placeholder={targetWords.length ? "Add more..." : "Type words and hit Enter..."}
                                                 value={wordInput}
-                                                onChange={(e) => setWordInput(e.target.value)}
+                                                onChange={e => setWordInput(e.target.value)}
                                                 onKeyDown={handleWordKeyDown}
-                                                placeholder={targetWords.length === 0 ? "e.g.: apple (type and press Enter)" : "New word..."} 
-                                                className="flex-1 min-w-[150px] bg-transparent outline-none text-slate-700 dark:text-slate-200 font-medium"
                                             />
                                         </div>
-                                        <p className="text-[11px] text-slate-500">All these words will be converted to the style you specify when found in the document.</p>
                                     </div>
 
-                                    <div className="flex flex-col gap-3">
-                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Style Settings</label>
-                                        <div className="flex flex-wrap items-center gap-3">
-                                            <button 
-                                                onClick={() => setIsBold(!isBold)}
-                                                className={cn("w-12 h-12 rounded-xl flex items-center justify-center font-serif text-lg transition-all", isBold ? "bg-slate-800 text-white dark:bg-indigo-500 dark:text-white shadow-md font-bold" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700")}
-                                            >
-                                                B
+                                    <div className="space-y-4">
+                                        <label className="text-xs font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2 ml-1">
+                                            <Palette size={14} /> Visual Signature
+                                        </label>
+                                        <div className="flex items-center gap-4">
+                                            <button onClick={() => setIsBold(!isBold)} className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-all shadow-lg", isBold ? "bg-indigo-600 text-white shadow-indigo-600/30" : "bg-zinc-100 dark:bg-white/5 text-zinc-400")}>
+                                                <Bold size={24} />
                                             </button>
-                                            <button 
-                                                onClick={() => setIsItalic(!isItalic)}
-                                                className={cn("w-12 h-12 rounded-xl flex items-center justify-center font-serif text-lg italic transition-all", isItalic ? "bg-slate-800 text-white dark:bg-indigo-500 dark:text-white shadow-md" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700")}
-                                            >
-                                                I
+                                            <button onClick={() => setIsItalic(!isItalic)} className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-all shadow-lg", isItalic ? "bg-indigo-600 text-white shadow-indigo-600/30" : "bg-zinc-100 dark:bg-white/5 text-zinc-400")}>
+                                                <Italic size={24} />
                                             </button>
-                                            <button 
-                                                onClick={() => setIsUnderline(!isUnderline)}
-                                                className={cn("w-12 h-12 rounded-xl flex items-center justify-center font-serif text-lg underline transition-all", isUnderline ? "bg-slate-800 text-white dark:bg-indigo-500 dark:text-white shadow-md" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700")}
-                                            >
-                                                U
+                                            <button onClick={() => setIsUnderline(!isUnderline)} className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-all shadow-lg", isUnderline ? "bg-indigo-600 text-white shadow-indigo-600/30" : "bg-zinc-100 dark:bg-white/5 text-zinc-400")}>
+                                                <Underline size={24} />
                                             </button>
-                                            
-                                            <div className="relative flex items-center ml-2">
-                                                <input 
-                                                    type="color" 
-                                                    value={color}
-                                                    onChange={e => setColor(e.target.value)}
-                                                    className="w-10 h-10 rounded-lg cursor-pointer opacity-0 absolute inset-0 z-10"
-                                                />
-                                                <div 
-                                                    className="w-12 h-12 rounded-xl border-2 border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center"
-                                                    style={{ backgroundColor: color }}
-                                                >
-                                                </div>
+                                            <div className="relative group">
+                                                <input type="color" value={color} onChange={e => setColor(e.target.value)} className="w-14 h-14 opacity-0 cursor-pointer absolute inset-0 z-10" />
+                                                <div style={{ backgroundColor: color }} className="w-14 h-14 rounded-2xl border-4 border-white dark:border-slate-800 shadow-xl" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Submit Button */}
-                                <div className="mt-4 flex flex-col items-center">
+                                <div className="mt-20">
                                     <button 
                                         onClick={processWordFile}
-                                        disabled={targetWords.length === 0 || isProcessing}
-                                        className="w-full md:w-auto px-12 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-3"
+                                        disabled={!targetWords.length || isProcessing}
+                                        className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-black py-6 rounded-3xl shadow-2xl shadow-indigo-600/40 flex items-center justify-center gap-4 transition-all hover:scale-[1.02] active:scale-[0.98] uppercase tracking-widest text-sm"
                                     >
-                                        {isProcessing ? (
-                                            <>
-                                                <RefreshCw size={20} className="animate-spin" />
-                                                <span>{status || "Processing..."}</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Wand2 size={20} />
-                                                <span>Apply Style and Download</span>
-                                            </>
-                                        )}
+                                        {isProcessing ? <Loader2 size={24} className="animate-spin" /> : <Download size={24} />}
+                                        {status || "Apply and Export DOCX"}
                                     </button>
-                                    
-                                    {!isProcessing && status && (
-                                        <p className="mt-4 text-sm font-bold text-emerald-600 flex items-center gap-1">
-                                            <Check size={16} /> {status}
-                                        </p>
-                                    )}
                                 </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
             </main>
         </div>

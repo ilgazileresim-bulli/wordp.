@@ -1,73 +1,66 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Image as ImageIcon, Download, Upload, ZoomIn, ZoomOut, RotateCcw, Sliders, CheckCircle, RefreshCcw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Image as ImageIcon, Download, Upload, ZoomIn, ZoomOut, RotateCcw, Sliders, CheckCircle, RefreshCcw, Sparkles, Sun, Palette, Droplets, Contrast, Eye } from 'lucide-react';
+import { cn } from "./editor/utils";
 
-const FILTER_CONFIGS: Record<string, { title: string; desc: string; controls: { id: string; label: string; min: number; max: number; step: number; default: number }[] }> = {
+const FILTER_CONFIGS: Record<string, { title: string; desc: string; icon: any; color: string; controls: { id: string; label: string; min: number; max: number; step: number; default: number }[] }> = {
   'brightness-contrast': {
-    title: "Parlaklık & Kontrast", desc: "Görüntü ışığını dengeleyin",
+    title: "Brightness & Contrast", desc: "Balance the light and dark.", icon: Sun, color: "from-yellow-400 to-orange-500",
     controls: [
-      { id: 'brightness', label: 'Parlaklık', min: -100, max: 100, step: 1, default: 0 },
-      { id: 'contrast', label: 'Kontrast', min: -100, max: 100, step: 1, default: 0 }
+      { id: 'brightness', label: 'Brightness', min: -100, max: 100, step: 1, default: 0 },
+      { id: 'contrast', label: 'Contrast', min: -100, max: 100, step: 1, default: 0 }
     ]
   },
   'hue-saturation': {
-    title: "Renk Tonu & Doygunluk", desc: "Canlılık ve renk kaydırma",
+    title: "Hue & Saturation", desc: "Vibrancy and color shifting.", icon: Palette, color: "from-fuchsia-500 to-purple-600",
     controls: [
-      { id: 'hue', label: 'Renk Tonu (Hue)', min: -180, max: 180, step: 1, default: 0 },
-      { id: 'saturation', label: 'Doygunluk', min: -100, max: 100, step: 1, default: 0 }
+      { id: 'hue', label: 'Hue Shift', min: -180, max: 180, step: 1, default: 0 },
+      { id: 'saturation', label: 'Saturation', min: -100, max: 100, step: 1, default: 0 }
     ]
   },
   'exposure': {
-    title: "Pozlama", desc: "Simüle edilmiş kamera pozlaması",
-    controls: [ { id: 'exposure', label: 'Pozlama (EV)', min: -5, max: 5, step: 0.1, default: 0 } ]
+    title: "Exposure", desc: "Simulate camera exposure.", icon: Sparkles, color: "from-blue-400 to-indigo-500",
+    controls: [ { id: 'exposure', label: 'Exposure (EV)', min: -5, max: 5, step: 0.1, default: 0 } ]
   },
   'vignette': {
-    title: "Vinyet Efekti", desc: "Kenar karartması oluşturun",
+    title: "Vignette Effect", desc: "Create edge darkening.", icon: Eye, color: "from-slate-700 to-slate-900",
     controls: [
-      { id: 'amount', label: 'Miktar', min: 0, max: 100, step: 1, default: 50 },
-      { id: 'size', label: 'Boyut', min: 0, max: 100, step: 1, default: 50 }
+      { id: 'amount', label: 'Amount', min: 0, max: 100, step: 1, default: 50 },
+      { id: 'size', label: 'Size', min: 0, max: 100, step: 1, default: 50 }
     ]
   },
   'sepia-vintage': {
-    title: "Sepya & Vintage", desc: "Eski film etkisi",
-    controls: [ { id: 'intensity', label: 'Karışım Yoğunluğu', min: 0, max: 100, step: 1, default: 100 } ]
+    title: "Sepia & Vintage", desc: "Old film aesthetics.", icon: RefreshCcw, color: "from-amber-600 to-orange-800",
+    controls: [ { id: 'intensity', label: 'Blend Intensity', min: 0, max: 100, step: 1, default: 100 } ]
   },
   'invert-colors': {
-    title: "Renkleri Ters Çevir", desc: "Negatif etkisi",
-    controls: [ { id: 'amount', label: 'Ters Çevirme', min: 0, max: 100, step: 1, default: 100 } ]
+    title: "Invert Colors", desc: "Create a negative effect.", icon: Contrast, color: "from-zinc-800 to-black",
+    controls: [ { id: 'amount', label: 'Inversion', min: 0, max: 100, step: 1, default: 100 } ]
   },
   'threshold': {
-    title: "Eşik", desc: "Sert siyah-beyaz yüksek kontrast",
-    controls: [ { id: 'level', label: 'Eşik Seviyesi', min: 1, max: 255, step: 1, default: 128 } ]
+    title: "Threshold", desc: "Sharp black and white contrast.", icon: Contrast, color: "from-zinc-400 to-zinc-600",
+    controls: [ { id: 'level', label: 'Threshold Level', min: 1, max: 255, step: 1, default: 128 } ]
   },
   'sharpen': {
-    title: "Keskinleştir", desc: "Matris keskinleştirme uygulayın",
-    controls: [ { id: 'strength', label: 'Yoğunluk', min: 0, max: 100, step: 1, default: 50 } ]
-  },
-  'duotone': {
-    title: "İki Ton Efekti", desc: "Luma tabanlı haritalama",
-    controls: [ { id: 'mix', label: 'Harita Karışımı', min: 0, max: 100, step: 1, default: 100 } ]
-  },
-  'blur': {
-    title: "Bulanıklaştır", desc: "Yumuşak odak efekti",
-    controls: [ { id: 'radius', label: 'Yarıçap', min: 0, max: 50, step: 1, default: 10 } ]
+    title: "Sharpen", desc: "Apply matrix sharpening.", icon: Droplets, color: "from-teal-400 to-emerald-600",
+    controls: [ { id: 'strength', label: 'Intensity', min: 0, max: 100, step: 1, default: 50 } ]
   }
 };
 
 export default function ImageStudio({ onBack, initialToolId }: { onBack: () => void; initialToolId: string }) {
-  // If the initialToolId doesn't exist in our optimized list, fallback to brightness-contrast as a generic editor
   const validToolId = FILTER_CONFIGS[initialToolId] ? initialToolId : 'brightness-contrast';
   const conf = FILTER_CONFIGS[validToolId];
 
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [params, setParams] = useState<Record<string, number>>({});
+  const [isCopied, setIsCopied] = useState(false);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const origImgRef = useRef<HTMLImageElement | null>(null);
 
-  // Initialize params when tool changes
   useEffect(() => {
     const initParams: Record<string, number> = {};
     conf.controls.forEach(c => initParams[c.id] = c.default);
@@ -91,7 +84,6 @@ export default function ImageStudio({ onBack, initialToolId }: { onBack: () => v
     if (!origImgRef.current || !canvasRef.current) return;
     setIsProcessing(true);
     
-    // We use a small timeout to allow UI to render the "Processing..." state
     requestAnimationFrame(() => {
       const cvs = canvasRef.current!;
       const ctx = cvs.getContext('2d', { willReadFrequently: true });
@@ -105,7 +97,6 @@ export default function ImageStudio({ onBack, initialToolId }: { onBack: () => v
       const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height);
       const data = imgData.data;
 
-      // PROCESS PIXELS
       if (validToolId === 'brightness-contrast') {
         const b = params.brightness || 0;
         const c = params.contrast || 0;
@@ -149,41 +140,20 @@ export default function ImageStudio({ onBack, initialToolId }: { onBack: () => v
           data[i+1] = data[i+1] * mult;
           data[i+2] = data[i+2] * mult;
         }
-      } else if (validToolId === 'duotone') {
-        const mix = (params.mix || 0) / 100;
-        // Spotify style Duotone (simplified approximation mapping luma to Blue-Red gradient)
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i], g = data[i+1], b = data[i+2];
-          const luma = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; // 0 to 1
-          
-          const dtR = luma * 255;
-          const dtG = luma * 50;  // Dark red/magenta tint
-          const dtB = (1 - luma) * 255; // Inverse mapping for shadows to blue
-          
-          data[i] = r + (dtR - r) * mix;
-          data[i+1] = g + (dtG - g) * mix;
-          data[i+2] = b + (dtB - b) * mix;
-        }
       } else if (validToolId === 'sharpen') {
          const strength = (params.strength || 0) / 100;
          if (strength > 0) {
             const w = cvs.width;
             const h = cvs.height;
-            const src = new Uint8ClampedArray(data); // clone orig
-            const mix = strength; // 0 to 1
-            const matrix = [
-               0, -1, 0,
-              -1,  5, -1,
-               0, -1, 0
-            ];
-            const side = Math.round(Math.sqrt(matrix.length));
-            const halfSide = Math.floor(side / 2);
-            
+            const src = new Uint8ClampedArray(data);
+            const mix = strength;
+            const matrix = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+            const side = 3;
+            const halfSide = 1;
             for (let y = 0; y < h; y++) {
                for (let x = 0; x < w; x++) {
                   const dstOff = (y*w+x)*4;
                   let r=0, g=0, b=0;
-                  // Extremely naïve convolution loop (unoptimized for edges)
                   for (let cy = 0; cy < side; cy++) {
                      for (let cx = 0; cx < side; cx++) {
                         const scy = y + cy - halfSide;
@@ -207,7 +177,6 @@ export default function ImageStudio({ onBack, initialToolId }: { onBack: () => v
 
       ctx.putImageData(imgData, 0, 0);
 
-      // Vignette implementation (overlaying gradient)
       if (validToolId === 'vignette') {
          const amount = (params.amount || 0) / 100;
          const size = (params.size || 50) / 100;
@@ -229,139 +198,119 @@ export default function ImageStudio({ onBack, initialToolId }: { onBack: () => v
     });
   };
 
-  // Re-apply when params change
   useEffect(() => {
     if (imageSrc) {
       const timer = setTimeout(() => applyFilters(), 50);
       return () => clearTimeout(timer);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   const handleDownload = () => {
     if (!canvasRef.current) return;
     const dataUrl = canvasRef.current.toDataURL('image/jpeg', 0.95);
     const link = document.createElement('a');
-    link.download = `edited_${Date.now()}.jpg`;
+    link.download = `macrotar_image_${Date.now()}.jpg`;
     link.href = dataUrl;
     link.click();
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 3000);
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-slate-200 font-sans flex flex-col">
+    <div className="min-h-screen bg-zinc-50 dark:bg-slate-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-[family-name:var(--font-inter)]">
       {/* Header */}
-      <header className="h-16 border-b border-white/10 bg-black/80 backdrop-blur-xl flex items-center justify-between px-6 sticky top-0 z-50">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-400 hover:text-white">
-            <ArrowLeft size={20} />
+      <header className="h-20 border-b border-zinc-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-50">
+        <div className="flex items-center gap-6">
+          <button onClick={onBack} className="p-2 hover:bg-zinc-100 dark:hover:bg-white/10 rounded-xl transition-colors text-zinc-500">
+            <ArrowLeft size={24} />
           </button>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center text-white">
-            <ImageIcon size={16} />
+          <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-xl bg-gradient-to-br", conf.color)}>
+            <conf.icon size={24} />
           </div>
           <div>
-            <h1 className="font-bold text-white text-lg tracking-tight">{conf.title}</h1>
-            <p className="text-[10px] text-fuchsia-400 font-semibold tracking-wider uppercase">{conf.desc}</p>
+            <h1 className="font-black text-zinc-900 dark:text-white text-xl tracking-tight uppercase">{conf.title}</h1>
+            <p className="text-[10px] text-zinc-400 font-black uppercase tracking-widest">{conf.desc}</p>
           </div>
         </div>
         
         {imageSrc && (
           <button 
             onClick={handleDownload}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-black font-bold text-sm rounded-lg hover:bg-slate-200 transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-black text-xs rounded-xl shadow-xl shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            <Download size={16} /> Aktar (JPG)
+            {isCopied ? <CheckCircle size={16} /> : <Download size={16} />}
+            {isCopied ? "EXPORTED" : "EXPORT IMAGE"}
           </button>
         )}
       </header>
 
-      <main className="flex-1 max-w-[1600px] w-full mx-auto p-6 flex flex-col lg:flex-row gap-6">
+      <main className="flex-1 max-w-[1600px] w-full mx-auto p-8 flex flex-col lg:flex-row gap-8 overflow-hidden">
         
-        {/* Canvas Working Area */}
-        <div className="flex-[3] bg-[#0c0c0e] border border-white/5 rounded-3xl overflow-hidden relative flex flex-col items-center justify-center min-h-[60vh] fancy-bg">
-           
-           <style dangerouslySetInnerHTML={{ __html: `
-             .fancy-bg {
-                background-image: 
-                  linear-gradient(45deg, #15151a 25%, transparent 25%), 
-                  linear-gradient(-45deg, #15151a 25%, transparent 25%), 
-                  linear-gradient(45deg, transparent 75%, #15151a 75%), 
-                  linear-gradient(-45deg, transparent 75%, #15151a 75%);
-                background-size: 20px 20px;
-                background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-             }
-           `}} />
-
+        {/* Canvas Area */}
+        <div className="flex-[3] bg-zinc-100 dark:bg-slate-900 border border-zinc-200 dark:border-slate-800 rounded-[2.5rem] overflow-hidden relative flex items-center justify-center min-h-[60vh] shadow-inner">
            {!imageSrc ? (
-             <label className="flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-white/5 w-full h-full p-12 transition-colors">
-               <div className="w-20 h-20 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 shadow-[0_0_50px_-10px_rgba(59,130,246,0.3)]">
-                 <Upload size={32} />
+             <label className="flex flex-col items-center justify-center gap-6 cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-white/5 w-full h-full p-12 transition-all group">
+               <div className="w-24 h-24 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
+                 <Upload size={40} />
                </div>
                <div className="text-center">
-                 <h3 className="text-xl font-bold text-white mb-2">Görsel Yükle</h3>
-                 <p className="text-slate-500 text-sm max-w-sm">Düzeltme, filtreleme veya renk oynamaları için bir fotoğraf seçin.</p>
+                 <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-2">Import Image</h3>
+                 <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-sm font-medium uppercase tracking-tight">Select a photo for professional enhancement and filtering.</p>
                </div>
                <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
              </label>
            ) : (
-             <div className="relative w-full h-full flex items-center justify-center p-8">
+             <div className="relative w-full h-full flex items-center justify-center p-8 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
                {isProcessing && (
-                 <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-10 flex items-center justify-center">
-                    <div className="flex flex-col items-center gap-3">
-                       <RefreshCcw size={32} className="text-white animate-spin" />
-                       <span className="text-sm font-bold tracking-widest text-white uppercase">İşleniyor</span>
-                    </div>
-                 </div>
+                  <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-10 flex items-center justify-center">
+                    <RefreshCcw size={48} className="text-white animate-spin" />
+                  </div>
                )}
-               <canvas 
-                 ref={canvasRef} 
-                 className="max-w-full max-h-full object-contain shadow-2xl rounded-lg"
-                 style={{ maxHeight: 'calc(100vh - 200px)' }}
-               />
+               <canvas ref={canvasRef} className="max-w-full max-h-full object-contain shadow-3xl rounded-2xl" style={{ maxHeight: 'calc(100vh - 250px)' }} />
              </div>
            )}
         </div>
 
-        {/* Adjustments Sidebar */}
-        <div className="flex-1 bg-[#111115] border border-white/5 rounded-3xl p-6 min-w-[320px] max-w-[400px]">
-           <div className="flex items-center gap-3 mb-8">
-              <Sliders size={20} className="text-fuchsia-500" />
-              <h2 className="text-sm uppercase font-black text-slate-300 tracking-wider">Ayar Paneli</h2>
+        {/* Sidebar */}
+        <div className="flex-1 bg-white dark:bg-slate-900 border border-zinc-200 dark:border-slate-800 rounded-[2.5rem] p-8 min-w-[360px] max-w-[400px] shadow-2xl flex flex-col">
+           <div className="flex items-center gap-3 mb-10 pb-6 border-b border-zinc-100 dark:border-slate-800">
+              <Sliders size={22} className="text-blue-500" />
+              <h2 className="text-xs uppercase font-black text-zinc-400 tracking-widest">Adjustments</h2>
            </div>
 
            {!imageSrc ? (
-              <div className="text-center p-8 border border-dashed border-white/10 rounded-2xl">
-                 <p className="text-slate-500 text-sm">Ayarları görebilmek için önce bir görsel yüklemelisiniz.</p>
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-10 border-2 border-dashed border-zinc-100 dark:border-slate-800 rounded-3xl">
+                 <ImageIcon size={32} className="text-zinc-300 mb-4" />
+                 <p className="text-zinc-400 text-[10px] font-black uppercase tracking-widest">Upload an image to unlock controls</p>
               </div>
            ) : (
-             <div className="space-y-8 flex flex-col">
+             <div className="space-y-10 flex flex-col flex-1">
                 {conf.controls.map(c => (
-                   <div key={c.id} className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                         <label className="font-bold text-slate-300 tracking-wide">{c.label}</label>
-                         <span className="font-mono text-fuchsia-400 bg-fuchsia-500/10 px-2 py-0.5 rounded text-xs">{params[c.id]}</span>
+                   <div key={c.id} className="space-y-4">
+                      <div className="flex items-center justify-between">
+                         <label className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">{c.label}</label>
+                         <span className={cn("font-mono text-[10px] font-black px-2 py-1 rounded-lg bg-zinc-100 dark:bg-slate-800 text-blue-500")}>{params[c.id]}</span>
                       </div>
                       <input 
                          type="range" 
                          min={c.min} max={c.max} step={c.step}
                          value={params[c.id] !== undefined ? params[c.id] : c.default}
                          onChange={(e) => setParams(p => ({ ...p, [c.id]: parseFloat(e.target.value) }))}
-                         className="w-full accent-fuchsia-500 bg-black/50 overflow-hidden rounded-full h-2 appearance-none"
-                         style={{ boxShadow: 'inset 0 0 5px rgba(0,0,0,0.5)' }}
+                         className="w-full accent-blue-600 h-1.5 appearance-none bg-zinc-100 dark:bg-slate-800 rounded-full"
                       />
                    </div>
                 ))}
 
-                <div className="pt-8 border-t border-white/5">
+                <div className="pt-10 mt-auto">
                    <button 
                      onClick={() => {
                        const defaults: Record<string, number> = {};
                        conf.controls.forEach(c => defaults[c.id] = c.default);
                        setParams(defaults);
-                       applyFilters();
                      }}
-                     className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-bold transition-all text-white"
+                     className="w-full flex items-center justify-center gap-3 py-4 bg-zinc-100 dark:bg-slate-800 hover:bg-zinc-200 dark:hover:bg-slate-700 border border-transparent rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all text-zinc-600 dark:text-zinc-300"
                    >
-                      <RotateCcw size={16} /> Değerleri Sıfırla
+                      <RotateCcw size={18} /> Reset Settings
                    </button>
                 </div>
              </div>

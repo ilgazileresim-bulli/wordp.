@@ -82,7 +82,7 @@ const SearchPanel = ({ isOpen, onClose, editor }: SearchPanelProps) => {
         }
 
         window.getSelection()?.removeAllRanges();
-        alert(`${count} değişiklik yapıldı.`);
+        alert(`${count} replacements made.`);
     };
 
     return (
@@ -95,7 +95,7 @@ const SearchPanel = ({ isOpen, onClose, editor }: SearchPanelProps) => {
                     className="absolute right-6 top-40 w-72 bg-white shadow-2xl border border-zinc-200 rounded-lg p-4 z-[55] no-print"
                 >
                     <div className="flex items-center justify-between mb-4">
-                        <span className="text-xs font-black text-zinc-800 uppercase tracking-tighter">Gezinti</span>
+                        <span className="text-xs font-black text-zinc-800 uppercase tracking-tighter">Navigation</span>
                         <button onClick={onClose} className="p-1 hover:bg-zinc-100 rounded-full transition-colors">
                             <X size={14} />
                         </button>
@@ -104,11 +104,11 @@ const SearchPanel = ({ isOpen, onClose, editor }: SearchPanelProps) => {
                         <button
                             onClick={() => setMode('search')}
                             className={cn("flex-1 py-1 text-[10px] font-bold rounded", mode === 'search' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500")}
-                        >Gezin</button>
+                        >Search</button>
                         <button
                             onClick={() => setMode('replace')}
                             className={cn("flex-1 py-1 text-[10px] font-bold rounded", mode === 'replace' ? "bg-white shadow-sm text-zinc-900" : "text-zinc-500")}
-                        >Değiştir</button>
+                        >Replace</button>
                     </div>
 
                     <div className="space-y-3">
@@ -116,7 +116,7 @@ const SearchPanel = ({ isOpen, onClose, editor }: SearchPanelProps) => {
                             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                             <input
                                 type="text"
-                                placeholder={mode === 'replace' ? "Aranan değer..." : "Belgede ara..."}
+                                placeholder={mode === 'replace' ? "Find value..." : "Search document..."}
                                 className="w-full pl-9 pr-3 py-2 bg-zinc-50 border border-zinc-200 rounded text-xs focus:ring-1 focus:ring-[#2b579a] focus:border-[#2b579a] outline-none"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -128,7 +128,7 @@ const SearchPanel = ({ isOpen, onClose, editor }: SearchPanelProps) => {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="Yeni değer..."
+                                    placeholder="New value..."
                                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded text-xs focus:ring-1 focus:ring-[#2b579a] focus:border-[#2b579a] outline-none"
                                     value={replaceTerm}
                                     onChange={(e) => setReplaceTerm(e.target.value)}
@@ -141,25 +141,25 @@ const SearchPanel = ({ isOpen, onClose, editor }: SearchPanelProps) => {
                         {mode === 'search' ? (
                             <>
                                 <button onClick={handleFindPrev} className="flex-1 py-1.5 flex items-center justify-center gap-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-[10px] font-bold rounded transition-colors" disabled={!searchTerm}>
-                                    <ChevronUp size={14} /> Önceki
+                                    <ChevronUp size={14} /> Previous
                                 </button>
                                 <button onClick={handleFindNext} className="flex-1 py-1.5 flex items-center justify-center gap-1 bg-[#2b579a] hover:bg-[#1a478a] text-white text-[10px] font-bold rounded transition-colors" disabled={!searchTerm}>
-                                    Sonraki <ChevronDown size={14} />
+                                    Next <ChevronDown size={14} />
                                 </button>
                             </>
                         ) : (
                             <div className="flex flex-col gap-2 w-full">
                                 <div className="flex items-center gap-2">
                                     <button onClick={handleFindNext} className="flex-1 py-1.5 flex items-center justify-center gap-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-[10px] font-bold rounded transition-colors" disabled={!searchTerm}>
-                                        Sonraki Bul
+                                        Find Next
                                     </button>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <button onClick={handleReplace} className="flex-1 py-1.5 flex items-center justify-center gap-1 bg-[#2b579a] hover:bg-[#1a478a] text-white text-[10px] font-bold rounded transition-colors" disabled={!searchTerm}>
-                                        <Check size={12} /> Değiştir
+                                        <Check size={12} /> Replace
                                     </button>
                                     <button onClick={handleReplaceAll} className="flex-1 py-1.5 flex items-center justify-center gap-1 bg-zinc-800 hover:bg-black text-white text-[10px] font-bold rounded transition-colors" disabled={!searchTerm}>
-                                        Tümünü Değiştir
+                                        Replace All
                                     </button>
                                 </div>
                             </div>
@@ -167,15 +167,15 @@ const SearchPanel = ({ isOpen, onClose, editor }: SearchPanelProps) => {
                     </div>
 
                     <div className="mt-4 pt-4 border-t border-zinc-100">
-                        <div className="text-[10px] text-zinc-400 font-medium mb-2">SONUÇLAR</div>
+                        <div className="text-[10px] text-zinc-400 font-medium mb-2">RESULTS</div>
                         {searchTerm ? (
                             <div className="text-center text-zinc-500 text-[11px] font-medium p-4 bg-zinc-50 rounded border border-zinc-100">
                                 <span className="text-[#2b579a] font-bold text-lg block mb-1">{matchCount}</span>
-                                eşleşme bulundu
+                                matches found
                             </div>
                         ) : (
                             <div className="py-6 text-center text-zinc-300 text-[11px] italic">
-                                Aramanızı buraya yazın...
+                                Type your search here...
                             </div>
                         )}
                     </div>

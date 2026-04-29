@@ -31,7 +31,7 @@ export default function ThemeToggle() {
             whileTap={{ scale: 0.95 }}
             onClick={toggleTheme}
             className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-zinc-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all text-zinc-600 dark:text-zinc-300"
-            title={theme === "light" ? "Karanlık Mod" : "Aydınlık Mod"}
+            title={theme === "light" ? "Dark Mode" : "Light Mode"}
         >
             {theme === "light" ? (
                 <Moon size={20} className="fill-current" />

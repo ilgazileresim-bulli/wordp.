@@ -37,21 +37,21 @@ const EditorStatusBar = ({
             <div className="flex items-center gap-4 h-full shrink-0">
                 <div className="flex items-center gap-1.5 px-2 hover:bg-white/10 h-full cursor-pointer transition-colors">
                     <FileText size={12} strokeWidth={2.5} />
-                    <span className="font-bold uppercase tracking-tighter">SAYFA {currentPage} / {pageCount}</span>
+                    <span className="font-bold uppercase tracking-tighter">PAGE {currentPage} / {pageCount}</span>
                 </div>
                 <div className="flex items-center gap-1.5 px-2 hover:bg-white/10 h-full cursor-pointer transition-colors border-l border-white/10 ml-[-12px]">
-                    <span className="font-bold uppercase tracking-tighter">{wordCount} SÖZCÜK</span>
+                    <span className="font-bold uppercase tracking-tighter">{wordCount} WORDS</span>
                 </div>
                 <div className="hidden lg:flex items-center gap-1.5 px-2 hover:bg-white/10 h-full cursor-pointer transition-colors border-l border-white/10">
                     <CheckCircle2 size={12} strokeWidth={2.5} />
-                    <span className="font-bold uppercase tracking-tighter">Erişilebilirlik: İyi</span>
+                    <span className="font-bold uppercase tracking-tighter">Accessibility: Good</span>
                 </div>
             </div>
             <div className="flex items-center gap-0 h-full shrink-0">
                 <div className="flex items-center h-full mr-4 gap-0.5">
-                    <button onClick={() => setViewMode('read')} className={cn("p-1 px-2 h-full transition-colors hover:bg-white/10", viewMode === 'read' && "bg-white/20 shadow-inner")} title="Okuma Modu"><BookOpen size={13} strokeWidth={2.5} /></button>
-                    <button onClick={() => setViewMode('print')} className={cn("p-1 px-2 h-full transition-colors hover:bg-white/10", viewMode === 'print' && "bg-white/20 shadow-inner")} title="Yazdırma Düzeni"><Layout size={13} strokeWidth={2.5} /></button>
-                    <button onClick={() => setViewMode('web')} className={cn("p-1 px-2 h-full transition-colors hover:bg-white/10", viewMode === 'web' && "bg-white/20 shadow-inner")} title="Web Düzeni"><Globe size={13} strokeWidth={2.5} /></button>
+                    <button onClick={() => setViewMode('read')} className={cn("p-1 px-2 h-full transition-colors hover:bg-white/10", viewMode === 'read' && "bg-white/20 shadow-inner")} title="Read Mode"><BookOpen size={13} strokeWidth={2.5} /></button>
+                    <button onClick={() => setViewMode('print')} className={cn("p-1 px-2 h-full transition-colors hover:bg-white/10", viewMode === 'print' && "bg-white/20 shadow-inner")} title="Print Layout"><Layout size={13} strokeWidth={2.5} /></button>
+                    <button onClick={() => setViewMode('web')} className={cn("p-1 px-2 h-full transition-colors hover:bg-white/10", viewMode === 'web' && "bg-white/20 shadow-inner")} title="Web Layout"><Globe size={13} strokeWidth={2.5} /></button>
                 </div>
                 <div className="flex items-center gap-2 px-3 border-l border-white/10 h-full">
                     <button onClick={() => setZoom(Math.max(25, zoom - 10))} className="hover:bg-white/10 p-1 rounded transition-colors"><Minus size={11} strokeWidth={3} /></button>
@@ -63,7 +63,7 @@ const EditorStatusBar = ({
                     <span className="w-10 text-right font-black text-[9px]">{zoom}%</span>
                 </div>
                 <div className="flex items-center gap-1.5 ml-auto pl-3">
-                    <button onClick={() => alert('Yardım merkezine bağlanıyor...')} className="p-1 px-2 hover:bg-white/10 rounded transition-colors text-white" title="Yardım">
+                    <button onClick={() => alert('Connecting to help center...')} className="p-1 px-2 hover:bg-white/10 rounded transition-colors text-white" title="Help">
                         <HelpCircle size={13} />
                     </button>
                 </div>

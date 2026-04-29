@@ -17,7 +17,7 @@ function generateId(): string {
 function extractPreview(content: string): string {
     // Strip HTML tags and get first 120 chars
     const text = content.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
-    return text.substring(0, 120) || "Boş belge";
+    return text.substring(0, 120) || "Empty document";
 }
 
 function countWords(content: string): number {
@@ -34,8 +34,8 @@ function extractTitle(content: string): string {
         if (title) return title.substring(0, 60);
     }
     const textMatch = content.replace(/<[^>]*>/g, "").trim();
-    if (textMatch) return textMatch.substring(0, 60) || "Adsız Belge";
-    return "Adsız Belge";
+    if (textMatch) return textMatch.substring(0, 60) || "Untitled Document";
+    return "Untitled Document";
 }
 
 export function getRecentDocuments(): RecentDocument[] {

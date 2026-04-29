@@ -20,7 +20,7 @@ const NavPane = ({ isOpen, onClose }: NavPaneProps) => {
                     className="absolute md:relative z-50 md:z-auto h-full bg-white dark:bg-[#16162a] border-r border-zinc-300 dark:border-slate-700 overflow-hidden flex flex-col shrink-0 no-print shadow-2xl md:shadow-none"
                 >
                     <div className="p-3 border-b border-zinc-200 dark:border-slate-700 flex items-center justify-between">
-                        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Gezinti</span>
+                        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Navigation</span>
                         <button onClick={onClose} className="p-1 hover:bg-zinc-100 dark:hover:bg-slate-700 rounded"><X size={12} /></button>
                     </div>
                     <div className="p-4 flex flex-col gap-4">
@@ -29,7 +29,7 @@ const NavPane = ({ isOpen, onClose }: NavPaneProps) => {
                             <div className="h-2 w-1/2 bg-zinc-100 dark:bg-slate-700 rounded animate-pulse" />
                         </div>
                         <div className="text-[11px] text-zinc-400 italic text-center mt-10">
-                            Başlıklar, sayfalar veya sonuçlar burada görünecektir.
+                            Headings, pages, or results will appear here.
                         </div>
                     </div>
                 </motion.div>

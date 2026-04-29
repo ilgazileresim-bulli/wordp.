@@ -1051,23 +1051,23 @@ export default function PdfEditor({
             <button
               onClick={onBack}
               className="p-1.5 hover:bg-[#3b67aa] rounded text-white transition-colors"
-              title="Geri"
+              title="Back"
             >
               <ArrowLeft size={16} strokeWidth={3} />
             </button>
             <button
               onClick={handleSave}
               className="p-1.5 hover:bg-[#3b67aa] rounded text-white transition-colors flex items-center gap-1 group"
-              title="PDF İndir (Kaydet)"
+              title="Download PDF (Save)"
             >
               <Download size={16} strokeWidth={3} />
               <span className="text-[10px] font-black uppercase tracking-tighter hidden sm:inline">
-                PDF İndir
+                Download PDF
               </span>
             </button>
             <button
               className="p-1.5 hover:bg-[#3b67aa] rounded text-white/50 transition-colors flex items-center gap-1 cursor-not-allowed"
-              title="Word Desteği Yakında"
+              title="Word Support Coming Soon"
             >
               <FileText size={16} strokeWidth={3} />
               <span className="text-[10px] font-black uppercase tracking-tighter hidden sm:inline">
@@ -1079,7 +1079,7 @@ export default function PdfEditor({
               onClick={undo}
               disabled={history.length === 0}
               className="p-1.5 hover:bg-[#3b67aa] rounded text-white transition-colors disabled:opacity-30"
-              title="Geri Al"
+              title="Undo"
             >
               <Undo size={16} strokeWidth={3} />
             </button>
@@ -1087,7 +1087,7 @@ export default function PdfEditor({
               onClick={redo}
               disabled={redoStack.length === 0}
               className="p-1.5 hover:bg-[#3b67aa] rounded text-white transition-colors disabled:opacity-30"
-              title="İleri Al"
+              title="Redo"
             >
               <Redo size={16} strokeWidth={3} />
             </button>
@@ -1097,7 +1097,7 @@ export default function PdfEditor({
           <div className="flex-1 flex justify-center overflow-hidden h-full">
             <div className="flex items-center gap-2 text-white text-[11px] font-black truncate py-2.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
               <FileText size={16} className="!text-white" strokeWidth={2.5} />
-              <span>{fileName || "Belge1"}</span>
+              <span>{fileName || "Document1"}</span>
               <span className="text-white/80 font-bold">
                 - Microsoft Macrotar
               </span>
@@ -1110,7 +1110,7 @@ export default function PdfEditor({
             <button
               onClick={() => window.print()}
               className="p-1.5 hover:bg-[#3b67aa] rounded text-white transition-colors"
-              title="Yazdır"
+              title="Print"
             >
               <Printer size={16} />
             </button>
@@ -1122,20 +1122,20 @@ export default function PdfEditor({
       {!isEmbedded && (
         <div className="h-8 bg-[#2b579a] flex items-center px-0 z-[99] no-print shrink-0">
           <button className="h-full px-5 bg-[#2b579a] text-white text-[11px] font-bold uppercase transition-colors hover:bg-[#1a478a] border-r border-[#1a478a]">
-            Dosya
+            File
           </button>
           <div className="flex items-center h-full">
             {[
-              "Giriş",
-              "Ekle",
-              "Tasarım",
-              "Düzen",
-              "Başvurular",
-              "Posta Gönderileri",
-              "Gözden Geçir",
-              "Görünüm",
-              "Yardım",
-              "Çizim",
+              "Home",
+              "Insert",
+              "Design",
+              "Layout",
+              "References",
+              "Mailings",
+              "Review",
+              "View",
+              "Help",
+              "Draw",
             ].map((tab) => (
               <button
                 key={tab}
@@ -1160,7 +1160,7 @@ export default function PdfEditor({
           className="h-24 bg-[#f3f2f1] border-b border-[#dadada] flex items-center px-4 gap-4 z-50 no-print shrink-0 shadow-sm"
           style={{ overflow: "visible", position: "relative" }}
         >
-          {activeTab === "giriş" && (
+          {activeTab === "home" && (
             <div className="flex h-full py-2 items-center gap-4">
               {/* ClipBoard Group */}
               <div className="flex flex-col items-center h-full min-w-[90px]">
@@ -1180,7 +1180,7 @@ export default function PdfEditor({
                       strokeWidth={2.5}
                     />
                     <span className="text-[9px] font-black text-zinc-900">
-                      Seç
+                      Select
                     </span>
                   </button>
                   <div className="flex flex-col gap-0.5">
@@ -1193,7 +1193,7 @@ export default function PdfEditor({
                         className="text-[#2b579a]"
                         strokeWidth={2.5}
                       />{" "}
-                      Aç
+                      Open
                     </button>
                     <button
                       onClick={handleSave}
@@ -1204,12 +1204,12 @@ export default function PdfEditor({
                         className="!text-[#2b579a]"
                         strokeWidth={3}
                       />{" "}
-                      PDF İndir
+                      Download PDF
                     </button>
                   </div>
                 </div>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Pano
+                  Clipboard
                 </span>
               </div>
               <div className="w-[1px] h-12 bg-[#dadada]" />
@@ -1244,13 +1244,13 @@ export default function PdfEditor({
                     </div>
                     <div className="flex gap-0.5 h-6">
                       <button className="w-6 h-6 hover:bg-white/60 rounded border border-transparent hover:border-[#dadada] flex items-center justify-center">
-                        <span className="font-bold text-[11px]">K</span>
+                        <span className="font-bold text-[11px]">B</span>
                       </button>
                       <button className="w-6 h-6 hover:bg-white/60 rounded border border-transparent hover:border-[#dadada] flex items-center justify-center font-serif">
-                        <span className="italic text-[11px]">t</span>
+                        <span className="italic text-[11px]">I</span>
                       </button>
                       <button className="w-6 h-6 hover:bg-white/60 rounded border border-transparent hover:border-[#dadada] flex items-center justify-center underline text-[11px]">
-                        A
+                        U
                       </button>
                     </div>
                   </div>
@@ -1269,12 +1269,12 @@ export default function PdfEditor({
                       strokeWidth={3}
                     />
                     <span className="text-[10px] font-black !text-zinc-950">
-                      Metin Ekle
+                      Add Text
                     </span>
                   </button>
                 </div>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Yazı Tipi
+                  Font
                 </span>
               </div>
               <div className="w-[1px] h-12 bg-[#dadada]" />
@@ -1292,7 +1292,7 @@ export default function PdfEditor({
                       className="text-red-500 group-hover:scale-110 transition-transform"
                     />
                     <span className="text-[9px] font-medium text-red-600">
-                      Sil
+                      Delete
                     </span>
                   </button>
                   <button
@@ -1305,13 +1305,13 @@ export default function PdfEditor({
                       strokeWidth={3}
                     />
                     <span className="text-[9px] font-black !text-zinc-950">
-                      Yazdır
+                      Print
                     </span>
                   </button>
                   <button
                     onClick={exportAsImage}
                     className="p-2 rounded hover:bg-white/60 flex flex-col items-center gap-1 w-12 transition-colors group"
-                    title="Bu sayfayı fotoğraf olarak kaydet"
+                    title="Save this page as an image"
                   >
                     <ImageIcon
                       size={22}
@@ -1319,18 +1319,18 @@ export default function PdfEditor({
                       strokeWidth={3}
                     />
                     <span className="text-[9px] font-black !text-zinc-950">
-                      Fotoğraf
+                      Export
                     </span>
                   </button>
                 </div>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Düzenle
+                  Edit
                 </span>
               </div>
             </div>
           )}
 
-          {activeTab === "çizim" && (
+          {activeTab === "draw" && (
             <div className="flex h-full py-2 items-center gap-4">
               {/* Tools Group */}
               <div className="flex flex-col items-center h-full">
@@ -1350,7 +1350,7 @@ export default function PdfEditor({
                       strokeWidth={2.5}
                     />
                     <span className="text-[9px] font-black text-zinc-900">
-                      Kalem
+                      Pen
                     </span>
                   </button>
                   <button
@@ -1368,12 +1368,12 @@ export default function PdfEditor({
                       strokeWidth={3}
                     />
                     <span className="text-[9px] font-black !text-zinc-950">
-                      Silgi
+                      Eraser
                     </span>
                   </button>
                 </div>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Araçlar
+                  Tools
                 </span>
               </div>
               <div className="w-[1px] h-12 bg-[#dadada]" />
@@ -1382,13 +1382,13 @@ export default function PdfEditor({
               <div className="flex flex-col items-center h-full">
                 <div className="flex-1 flex items-center gap-2 p-1.5 bg-white/40 rounded border border-[#dadada] shadow-inner">
                   {[
-                    { color: "#000000", size: 2, name: "İnce" },
-                    { color: "#005a9e", size: 4, name: "Mavi" },
-                    { color: "#d83b01", size: 4, name: "Turuncu" },
+                    { color: "#000000", size: 2, name: "Thin" },
+                    { color: "#005a9e", size: 4, name: "Blue" },
+                    { color: "#d83b01", size: 4, name: "Orange" },
                     {
                       color: "#ffff00",
                       size: 12,
-                      name: "Vurgu",
+                      name: "Highlight",
                       type: "highlight",
                     },
                   ].map((pen, i) => (
@@ -1420,13 +1420,13 @@ export default function PdfEditor({
                         }}
                       />
                       <span className="text-[7px] uppercase font-black text-zinc-600">
-                        {pen.name}
+                        {pen.name === "İnce" ? "Thin" : pen.name === "Mavi" ? "Blue" : pen.name === "Turuncu" ? "Orange" : pen.name === "Vurgu" ? "Highlight" : pen.name}
                       </span>
                     </button>
                   ))}
                 </div>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Kalemler
+                  Pens
                 </span>
               </div>
               <div className="w-[1px] h-12 bg-[#dadada]" />
@@ -1436,7 +1436,7 @@ export default function PdfEditor({
                 <div className="flex-1 flex items-center gap-4">
                   <div className="bg-white p-2 rounded border border-[#dadada] shadow-sm flex flex-col gap-1 min-w-[100px]">
                     <div className="flex justify-between items-center text-[9px] font-bold text-zinc-500">
-                      <span>KALINLIK</span>
+                      <span>THICKNESS</span>
                       <span className="text-[#2b579a]">{brushThickness}px</span>
                     </div>
                     <input
@@ -1474,13 +1474,13 @@ export default function PdfEditor({
                   </div>
                 </div>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Özellikler
+                  Properties
                 </span>
               </div>
             </div>
           )}
 
-          {activeTab === "ekle" && (
+          {activeTab === "insert" && (
             <div className="flex h-full py-2 items-center gap-4">
               {/* Signature */}
               <div className="flex flex-col items-center h-full">
@@ -1502,11 +1502,11 @@ export default function PdfEditor({
                     strokeWidth={3}
                   />
                   <span className="text-[9px] font-black !text-zinc-950">
-                    İmza Ekle
+                    Add Signature
                   </span>
                 </button>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  İmza
+                  Signature
                 </span>
               </div>
               <div className="w-[1px] h-12 bg-[#dadada]" />
@@ -1527,7 +1527,7 @@ export default function PdfEditor({
                     strokeWidth={2.5}
                   />
                   <span className="text-[9px] font-black !text-zinc-950">
-                    Damga
+                    Stamp
                   </span>
                 </button>
                 {showStampMenu && (
@@ -1548,7 +1548,7 @@ export default function PdfEditor({
                   </div>
                 )}
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Damga
+                  Stamp
                 </span>
               </div>
               <div className="w-[1px] h-12 bg-[#dadada]" />
@@ -1565,11 +1565,11 @@ export default function PdfEditor({
                     strokeWidth={2.5}
                   />
                   <span className="text-[9px] font-black !text-zinc-950">
-                    Not Ekle
+                    Add Note
                   </span>
                 </button>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Not
+                  Note
                 </span>
               </div>
               <div className="w-[1px] h-12 bg-[#dadada]" />
@@ -1586,11 +1586,11 @@ export default function PdfEditor({
                     strokeWidth={2.5}
                   />
                   <span className="text-[9px] font-black !text-zinc-950">
-                    Döndür
+                    Rotate
                   </span>
                 </button>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Sayfa
+                  Page
                 </span>
               </div>
               <div className="w-[1px] h-12 bg-[#dadada]" />
@@ -1617,7 +1617,7 @@ export default function PdfEditor({
                   </button>
                 </div>
                 <span className="text-[9px] !text-zinc-950 uppercase tracking-tighter mt-1 font-black">
-                  Sayfalar
+                  Pages
                 </span>
               </div>
             </div>
@@ -1630,7 +1630,7 @@ export default function PdfEditor({
         <div className="w-56 bg-[#f3f2f1] border-r border-[#dadada] flex flex-col hidden md:flex no-print">
           <div className="p-3 border-b border-[#dadada] flex items-center justify-between bg-white/50">
             <span className="text-[10px] font-black uppercase tracking-widest !text-zinc-950">
-              Navigasyon
+              Navigation
             </span>
             <Layers size={14} className="!text-[#2b579a]" strokeWidth={3} />
           </div>
@@ -1668,7 +1668,7 @@ export default function PdfEditor({
               >
                 <div className="w-12 h-12 border-4 border-[#2b579a]/20 border-t-[#2b579a] rounded-full animate-spin mb-4 shadow-sm" />
                 <p className="text-zinc-600 font-medium text-sm italic">
-                  PDF hazırlanıyor...
+                  Preparing PDF...
                 </p>
               </motion.div>
             ) : (
@@ -1754,14 +1754,14 @@ export default function PdfEditor({
                               setIsEditingText(false);
                             }}
                             className="w-6 h-6 flex items-center justify-center bg-red-500 hover:bg-red-600 text-white rounded-full transition-colors shadow-sm"
-                            title="Sil"
+                            title="Delete"
                           >
                             <X size={14} />
                           </button>
                           <button
                             onClick={() => setIsEditingText(false)}
                             className="w-6 h-6 flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-white rounded-full transition-colors shadow-sm"
-                            title="Tamam"
+                            title="Done"
                           >
                             <Check size={14} />
                           </button>
@@ -1774,16 +1774,16 @@ export default function PdfEditor({
                       <FileText size={40} className="text-orange-600" />
                     </div>
                     <h2 className="text-2xl font-black text-zinc-800 mb-2">
-                      Belge Yüklenmedi
+                      No Document Loaded
                     </h2>
                     <p className="text-zinc-600 text-sm font-medium max-w-[280px]">
-                      Düzenlemek istediğiniz dosyayı seçerek başlayabilirsiniz.
+                      Select a file to begin editing your document instantly.
                     </p>
                     <button
                       onClick={() => fileInputRef.current?.click()}
                       className="mt-8 px-8 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-xl font-bold transition-all shadow-xl shadow-orange-900/40"
                     >
-                      Dosya Seç
+                      Choose File
                     </button>
                   </div>
                 )}
@@ -1860,7 +1860,7 @@ export default function PdfEditor({
               onClick={handleSave}
               className="flex items-center gap-2 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl transition-all shadow-lg shadow-rose-900/20"
             >
-              <Download size={14} /> PDF İndir
+              <Download size={14} /> DOWNLOAD PDF
             </button>
           </div>
         </div>
@@ -1871,16 +1871,16 @@ export default function PdfEditor({
         <div className="h-6 bg-[#2b579a] text-white px-4 flex items-center justify-between text-[10px] no-print">
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2 font-medium">
-              SAYFA {currentPage} / {totalPages || 0}
+              PAGE {currentPage} / {totalPages || 0}
             </span>
             <span className="flex items-center gap-1 font-medium opacity-80 uppercase tracking-tighter italic">
-              0 SÖZCÜK
+              0 WORDS
             </span>
             <span className="opacity-40">|</span>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="opacity-100 font-bold uppercase tracking-widest">
-                {fileName || "Belge1"} - Kaydetme Tamamlandı
+                {fileName || "Document1"} - Sync Complete
               </span>
             </div>
           </div>

@@ -33,30 +33,30 @@ const EditorTopBar = ({
         <div className="h-10 bg-[#2b579a] dark:bg-[#0d0d1a] flex items-center px-4 z-[60] shrink-0 no-print border-b border-[#1a478a] dark:border-[#1e1e30] overflow-x-auto scrollbar-hide">
             <div className="flex items-center gap-3 min-w-max">
                 <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold text-white/90 uppercase tracking-tighter">Otomatik Kaydet</span>
+                    <span className="text-[10px] font-bold text-white/90 uppercase tracking-tighter">Auto Save</span>
                     <div className="w-8 h-4 bg-white/20 rounded-full relative cursor-pointer ring-1 ring-white/10">
                         <div className="absolute left-1 top-1 w-2 h-2 bg-white rounded-full"></div>
                     </div>
                 </div>
                 <div className="flex items-center gap-1 ml-2">
-                    <button onClick={onSave} className={cn("p-1.5 hover:bg-white/10 rounded transition-colors text-white relative", isSaving && "animate-pulse")} title="Kaydet">
+                    <button onClick={onSave} className={cn("p-1.5 hover:bg-white/10 rounded transition-colors text-white relative", isSaving && "animate-pulse")} title="Save">
                         {isSaving ? <RefreshCw size={16} className="animate-spin" /> : <Save size={16} strokeWidth={2.5} />}
                     </button>
-                    <button onClick={onExportPdf} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white flex items-center gap-1" title="PDF İndir">
+                    <button onClick={onExportPdf} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white flex items-center gap-1" title="Download PDF">
                         <FileText size={16} strokeWidth={2.5} className="text-red-300" />
                         <span className="text-[9px] font-black uppercase tracking-tighter hidden sm:inline">PDF</span>
                     </button>
-                    <button onClick={onExportDocx} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white flex items-center gap-1" title="Word İndir">
+                    <button onClick={onExportDocx} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white flex items-center gap-1" title="Download Word">
                         <Download size={16} strokeWidth={2.5} className="text-blue-200" />
                         <span className="text-[9px] font-black uppercase tracking-tighter hidden sm:inline">DOCX</span>
                     </button>
                     <div className="w-px h-4 bg-white/20 mx-1" />
-                    <button onClick={onUndo} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Geri Al"><Undo size={16} strokeWidth={2.5} /></button>
-                    <button onClick={onRedo} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Yinele"><Redo size={16} strokeWidth={2.5} /></button>
+                    <button onClick={onUndo} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Undo"><Undo size={16} strokeWidth={2.5} /></button>
+                    <button onClick={onRedo} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Redo"><Redo size={16} strokeWidth={2.5} /></button>
                     {onDictate && (
-                      <button onClick={onDictate} className={cn("p-1.5 ml-1 rounded transition-colors text-white relative flex items-center gap-1", isDictating ? "bg-red-500 hover:bg-red-600 animate-pulse" : "hover:bg-white/10")} title="Sesle Dikte (Mikrofon)">
+                      <button onClick={onDictate} className={cn("p-1.5 ml-1 rounded transition-colors text-white relative flex items-center gap-1", isDictating ? "bg-red-500 hover:bg-red-600 animate-pulse" : "hover:bg-white/10")} title="Voice Dictation (Microphone)">
                           <Mic size={16} strokeWidth={2.5} />
-                          {isDictating && <span className="text-[9px] font-black uppercase tracking-tighter">Dinliyor...</span>}
+                          {isDictating && <span className="text-[9px] font-black uppercase tracking-tighter">Listening...</span>}
                       </button>
                     )}
                 </div>
@@ -64,13 +64,13 @@ const EditorTopBar = ({
             <div className="flex-1 flex justify-center items-center">
                 <div className="flex items-center gap-2 px-6 py-1 bg-white/10 rounded-md border border-white/5 max-w-sm w-full cursor-pointer hover:bg-white/15 transition-colors group">
                     <Search size={14} className="text-white/60 group-hover:text-white" />
-                    <span className="text-xs font-bold text-white/90 truncate">Belge1 - Macrotar</span>
+                    <span className="text-xs font-bold text-white/90 truncate">Document1 - Macrotar</span>
                     <ChevronDown size={14} className="text-white/60 ml-auto" />
                 </div>
             </div>
             <div className="flex items-center gap-1 min-w-max justify-end ml-4">
-                <button onClick={onPrint} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Yazdır"><Printer size={18} strokeWidth={2.5} /></button>
-                <button onClick={onBack} className="p-1.5 hover:bg-red-500 rounded transition-colors text-white" title="Kapat"><X size={18} strokeWidth={2.5} /></button>
+                <button onClick={onPrint} className="p-1.5 hover:bg-white/10 rounded transition-colors text-white" title="Print"><Printer size={18} strokeWidth={2.5} /></button>
+                <button onClick={onBack} className="p-1.5 hover:bg-red-500 rounded transition-colors text-white" title="Close"><X size={18} strokeWidth={2.5} /></button>
             </div>
         </div>
     );
