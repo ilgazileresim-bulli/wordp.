@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { ArrowLeft, Upload, FileText, Type, Check, Download, Wand2, RefreshCw, X, Palette, Bold, Italic, Underline } from "lucide-react";
+import { ArrowLeft, Upload, FileText, Type, Check, Download, Wand2, RefreshCw, X, Palette, Bold, Italic, Underline, Loader2 } from "lucide-react";
 import { cn } from "./editor/utils";
 
 export default function WordModifier({ onBack }: { onBack: () => void }) {
